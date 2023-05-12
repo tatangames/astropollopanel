@@ -157,14 +157,6 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Categoría:</label>
-                                <select class="form-control" id="select-categorias-editar">
-
-                                </select>
-                            </div>
-
-
-                            <div class="form-group">
                                 <div>
                                     <label>Imagen</label>
                                     <p>Tamaño recomendado de: 600 x 400 px</p>
@@ -280,8 +272,6 @@
             var cbnota = document.getElementById('toggle-nota').checked;
             var nota = document.getElementById('nota-nuevo').value;
 
-            var categoria = document.getElementById('select-categorias').value;
-
             var check_imagen = cbimagen ? 1 : 0;
             var check_nota = cbnota ? 1 : 0;
 
@@ -292,11 +282,6 @@
 
             if(nombre.length > 150){
                 toastr.error('Nombre máximo 150 caracteres');
-                return;
-            }
-
-            if(categoria === ''){
-                toastr.error('Categoría es requerida');
                 return;
             }
 
@@ -353,10 +338,10 @@
 
             openLoading();
 
-            var idservicio = {{ $id }};
+            var idcategoria = {{ $id }};
 
             var formData = new FormData();
-            formData.append('idservicio', idservicio);
+            formData.append('idcategoria', idcategoria);
             formData.append('nombre', nombre);
             formData.append('imagen', imagen.files[0]);
             formData.append('descripcion', descripcion);
@@ -364,7 +349,6 @@
             formData.append('cbnota', check_nota);
             formData.append('cbimagen', check_imagen);
             formData.append('nota', nota);
-            formData.append('categoria', categoria);
 
             axios.post('/admin/productos/nuevo', formData, {
             })
@@ -422,17 +406,6 @@
                             $("#toggle-imagen-editar").prop("checked", true);
                         }
 
-                        document.getElementById("select-categorias-editar").options.length = 0;
-
-                        $.each(response.data.cate, function( key, val ){
-                            if(response.data.producto.categorias_id == val.id){
-                                $('#select-categorias-editar').append('<option value="' +val.id +'" selected="selected">'+val.nombre+'</option>');
-                            }else{
-                                $('#select-categorias-editar').append('<option value="' +val.id +'">'+val.nombre+'</option>');
-                            }
-                        });
-
-
                     }else{
                         toastr.error('Error al buscar');
                     }
@@ -455,8 +428,6 @@
             var cbactivo = document.getElementById('toggle-activo').checked;
             var nota = document.getElementById('nota-editar').value;
 
-            var catego = document.getElementById('select-categorias-editar').value;
-
             var check_imagen = cbimagen ? 1 : 0;
             var check_nota = cbnota ? 1 : 0;
             var check_activo = cbactivo ? 1 : 0;
@@ -470,12 +441,6 @@
                 toastr.error('Nombre máximo 150 caracteres');
                 return;
             }
-
-            if(catego === '') {
-                toastr.error('Categoría es requerido');
-                return;
-            }
-
 
             if(nota.length > 500){
                 toastr.error('Nota máximo 500 caracteres');
@@ -535,7 +500,6 @@
             formData.append('cbimagen', check_imagen);
             formData.append('cbactivo', check_activo);
             formData.append('nota', nota);
-            formData.append('catego', catego);
 
             axios.post('/admin/productos/editar', formData, {
             })

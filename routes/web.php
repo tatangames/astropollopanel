@@ -11,7 +11,7 @@ use App\Http\Controllers\Backend\Configuracion\ServiciosController;
 use App\Http\Controllers\Backend\Configuracion\CategoriasController;
 use App\Http\Controllers\Backend\Configuracion\ZonasServicioController;
 use App\Http\Controllers\Backend\Configuracion\ProductosController;
-
+use App\Http\Controllers\Backend\Configuracion\SliderController;
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
@@ -101,4 +101,13 @@ Route::post('/admin/productos/nuevo', [ProductosController::class,'nuevoProducto
 Route::post('/admin/productos/informacion', [ProductosController::class,'informacionProductos']);
 Route::post('/admin/productos/editar', [ProductosController::class,'editarProductos']);
 Route::post('/admin/productos/ordenar', [ProductosController::class,'ordenarProductos']);
+
+// --- SLIDER de servicios ---
+Route::get('/admin/slider/listado/{id}', [SliderController::class,'index']);
+Route::get('/admin/slider/listado/tabla/{id}', [SliderController::class,'sliderTabla']);
+Route::post('/admin/slider/nuevo', [SliderController::class,'nuevaSlider']);
+Route::post('/admin/slider/informacion', [SliderController::class,'informacionSlider']);
+Route::post('/admin/slider/editar', [SliderController::class,'editarSlider']);
+Route::post('/admin/slider/ordenar', [SliderController::class,'ordenarSlider']);
+
 

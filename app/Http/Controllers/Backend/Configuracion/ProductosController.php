@@ -28,7 +28,7 @@ class ProductosController extends Controller
     // tabla de productos
     public function productosTabla($id){
 
-        $producto = Productos::where('id_categorias', $id)
+        $productos = Productos::where('id_categorias', $id)
             ->orderBy('posicion')
             ->get();
 
@@ -37,7 +37,7 @@ class ProductosController extends Controller
             $pp->precio = number_format((float)$pp->precio, 2, '.', ',');
         }
 
-        return view('backend.admin.configuracion.productos.tablaproductos', compact('producto'));
+        return view('backend.admin.configuracion.productos.tablaproductos', compact('productos'));
     }
 
 
@@ -45,7 +45,7 @@ class ProductosController extends Controller
 
         $regla = array(
             'nombre' => 'required',
-            'categoria' => 'required'
+            'idcategoria' => 'required'
         );
 
         $validar = Validator::make($request->all(), $regla);
@@ -73,8 +73,7 @@ class ProductosController extends Controller
                 }
 
                 $ca = new Productos();
-                $ca->bloque_servicios_id = $request->idservicio;
-                $ca->categorias_id = $request->categoria;
+                $ca->id_categorias = $request->idcategoria;
                 $ca->nombre = $request->nombre;
                 $ca->imagen = $nombreFoto;
                 $ca->descripcion = $request->descripcion;
@@ -104,8 +103,7 @@ class ProductosController extends Controller
             }
 
             $ca = new Productos();
-            $ca->bloque_servicios_id  = $request->idservicio;
-            $ca->categorias_id = $request->categoria;
+            $ca->id_categorias = $request->categoria;
             $ca->nombre = $request->nombre;
             $ca->descripcion = $request->descripcion;
             $ca->precio = $request->precio;
@@ -173,7 +171,6 @@ class ProductosController extends Controller
                     $imagenOld = $info->imagen;
 
                     Productos::where('id', $request->id)->update([
-                        'categorias_id' => $request->catego,
                         'nombre' => $request->nombre,
                         'descripcion' => $request->descripcion,
                         'precio' => $request->precio,
@@ -204,7 +201,6 @@ class ProductosController extends Controller
                 }
 
                 Productos::where('id', $request->id)->update([
-                    'categorias_id' => $request->catego,
                     'nombre' => $request->nombre,
                     'descripcion' => $request->descripcion,
                     'precio' => $request->precio,

@@ -253,7 +253,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Tiempo de Preparacion (Minutos)</label>
+                                <label>Tiempo de Preparación (Minutos)</label>
                                 <input type="text" class="form-control" id="tiempo-editar" placeholder="Tiempo de Preparacion">
                             </div>
 
@@ -434,6 +434,14 @@
                                         Categorias
                                     </button>
                                 </div>
+
+                                <div class="form-group">
+                                    <button class="form-control btn btn-info btn-sm" type="button" onclick="verSlider()">
+                                        <i class="fas fa-pencil-alt"></i>
+                                        Slider
+                                    </button>
+                                </div>
+
 
                             </div>
                         </div>
@@ -1253,6 +1261,12 @@
             var id = document.getElementById('id-opciones').value;
             window.location.href="{{ url('/admin/categorias/listado/') }}/"+id;
         }
+
+        function verSlider(){
+            var id = document.getElementById('id-opciones').value;
+            window.location.href="{{ url('/admin/slider/listado/') }}/"+id;
+        }
+
 
 
 
