@@ -71,7 +71,7 @@
 
                                 <div class="form-group">
                                     <label>Descripción del Slider</label>
-                                    <input type="text" maxlength="200" class="form-control" id="nombre-nuevo">
+                                    <input type="text" autocomplete="off" maxlength="200" class="form-control" id="nombre-nuevo">
                                 </div>
 
                                 <div class="form-group" style="margin-left:0px">
@@ -120,6 +120,8 @@
                                     </label>
                                 </div>
 
+                                <p>Si no utiliza Horario este Slider, establecer uno por Defecto</p>
+
                                 <div class="form-group">
                                     <label>Horario abre</label>
                                     <input type="time" class="form-control" id="hora-abre">
@@ -160,45 +162,16 @@
                     <div class="card-body">
                         <div class="col-md-12">
 
-
                             <div class="form-group" style="margin-left:0px">
-                                <label>Redirecciona a Producto?</label><br>
+                                <label>Slider Disponible</label><br>
                                 <label class="switch" style="margin-top:10px">
-                                    <input type="checkbox" id="toggle-redire-editar">
+                                    <input type="checkbox" id="toggle-activo-editar">
                                     <div class="slider round">
                                         <span class="on">Sí</span>
                                         <span class="off">No</span>
                                     </div>
                                 </label>
                             </div>
-
-                            <div class="form-group">
-                                <label>En caso que no redireccione a ningun Producto, puede seleccionar cualquier categoría</label>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Producto:</label>
-                                <select class="form-control" id="select-producto-editar">
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Descripción</label>
-                                <input type="hidden" id="id-editar">
-                                <input type="text" maxlength="300" autocomplete="off" class="form-control" id="nombre-editar" placeholder="Descripción">
-                            </div>
-
-                            <div class="form-group">
-                                <div>
-                                    <label>Imagen</label>
-                                    <p>Tamaño recomendado de: 2048 x 1000 px</p>
-                                </div>
-                                <br>
-                                <div class="col-md-10">
-                                    <input type="file" style="color:#191818" id="imagen-editar" accept="image/jpeg, image/jpg, image/png"/>
-                                </div>
-                            </div>
-
 
                         </div>
                     </div>
@@ -355,8 +328,6 @@
         function informacion(id){
 
             document.getElementById("formulario-editar").reset();
-            $("#select-producto-editar").val('').trigger('change');
-
             openLoading();
 
             axios.post('/admin/slider/informacion',{
@@ -365,29 +336,14 @@
                 .then((response) => {
                     closeLoading();
                     if(response.data.success === 1){
-
-                        document.getElementById("select-producto-editar").options.length = 0;
-
                         $('#modalEditar').modal('show');
+
                         $('#id-editar').val(id);
 
-
-                        $('#nombre-editar').val(response.data.slider.descripcion);
-
-                        $('#select-producto-editar').append('<option value="">Seleccionar opción</option>');
-                        $.each(response.data.producto, function( key, val ){
-                            if(response.data.idproducto == val.id){
-                                $('#select-producto-editar').append('<option value="' +val.id +'" selected="selected">'+ val.nombre +'</option>');
-                            }else{
-                                $('#select-producto-editar').append('<option value="' +val.id +'">'+ val.nombre +'</option>');
-                            }
-                        });
-
-
-                        if(response.data.slider.redireccionamiento === 0){
-                            $("#toggle-redire-editar").prop("checked", false);
+                        if(response.data.slider.activo === 0){
+                            $("#toggle-activo-editar").prop("checked", false);
                         }else{
-                            $("#toggle-redire-editar").prop("checked", true);
+                            $("#toggle-activo-editar").prop("checked", true);
                         }
 
                     }else{
@@ -395,47 +351,22 @@
                     }
                 })
                 .catch((error) => {
-                    toastr.error('Error al buscar');
+                    toastr.error('Error de servidor');
                     closeLoading();
                 });
         }
 
         function editar(){
 
-            var id = document.getElementById('id-editar').value;
-            var nombre = document.getElementById('nombre-editar').value;
-            var imagen = document.getElementById('imagen-editar');
-            var producto = document.getElementById('select-producto-editar').value;
-            var cbredire = document.getElementById('toggle-redire-editar').checked;
+            var idslider = document.getElementById('id-editar').value;
+            var cbactivo = document.getElementById('toggle-activo-editar').checked;
 
-            var check_redire = cbredire ? 1 : 0;
-
-            if(check_redire === 1){
-                if(producto === '' || producto == null){
-                    toastr.error('Seleccionar Producto');
-                    return;
-                }
-            }
-
-            if(nombre.length > 300){
-                toastr.error('Descripción máximo 300 caracteres');
-                return;
-            }
-
-            if(imagen.files && imagen.files[0]){ // si trae imagen
-                if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
-                    toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
-                    return;
-                }
-            }
+            var toggleActivo = cbactivo ? 1 : 0;
 
             openLoading();
             var formData = new FormData();
-            formData.append('id', id);
-            formData.append('nombre', nombre);
-            formData.append('imagen', imagen.files[0]);
-            formData.append('producto', producto);
-            formData.append('checkredirec', check_redire);
+            formData.append('idslider', idslider);
+            formData.append('toggleactivo', toggleActivo);
 
 
             axios.post('/admin/slider/editar', formData, {
@@ -457,7 +388,7 @@
                 });
         }
 
-        function informacionBorrar(id){
+        function modalBorrar(id){
             Swal.fire({
                 title: 'Borrar Slider?',
                 text: "",

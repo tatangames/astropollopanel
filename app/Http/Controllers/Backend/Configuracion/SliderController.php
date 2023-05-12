@@ -42,10 +42,10 @@ class SliderController extends Controller
 
         $slider = Slider::orderBy('posicion')->get();
 
-        foreach ($slider as $ss){
+        foreach ($slider as $info){
 
-            if($info = Productos::where('id', $ss->id_producto)->first()){
-                $ss->producto = $info->nombre;
+            if($infoProducto = Productos::where('id', $info->id_producto)->first()){
+                $info->producto = $infoProducto->nombre;
             }
 
             $info->hora_abre = date("h:i A", strtotime($info->hora_abre));
@@ -109,11 +109,11 @@ class SliderController extends Controller
 
     function editarSlider(Request $request){
 
-
+        // aqui vyo
 
     }
     public function ordenarSliders(Request $request){
-        $tasks = BloqueSlider::all();
+        $tasks = Slider::all();
 
         foreach ($tasks as $task) {
             $id = $task->id;
@@ -136,16 +136,17 @@ class SliderController extends Controller
 
         if ($validator->fails()){return ['success' => 0]; }
 
-        if($info = BloqueSlider::where('id', $request->id)->first()){
+        if($info = Slider::where('id', $request->id)->first()){
 
             if(Storage::disk('imagenes')->exists($info->imagen)){
                 Storage::disk('imagenes')->delete($info->imagen);
             }
 
-            BloqueSlider::where('id', $request->id)->delete();
+            Slider::where('id', $request->id)->delete();
+
             return ['success' => 1];
         }else{
-            return ['success' => 2];
+            return ['success' => 99];
         }
     }
 
@@ -159,12 +160,9 @@ class SliderController extends Controller
 
         if ($validar->fails()){return ['success' => 0]; }
 
-        if($bloque = BloqueSlider::where('id', $request->id)->first()){
+        if($bloque = Slider::where('id', $request->id)->first()){
 
-            $producto = Producto::where('activo', 1)->orderBy('nombre')->get();
-
-            return ['success' => 1, 'slider' => $bloque, 'producto' => $producto,
-                'idproducto' => $bloque->id_producto];
+            return ['success' => 1, 'slider' => $bloque];
         }else{
             return ['success' => 2];
         }

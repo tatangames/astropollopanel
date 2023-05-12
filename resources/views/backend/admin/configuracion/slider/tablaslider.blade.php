@@ -53,8 +53,8 @@
                                     </button>
                                     <br><br>
 
-                                    <button type="button" class="btn btn-success btn-xs" onclick="verProductos({{ $dato->id }})">
-                                        <i class="fas fa-eye" title="Productos"></i>&nbsp; Productos
+                                    <button type="button" class="btn btn-danger btn-xs" onclick="modalBorrar({{ $dato->id }})">
+                                        <i class="fas fa-trash" title="Borrar"></i>&nbsp; Borrar
                                     </button>
 
 

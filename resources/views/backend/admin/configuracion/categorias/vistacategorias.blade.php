@@ -83,7 +83,7 @@
                                     </label>
                                 </div>
 
-                                <p>Si no utiliza Horario esta Categoría, establecer por Defecto</p>
+                                <p>Si no utiliza Horario esta Categoría, establecer uno por Defecto</p>
 
                                 <div class="form-group">
                                     <label>Horario abre</label>

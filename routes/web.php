@@ -106,6 +106,7 @@ Route::post('/admin/productos/ordenar', [ProductosController::class,'ordenarProd
 Route::get('/admin/slider/listado/{id}', [SliderController::class,'index']);
 Route::get('/admin/slider/listado/tabla/{id}', [SliderController::class,'sliderTabla']);
 Route::post('/admin/slider/nuevo', [SliderController::class,'nuevaSlider']);
+Route::post('/admin/slider/borrar', [SliderController::class,'borrarSliders']);
 Route::post('/admin/slider/informacion', [SliderController::class,'informacionSlider']);
 Route::post('/admin/slider/editar', [SliderController::class,'editarSlider']);
 Route::post('/admin/slider/ordenar', [SliderController::class,'ordenarSlider']);
