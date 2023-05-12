@@ -6,6 +6,9 @@ use App\Http\Controllers\Controles\ControlController;
 use App\Http\Controllers\Backend\Roles\RolesController;
 use App\Http\Controllers\Backend\Perfil\PerfilController;
 use App\Http\Controllers\Backend\Roles\PermisoController;
+use App\Http\Controllers\Backend\Configuracion\ZonasController;
+use App\Http\Controllers\Backend\Configuracion\ServiciosController;
+use App\Http\Controllers\Backend\Configuracion\CategoriasController;
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
@@ -48,4 +51,34 @@ Route::post('/admin/editar-perfil/actualizar', [PerfilController::class, 'editar
 Route::get('sin-permisos', [ControlController::class,'indexSinPermiso'])->name('no.permisos.index');
 
 
+// --- ZONAS ---
+Route::get('/admin/zonas/mapa/zona', [ZonasController::class,'index'])->name('index.vistas.zonas');
+Route::get('/admin/zonas/tablas/zona', [ZonasController::class,'tablaZonas']);
+Route::post('/admin/zonas/registro/nueva', [ZonasController::class,'nuevaZona']);
+Route::post('/admin/zonas/informacion-zona', [ZonasController::class,'informacionZona']);
+Route::post('/admin/zonas/editar-zona', [ZonasController::class,'editarZona']);
+Route::get('/admin/zonas/ver-mapa/{id}', [ZonasController::class,'verMapa']);
 
+
+// --- POLIGONO ---
+Route::get('/admin/zonas/poligono/{id}', [ZonasController::class,'indexPoligono']);
+Route::post('/admin/zonas/poligono/listado-nuevo', [ZonasController::class,'nuevoPoligono']);
+Route::post('/admin/zonas/poligono/borrar', [ZonasController::class,'borrarPoligonos']);
+
+// --- SERVICIOS ---
+Route::get('/admin/servicios/listado', [ServiciosController::class,'index'])->name('index.servicios.listado');
+Route::get('/admin/servicios/listado/tabla', [ServiciosController::class,'serviciosTabla']);
+Route::post('/admin/servicios/registrar/nuevo', [ServiciosController::class,'registrarServicio']);
+Route::post('/admin/servicios/informacion', [ServiciosController::class,'informacionServicio']);
+Route::post('/admin/servicios/editar-servicio', [ServiciosController::class,'editarServicios']);
+Route::post('/admin/servicios/informacion-horario/servicio', [ServiciosController::class,'informacionHorarios']);
+Route::post('/admin/servicios/editar/horarios', [ServiciosController::class,'editarHorarioServicio']);
+
+
+// --- CATEGORIAS de servicio---
+Route::get('/admin/categorias/listado/{id}', [CategoriasController::class,'index']);
+Route::get('/admin/categorias/listado/tabla/{id}', [CategoriasController::class,'categoriasTabla']);
+Route::post('/admin/categorias/nuevo', [CategoriasController::class,'nuevaCategorias']);
+Route::post('/admin/categorias/informacion', [CategoriasController::class,'informacionCategorias']);
+Route::post('/admin/categorias/editar', [CategoriasController::class,'editarCategorias']);
+Route::post('/admin/categorias/ordenar', [CategoriasController::class,'ordenarCategorias']);

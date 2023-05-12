@@ -6,9 +6,6 @@
     </div>
 </aside>
 
-<footer class="main-footer">
-    <strong>Sistema El Tuncazo</strong>
-</footer>
 </div>
 
 
