@@ -28,11 +28,7 @@ class ServiciosController extends Controller
             array_push($pilaIdZonas, $info->id_zonas);
         }
 
-        $zonas = Zonas::whereNotIn('id', $pilaIdZonas)
-            ->orderBy('nombre')
-            ->get();
-
-        return view('backend.admin.configuracion.servicios.vistaservicios', compact('zonas'));
+        return view('backend.admin.configuracion.servicios.vistaservicios', );
     }
 
     // tabla
@@ -41,10 +37,6 @@ class ServiciosController extends Controller
         $servicios = Servicios::orderBy('nombre')->get();
 
         foreach ($servicios as $info){
-
-            $infoZona = Zonas::where('id', $info->id_zonas)->first();
-            $info->nombrezona = $infoZona->nombre;
-
             $info->minimo = '$' . number_format((float)$info->minimo, 2, '.', ',');
         }
 
@@ -54,10 +46,6 @@ class ServiciosController extends Controller
 
     public function registrarServicio(Request $request)
     {
-        if (Servicios::where('id_zonas', $request->idzona)->first()) {
-            // ya hay 1 servicio asignado a esta zona
-            return ['success' => 1];
-        }
 
         DB::beginTransaction();
 
@@ -65,7 +53,6 @@ class ServiciosController extends Controller
 
             $tipo = new Servicios();
 
-            $tipo->id_zonas = $request->idzona;
             $tipo->nombre = $request->nombre;
             $tipo->telefono = $request->telefono;
             $tipo->minimo = $request->minimocompra;
@@ -132,7 +119,7 @@ class ServiciosController extends Controller
             $hora7->save();
 
             DB::commit();
-            return ['success' => 2];
+            return ['success' => 1];
 
         } catch (\Throwable $e) {
 

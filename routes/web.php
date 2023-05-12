@@ -9,6 +9,9 @@ use App\Http\Controllers\Backend\Roles\PermisoController;
 use App\Http\Controllers\Backend\Configuracion\ZonasController;
 use App\Http\Controllers\Backend\Configuracion\ServiciosController;
 use App\Http\Controllers\Backend\Configuracion\CategoriasController;
+use App\Http\Controllers\Backend\Configuracion\ZonasServicioController;
+use App\Http\Controllers\Backend\Configuracion\ProductosController;
+
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
@@ -82,3 +85,20 @@ Route::post('/admin/categorias/nuevo', [CategoriasController::class,'nuevaCatego
 Route::post('/admin/categorias/informacion', [CategoriasController::class,'informacionCategorias']);
 Route::post('/admin/categorias/editar', [CategoriasController::class,'editarCategorias']);
 Route::post('/admin/categorias/ordenar', [CategoriasController::class,'ordenarCategorias']);
+
+
+/// --- ZONAS SERVICIO ---
+Route::get('/admin/zonasservicio/listado', [ZonasServicioController::class,'index'])->name('index.zonas.servicio.listado');
+Route::get('/admin/zonasservicio/listado/tabla', [ZonasServicioController::class,'zonasServicioTablas']);
+Route::post('/admin/zonaservicios/nuevo', [ZonasServicioController::class,'nuevaZonaServicio']);
+Route::post('/admin/zonaservicios/borrar', [ZonasServicioController::class,'borrarRegistro']);
+
+
+// --- PRODUCTOS ---
+Route::get('/admin/productos/listado/{id}', [ProductosController::class,'index']);
+Route::get('/admin/productos/listado/tabla/{id}', [ProductosController::class,'productosTabla']);
+Route::post('/admin/productos/nuevo', [ProductosController::class,'nuevoProducto']);
+Route::post('/admin/productos/informacion', [ProductosController::class,'informacionProductos']);
+Route::post('/admin/productos/editar', [ProductosController::class,'editarProductos']);
+Route::post('/admin/productos/ordenar', [ProductosController::class,'ordenarProductos']);
+

@@ -7,48 +7,23 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 10%">Nombre</th>
-                                <th style="width: 6%">Teléfono </th>
-                                <th style="width: 8%">Usa Mínimo $</th>
-                                <th style="width: 8%">Minimo Compra</th>
-                                <th style="width: 12%">Tiempo Preparación (Minutos)</th>
-                                <th style="width: 10%">Opciones</th>
+                                <th style="width: 15%">Nombre de Zona</th>
+                                <th style="width: 20%">Nombre del Negocio</th>
+                                <th style="width: 20%">Opciones</th>
+
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($servicios as $dato)
+                            @foreach($listado as $dato)
 
                                 <tr>
-                                    <td>{{ $dato->nombre }}</td>
-                                    <td>{{ $dato->telefono }}</td>
-
+                                    <td>{{ $dato->nombrezona }}</td>
+                                    <td>{{ $dato->nombrenegocio }}</td>
                                     <td>
-                                        @if($dato->utiliza_minimo == 0)
-                                            <span class="badge bg-danger">No</span>
-                                        @else
-                                            <span class="badge bg-success">Si</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $dato->minimo }}</td>
-                                    <td>{{ $dato->tiempo }}</td>
-
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacionServicio({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Editar"></i>&nbsp; Editar
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="borrarRegistro({{ $dato->id }})">
+                                            <i class="fas fa-trash" title="Borrar Registro"></i>&nbsp; Borrar Registro
                                         </button>
-
-                                        <br><br>
-
-                                        <button type="button" class="btn btn-success btn-xs" onclick="modalHorario({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Horarios"></i>&nbsp; Horarios
-                                        </button>
-                                        <br><br>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="abrirModalOpciones({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Opciones"></i>&nbsp; Opciones
-                                        </button>
-
-
                                     </td>
                                 </tr>
 
@@ -107,4 +82,3 @@
 
 
 </script>
-

@@ -10,20 +10,17 @@
                             <th>Posición</th>
                             <th>Nombre</th>
                             <th>Activo</th>
-                            <th>Horario Menu</th>
-                            <th>Abre</th>
-                            <th>Cierra</th>
+                            <th>Precio</th>
                             <th>Imagen</th>
                             <th>Opciones</th>
                         </tr>
                         </thead>
                         <tbody id="tablecontents">
-                        @foreach($categorias as $dato)
+                        @foreach($productos as $dato)
                             <tr class="row1" data-id="{{ $dato->id }}">
 
                                 <td>{{ $dato->posicion }}</td>
                                 <td>{{ $dato->nombre }}</td>
-
                                 <td>
                                     @if($dato->activo == 0)
                                         <span class="badge bg-danger">Desactivado</span>
@@ -32,31 +29,18 @@
                                     @endif
                                 </td>
 
+                                <td>{{ $dato->precio }}</td>
+
                                 <td>
-                                    @if($dato->usa_horario == 0)
-                                        <span class="badge bg-danger">Desactivado</span>
-                                    @else
-                                        <span class="badge bg-success">Activado</span>
+                                    @if($dato->utiliza_imagen == 1)
+                                        <center><img alt="Imagenes" src="{{ url('storage/imagenes/'.$dato->imagen) }}" width="150px" height="150px" /></center>
                                     @endif
-                                </td>
-
-                                <td>{{ $dato->hora_abre }}</td>
-                                <td>{{ $dato->hora_cierra }}</td>
-
-                                <td>
-                                    <center><img alt="Imagenes" src="{{ url('storage/imagenes/'.$dato->imagen) }}" width="75px" height="75px" /></center>
                                 </td>
 
                                 <td>
                                     <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">
                                         <i class="fas fa-eye" title="Editar"></i>&nbsp; Editar
                                     </button>
-                                    <br><br>
-
-                                    <button type="button" class="btn btn-success btn-xs" onclick="verProductos({{ $dato->id }})">
-                                        <i class="fas fa-eye" title="Productos"></i>&nbsp; Productos
-                                    </button>
-
 
                                 </td>
 
@@ -94,7 +78,7 @@
 
             openLoading();
 
-            axios.post('/admin/categorias/ordenar',  {
+            axios.post('/admin/productos/ordenar',  {
                 'order': order
             })
                 .then((response) => {

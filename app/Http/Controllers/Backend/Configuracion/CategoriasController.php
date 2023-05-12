@@ -82,8 +82,6 @@ class CategoriasController extends Controller
             return ['success' => 2];
         }
 
-
-
     }
 
     public function informacionCategorias(Request $request){

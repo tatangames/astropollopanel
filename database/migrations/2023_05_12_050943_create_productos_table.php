@@ -24,7 +24,7 @@ class CreateProductosTable extends Migration
             $table->boolean('activo');
             $table->integer('posicion');
             $table->boolean('utiliza_nota');
-            $table->string('nota', 75)->nullable();
+            $table->string('nota', 500)->nullable();
             $table->boolean('utiliza_imagen');
 
             $table->foreign('id_categorias')->references('id')->on('categorias');

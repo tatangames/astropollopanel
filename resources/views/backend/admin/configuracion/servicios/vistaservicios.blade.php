@@ -60,25 +60,9 @@
                                 <div class="col-md-12">
 
                                     <div class="form-group">
-                                        <label style="color:#191818">Zona del Negocio</label>
-                                        <br>
-                                        <div>
-                                            <select class="form-control" id="select-zona">
-                                                <option value="" selected>Seleccionar</option>
-                                                @foreach($zonas as $item)
-                                                    <option value="{{$item->id}}">{{$item->nombre}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group">
                                         <label>Nombre del Negocio</label>
                                         <input type="text" maxlength="100" class="form-control" id="nombre-nuevo" placeholder="Nombre del Negocio">
                                     </div>
-
-
 
                                     <div class="form-group">
                                         <label>Mínimo de Compra</label><br>
@@ -426,6 +410,44 @@
 
 
 
+
+<!-- opciones de modales -->
+<div class="modal fade" id="modalOpcion">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Opciones</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formulario-opciones">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="hidden" id="id-opciones">
+
+                                <div class="form-group">
+                                    <button class="form-control btn btn-info btn-sm" type="button" onclick="verCategorias()">
+                                        <i class="fas fa-pencil-alt"></i>
+                                        Categorias
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
 @extends('backend.menus.footerjs')
 @section('archivos-js')
 
@@ -479,8 +501,7 @@
         //nuevo servicio
         function nuevoRegistro(){
 
-            // parte 1
-            var idzona = document.getElementById('select-zona').value;
+
             var nombre = document.getElementById('nombre-nuevo').value;
             var telefono = document.getElementById('telefono-nuevo').value;
 
@@ -532,11 +553,6 @@
 
             var toggleDomingo = cbcerradodomingo ? 1 : 0;
 
-
-            if (idzona === '') {
-                toastr.error('Zona para Negocio es requerida');
-                return;
-            }
 
             if (nombre === '') {
                 toastr.error("Nombre de Negocio es requerido");
@@ -703,7 +719,6 @@
 
 
                 var formData = new FormData();
-                formData.append('idzona', idzona);
                 formData.append('nombre', nombre);
                 formData.append('telefono', telefono);
 
@@ -750,25 +765,6 @@
                         closeLoading();
 
                         if (response.data.success === 1) {
-                            // esta zona ya tiene un servicio registrado
-
-                            Swal.fire({
-                                title: 'No Guardado',
-                                text: "Esta Zona ya tiene un Negocio Registrado, recargar la Vista",
-                                icon: 'info',
-                                showCancelButton: false,
-                                confirmButtonColor: '#28a745',
-                                cancelButtonColor: '#d33',
-                                cancelButtonText: 'Cancelar',
-                                confirmButtonText: 'Aceptar'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-
-                                }
-                            })
-
-                        }
-                        else if (response.data.success === 2) {
                             toastr.success('Servicio Agregado');
                             $('#modalAgregar').modal('hide');
                             recargar();
@@ -825,6 +821,16 @@
                     toastr.error('Error del servidor');
                 });
         }
+
+        // abrir modales de opciones de servicio
+        function abrirModalOpciones(id){
+
+            document.getElementById("formulario-opciones").reset();
+
+            $('#id-opciones').val(id);
+            $('#modalOpcion').modal('show');
+        }
+
 
         // editar servicio
         function editarservicio(){
@@ -1243,7 +1249,8 @@
                 });
         }
 
-        function verCategorias(id){
+        function verCategorias(){
+            var id = document.getElementById('id-opciones').value;
             window.location.href="{{ url('/admin/categorias/listado/') }}/"+id;
         }
 

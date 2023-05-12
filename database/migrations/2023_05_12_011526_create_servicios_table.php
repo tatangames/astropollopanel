@@ -15,7 +15,6 @@ class CreateServiciosTable extends Migration
     {
         Schema::create('servicios', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('id_zonas')->unsigned();
 
             $table->string('nombre', 100);
 
@@ -28,8 +27,6 @@ class CreateServiciosTable extends Migration
 
             // tiempo predeterminado para contestar una orden
             $table->integer('tiempo');
-
-            $table->foreign('id_zonas')->references('id')->on('zonas');
         });
     }
 

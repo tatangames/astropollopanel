@@ -415,7 +415,7 @@
         }
 
         function verProductos(id) {
-            window.location.href="{{ url('/admin/productos/') }}/"+id;
+            window.location.href="{{ url('/admin/productos/listado') }}/"+id;
         }
 
 
