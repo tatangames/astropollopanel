@@ -100,28 +100,32 @@ class ZonasController extends Controller
 
         if(Zonas::where('id', $request->id)->first()){
 
+            if($request->togglea == 1){
+                if(ZonasPoligono::where('id_zonas', $request->id)->first()){
 
-            if(ZonasPoligono::where('id_zonas', $request->id)->first()){
+                    // no hacer nada
+                }else{
+                    // no puede activar porque no tiene poligonos
 
-                Zonas::where('id', $request->id)->update([
-                    'nombre' => $request->nombre,
-                    'latitud' => $request->latitud,
-                    'longitud' => $request->longitud,
-                    'saturacion' => $request->togglep,
-                    'hora_abierto_delivery' => $request->horaabierto,
-                    'hora_cerrado_delivery' => $request->horacerrado,
-                    'activo' => $request->togglea,
-                    'tiempo_extra' => $request->tiempoextra,
-                    'mensaje_bloqueo' => $request->mensaje
-                ]);
-
-                return ['success' => 1];
-            }else{
-                // no puede activar porque no tiene poligonos
-
-                return ['success' => 2];
+                    return ['success' => 2];
+                }
             }
 
+            // actualizar zona
+
+            Zonas::where('id', $request->id)->update([
+                'nombre' => $request->nombre,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
+                'saturacion' => $request->togglep,
+                'hora_abierto_delivery' => $request->horaabierto,
+                'hora_cerrado_delivery' => $request->horacerrado,
+                'activo' => $request->togglea,
+                'tiempo_extra' => $request->tiempoextra,
+                'mensaje_bloqueo' => $request->mensaje
+            ]);
+
+            return ['success' => 1];
         }else{
             return ['success' => 99];
         }

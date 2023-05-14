@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <title>El Tuncazo - Panel</title>
+    <title>Astro Pollo - Panel</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -12,7 +12,6 @@
     <!--Fontawesome CDN.-->
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <!-- comprimido de librerias -->
-    <link href="{{ asset('css/login/login.css') }}" type="text/css" rel="stylesheet" />
     <!-- libreria para alertas -->
     <link rel="stylesheet" href="{{asset('css/login/styleLogin.css')}}">
 
@@ -29,7 +28,7 @@
     }
     body {
         font-family: 'Roboto', sans-serif;
-        background-image: linear-gradient(to top, #7028e4 0%, #e5b2ca 100%);
+        background-image: url({{ asset('images/fondo1.jpg') }});
     }
     .demo-container {
         height: 100%;
@@ -89,8 +88,8 @@
                     <img src="{{ asset('images/logo.png') }}" class="rounded-circle p-2 bg-white">
                 </div>
                 <div class="p-5 bg-white rounded shadow-lg">
-                    <h3 class="mb-2 text-center pt-5">PANEL DE CONTROL EL TUNCAZO</h3>
-                    <p class="text-center lead">Cafe, Helados Y Pupusería El Tuncazo</p>
+                    <h3 class="mb-2 text-center pt-5">ASTRO POLLO</h3>
+                    <p class="text-center lead">Panel de Administración</p>
                     <form class=" validate-form">
 
                         <div class="input-group form-group" style="margin-top: 25px">
@@ -107,10 +106,15 @@
                             <input id="password" maxlength="16" type="password" class="form-control" required placeholder="Contraseña" autocomplete="off">
                         </div>
 
-                        <br>
+                        <div class="form-group text-left">
+                            <a id="myLink" style="color: black; font-size: 15px" href="#" onclick="modalRecuperar()"> Contraseña olvidada?
+                            </a>
+                        </div>
+
+
                         <br>
                         <div class="form-group text-center">
-                            <input type="button" value="ACCEDER" onclick="login()" id="btnLogin" class="btn btn-lg w-100 shadow-lg" style="background: #673AB7; color: white">
+                            <input type="button" value="ACCEDER" onclick="login()" id="btnLogin" class="btn btn-lg w-100 shadow-lg" style="background: #bb1c1c; color: white">
                         </div>
                     </form>
 
@@ -209,6 +213,12 @@
         else {
             toastr.error('Error');
         }
+    }
+
+
+    // modal para recuperar contrasena
+    function modalRecuperar(){
+        console.log('entra');
     }
 
 

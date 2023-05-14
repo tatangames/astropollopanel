@@ -109,8 +109,25 @@ class SliderController extends Controller
 
     function editarSlider(Request $request){
 
-        // aqui vyo
+        $rules = array(
+            'idslider' => 'required',
+            'toggleactivo' => 'required',
+        );
 
+        $validator = Validator::make($request->all(), $rules);
+
+        if ( $validator->fails()){return ['success' => 0];}
+
+        if(Slider::where('id', $request->idslider)->first()){
+
+            Slider::where('id', $request->id)->update([
+                'activo' => $request->toggleactivo,
+            ]);
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
     }
     public function ordenarSliders(Request $request){
         $tasks = Slider::all();

@@ -368,7 +368,6 @@
             formData.append('idslider', idslider);
             formData.append('toggleactivo', toggleActivo);
 
-
             axios.post('/admin/slider/editar', formData, {
             })
                 .then((response) => {
