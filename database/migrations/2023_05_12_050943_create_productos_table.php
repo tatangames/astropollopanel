@@ -16,7 +16,7 @@ class CreateProductosTable extends Migration
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger('id_categorias')->unsigned();
+            $table->bigInteger('id_subcategorias')->unsigned();
             $table->string('nombre', 100);
             $table->string('imagen', 100);
             $table->string('descripcion', 2000)->nullable();
@@ -27,7 +27,7 @@ class CreateProductosTable extends Migration
             $table->string('nota', 500)->nullable();
             $table->boolean('utiliza_imagen');
 
-            $table->foreign('id_categorias')->references('id')->on('categorias');
+            $table->foreign('id_subcategorias')->references('id')->on('sub_categorias');
         });
     }
 

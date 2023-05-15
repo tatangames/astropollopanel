@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\Registro\ApiRegistroController;
 use App\Http\Controllers\Api\Cliente\ApiClienteController;
 use App\Http\Controllers\Api\Cliente\ApiDireccionesController;
 use App\Http\Controllers\Api\Cliente\ApiMenuController;
-
+use App\Http\Controllers\Api\Carrito\CarritoComprasController;
 
 
 /*
@@ -41,7 +41,17 @@ Route::post('cliente/nueva/direccion', [ApiDireccionesController::class, 'nuevaD
 // MENU PRINCIPAL
 Route::post('cliente/lista/servicios-bloque', [ApiMenuController::class, 'listadoMenuPrincipal']);
 
+// retorna lista de todas las categorias del servicio (filtro horario)
+Route::post('cliente/listado/todas/categorias', [ApiMenuController::class, 'listaDeTodasLasCategorias']);
 
+// retorna listado de productos cuando es seleccionada una categoria
+Route::post('cliente/listado/productos/servicios', [ApiMenuController::class, 'listaDeTodosLosProductosServicio']);
+
+// retorna informacion de 1 producto individual
+Route::post('cliente/informacion/producto/individual', [ApiMenuController::class, 'informacionProductoIndividual']);
+
+// agregar el producto al carrito de compras del cliente
+Route::post('cliente/carrito/producto/agregar', [CarritoComprasController::class, 'agregarProductoCarritoTemporal']);
 
 
 

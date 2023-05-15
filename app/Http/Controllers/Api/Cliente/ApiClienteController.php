@@ -38,8 +38,8 @@ class ApiClienteController extends Controller
 
             if (Hash::check($request->password, $info->password)) {
 
-                if($request->token_fcm != null){
-                    Clientes::where('id', $info->id)->update(['token_fcm' => $request->token_fcm]);
+                if($request->idfirebase != null){
+                    Clientes::where('id', $info->id)->update(['token_fcm' => $request->idfirebase]);
                 }
 
                 // inicio sesion

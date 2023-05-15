@@ -9,6 +9,7 @@ use App\Models\DireccionCliente;
 use App\Models\Productos;
 use App\Models\Servicios;
 use App\Models\Slider;
+use App\Models\SubCategorias;
 use App\Models\ZonasServicio;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -117,9 +118,9 @@ class ApiMenuController extends Controller
                     ->get();
 
                 // validar que haya categorias, sino ocultar
-                $hayCategorias = false;
+                $hayCategorias = 0;
                 if ($arrayCategorias->count()){
-                    $hayCategorias = true;
+                    $hayCategorias = 1;
                 }
 
 
@@ -131,7 +132,8 @@ class ApiMenuController extends Controller
 
                 $arrayPopularesHorario = DB::table('populares AS pop')
                     ->join('productos AS pro', 'pop.id_productos', '=', 'pro.id')
-                    ->join('categorias AS ca', 'pro.id_categorias', '=', 'ca.id')
+                    ->join('sub_categorias AS subca', 'pro.id_subcategorias', '=', 'subca.id')
+                    ->join('categorias AS ca', 'subca.id_categorias', '=', 'ca.id')
                     ->select('ca.activo', 'pro.id', 'ca.usa_horario', 'ca.hora_abre', 'ca.hora_cierra', 'ca.id_servicios')
                     ->where('ca.id_servicios', $infoZonaServicio->id_servicios)
                     ->where('ca.activo', 1)
@@ -149,7 +151,8 @@ class ApiMenuController extends Controller
 
                 $arrayPopulares = DB::table('populares AS pop')
                     ->join('productos AS pro', 'pop.id_productos', '=', 'pro.id')
-                    ->join('categorias AS ca', 'pro.id_categorias', '=', 'ca.id')
+                    ->join('sub_categorias AS subca', 'pro.id_subcategorias', '=', 'subca.id')
+                    ->join('categorias AS ca', 'subca.id_categorias', '=', 'ca.id')
                     ->select('ca.activo', 'pro.id', 'ca.usa_horario', 'ca.hora_abre', 'ca.hora_cierra', 'ca.id_servicios')
                     ->where('ca.id_servicios', $infoZonaServicio->id_servicios)
                     ->where('ca.activo', 1)
@@ -170,9 +173,9 @@ class ApiMenuController extends Controller
                     $info->precio = '$' . number_format((float)$info->precio, 2, '.', ',');
                 }
 
-                $hayPopulares = false;
+                $hayPopulares = 0;
                 if ($arrayProductos->count()){
-                    $hayPopulares = true;
+                    $hayPopulares = 1;
                 }
 
                 // el slider siempre estara fijo en la app
@@ -196,5 +199,124 @@ class ApiMenuController extends Controller
             return ['success' => 5, 'mensaje' => $mensaje];
         }
     }
+
+
+
+
+
+    public function listaDeTodasLasCategorias(Request $request){
+
+        // ESTA PETICION SIEMPRE EL CLIENTE DEBERA TENER UNA DIRECCION YA REGISTRADA
+
+        $infoDireccion = DireccionCliente::where('id_cliente', $request->id)
+            ->where('seleccionado', 1)
+            ->first();
+
+        if($infoZonaServicio = ZonasServicio::where('id_zonas', $infoDireccion->id_zonas)->first()){
+
+            $getValores = Carbon::now('America/El_Salvador');
+            $hora = $getValores->format('H:i:s');
+
+            $pilaIdCategorias = array();
+
+            // obtener las categorias del servicio (ACTIVAS Y UTILIZAN HORARIO)
+            $categoriasHorario = Categorias::where('id_servicios', $infoZonaServicio->id_servicios)
+                ->where('activo', 1)
+                ->where('usa_horario', 1)
+                ->where('hora_abre', '<=', $hora)
+                ->where('hora_cierra', '>=', $hora)
+                ->get();
+
+            foreach ($categoriasHorario as $info){
+                array_push($pilaIdCategorias, $info->id);
+            }
+
+            // obtener las categorias del servicio (ACTIVAS)
+
+            $categoriasActivas = Categorias::where('id_servicios', $infoZonaServicio->id_servicios)
+                ->where('activo', 1)
+                ->where('usa_horario', 0)
+                ->get();
+
+            foreach ($categoriasActivas as $info){
+                array_push($pilaIdCategorias, $info->id);
+            }
+
+            // listado de categorias ya filtradas
+            $arrayCategorias = Categorias::whereIn('id', $pilaIdCategorias)
+                ->orderBy('posicion', 'ASC')
+                ->get();
+
+
+            return ['success' => 1, 'categorias' => $arrayCategorias];
+
+        }else{
+            $mensaje = "No hay una servicio asociado a la zona";
+            return ['success' => 2, 'mensaje' => $mensaje];
+        }
+    }
+
+
+
+    // retorna listado de productos cuando es seleccionada una categoria
+    public function listaDeTodosLosProductosServicio(Request $request){
+
+        // viene id categoria
+
+        $reglaDatos = array(
+            'id' => 'required',
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        $arraySubcategorias = SubCategorias::where('id_categorias', $request->id)
+                ->where('activo', 1)
+                ->orderBy('posicion', 'ASC')
+                ->get();
+
+            $resultsBloque = array();
+            $index = 0;
+
+            foreach($arraySubcategorias as $secciones){
+                array_push($resultsBloque,$secciones);
+
+                $subSecciones = Productos::where('id_subcategorias', $secciones->id)
+                    ->where('activo', 1)
+                    ->orderBy('posicion', 'ASC')
+                    ->get();
+
+                $resultsBloque[$index]->productos = $subSecciones; //agregar los productos en la sub seccion
+                $index++;
+            }
+
+            return [
+                'success' => 1,
+                'productos' => $arraySubcategorias,
+            ];
+        }
+
+
+        public function informacionProductoIndividual(Request $request){
+
+            $reglaDatos = array(
+                'id' => 'required',   // id producto
+            );
+
+            $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+            if($validarDatos->fails()){return ['success' => 0]; }
+
+            if(Productos::where('id', $request->id)->first()){
+
+                $producto = Productos::where('id', $request->id)->get();
+
+                return ['success' => 1, 'producto' => $producto];
+
+            }else{
+                return ['success' => 2];
+            }
+        }
 
 }
