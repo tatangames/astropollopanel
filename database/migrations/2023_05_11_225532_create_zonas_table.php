@@ -34,6 +34,13 @@ class CreateZonasTable extends Migration
 
             // aumenta el tiempo de una orden, a esta zona
             $table->integer('tiempo_extra');
+
+
+            // minimo de compra en la zona
+            $table->decimal('minimo', 10,2);
+            $table->boolean('utiliza_minimo');
+
+
         });
     }
 

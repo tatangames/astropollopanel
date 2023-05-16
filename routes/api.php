@@ -53,6 +53,33 @@ Route::post('cliente/informacion/producto/individual', [ApiMenuController::class
 // agregar el producto al carrito de compras del cliente
 Route::post('cliente/carrito/producto/agregar', [CarritoComprasController::class, 'agregarProductoCarritoTemporal']);
 
+// ver carrito de compras
+Route::post('cliente/carrito/ver/orden', [CarritoComprasController::class, 'verCarritoDeCompras']);
+
+// borrar carrito de compras
+Route::post('cliente/carrito/borrar/orden', [CarritoComprasController::class, 'borrarCarritoDeCompras']);
+
+// eliminar una fila del carrito de compras
+Route::post('cliente/carrito/eliminar/producto', [CarritoComprasController::class, 'borrarProductoDelCarrito']);
+
+// ver producto individual en pantalla de editar la cantidad
+
+Route::post('cliente/carrito/ver/producto', [CarritoComprasController::class, 'verProductoCarritoEditar']);
+
+// cambiar la cantidad de producto a editar en carrito de compras
+Route::post('cliente/carrito/cambiar/cantidad', [CarritoComprasController::class, 'editarCantidadProducto']);
+
+// informacion final para procesar la orden
+Route::post('cliente/carrito/ver/proceso-orden', [CarritoComprasController::class, 'verOrdenAProcesarCliente']);
+
+// ** verificacion de cupones **
+Route::post('cliente/verificar/cupon', [CarritoComprasController::class, 'verificarCupon']);
+
+
+
+
+
+
 
 
 

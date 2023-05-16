@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCarritoTemporalTable extends Migration
+class CreateCProductoGratisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreateCarritoTemporalTable extends Migration
      */
     public function up()
     {
-        Schema::create('carrito_temporal', function (Blueprint $table) {
+        Schema::create('c_producto_gratis', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('id_clientes')->unsigned();
+            $table->bigInteger('id_cupones')->unsigned();
             $table->bigInteger('id_servicios')->unsigned();
 
-            $table->foreign('id_clientes')->references('id')->on('clientes');
+            // NOMBRE DE PRODUCTO GRATIS
+            $table->string('nombre', 100);
+
+            $table->foreign('id_cupones')->references('id')->on('cupones');
             $table->foreign('id_servicios')->references('id')->on('servicios');
         });
     }
@@ -30,6 +33,6 @@ class CreateCarritoTemporalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carrito_temporal');
+        Schema::dropIfExists('c_producto_gratis');
     }
 }
