@@ -31,6 +31,10 @@ class CreateClientesTable extends Migration
 
             // el cliente decide si borra carrito de compras al realizar una orden
             $table->boolean('borrar_carrito');
+
+
+            // para saber de que app se registro
+            $table->string('appregistro', 50);
         });
     }
 

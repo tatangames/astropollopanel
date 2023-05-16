@@ -13,7 +13,7 @@ use App\Http\Controllers\Backend\Configuracion\ZonasServicioController;
 use App\Http\Controllers\Backend\Configuracion\ProductosController;
 use App\Http\Controllers\Backend\Configuracion\SliderController;
 use App\Http\Controllers\Backend\Configuracion\CuponesController;
-
+use App\Http\Controllers\Backend\Clientes\ClientesController;
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
@@ -171,6 +171,20 @@ Route::get('/admin/productos/servicio/principales/{id}', [CategoriasController::
 Route::get('/admin/productos/servicio/principales/tabla/{id}', [CategoriasController::class,'tablaServiciosProductosPrincipales']);
 Route::post('/admin/productos/servicio/principales/nuevo', [CategoriasController::class,'nuevoProductosPrincipales']);
 Route::post('/admin/productos/servicio/principales/borrar', [CategoriasController::class,'borrarProductosPrincipales']);
+
+
+// --- LISTA DE CLIENTES REGISTRADOS ----
+Route::get('/admin/clientes/listado', [ClientesController::class,'index'])->name('index.clientes.listado');
+Route::get('/admin/clientes/listado/tabla', [ClientesController::class,'tablaClientes']);
+Route::post('/admin/clientes/listado/informacion', [ClientesController::class,'informacionCliente']);
+Route::post('/admin/clientes/informacion/editar', [ClientesController::class,'editarCliente']);
+
+
+// --- LISTA DE DIRECCIONES DEL CLIENTE ---
+Route::get('/admin/clientes/direcciones/listado/{id}', [ClientesController::class,'indexListaDirecciones']);
+Route::get('/admin/clientes/direcciones/listado/tabla/{id}', [ClientesController::class,'tablaClientesDirecciones']);
+
+
 
 
 

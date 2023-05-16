@@ -8,54 +8,46 @@
                             <thead>
                             <tr>
 
-                                <th style="width: 10%">Nombre</th>
-                                <th style="width: 10%">Abre/Cierre Zona</th>
-                                <th style="width: 10%">Mensaje Cierre</th>
-                                <th style="width: 10%">Hora Abierto</th>
-                                <th style="width: 10%">Hora Cerrado</th>
+                                <th style="width: 10%">Fecha de Registro</th>
+                                <th style="width: 10%">Usuario</th>
+                                <th style="width: 10%">Correo</th>
+                                <th style="width: 10%">App Registro</th>
+                                <th style="width: 10%">Usuario Activo</th>
 
-                                <th style="width: 10%">Zona Activa</th>
                                 <th style="width: 10%">Opciones</th>
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($zonas as $dato)
+                            @foreach($lista as $dato)
 
                                 <tr>
-                                    <td>{{ $dato->nombre }}</td>
+                                    <td>{{ $dato->fecha }}</td>
+                                    <td>{{ $dato->usuario }}</td>
+                                    <td>{{ $dato->correo }}</td>
+                                    <td>{{ $dato->appregistro }}</td>
+
                                     <td>
-                                        @if($dato->saturacion == 0)
+                                        @if($dato->activo == 0)
                                             <span class="badge bg-danger">Desactivado</span>
                                         @else
                                             <span class="badge bg-success">Activado</span>
                                         @endif
                                     </td>
-                                    <td>{{ $dato->mensaje_bloqueo }}</td>
 
-                                    <td>{{ $dato->hora_abierto_delivery }}</td>
-                                    <td>{{ $dato->hora_cerrado_delivery }}</td>
+
 
                                     <td>
-                                        @if($dato->activo == 0)
-                                            <span class="badge bg-danger">Cerrado</span>
-                                        @else
-                                            <span class="badge bg-success">Abierto</span>
-                                        @endif
-                                    </td>
 
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="verInformacion({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Editar"></i>&nbsp; Editar
+                                        <button type="button" class="btn btn-success btn-xs" onclick="verInformacion({{ $dato->id }})">
+                                            <i class="fa fa-location-arrow" title="Editar"></i>&nbsp; Editar
                                         </button>
+
                                         <br><br>
-                                        <button type="button" class="btn btn-success btn-xs" onclick="vistaPoligonos({{ $dato->id }})">
-                                            <i class="fa fa-location-arrow" title="Poligonos"></i>&nbsp; Poligonos
+                                        <button type="button" class="btn btn-success btn-xs" onclick="vistaDirecciones({{ $dato->id }})">
+                                            <i class="fa fa-location-arrow" title="Direcciones"></i>&nbsp; Direcciones
                                         </button>
-                                        <br><br>
-                                        <button type="button" class="btn btn-warning btn-xs" onclick="verMapa({{ $dato->id }})">
-                                            <i class="fa fa-location-arrow" title="Mapa"></i>&nbsp; Mapa
-                                        </button>
+
                                     </td>
                                 </tr>
 
