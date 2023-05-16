@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Backend\Configuracion;
 use App\Http\Controllers\Controller;
 use App\Models\Categorias;
 use App\Models\CategoriasPrincipales;
+use App\Models\Populares;
 use App\Models\Productos;
 use App\Models\SubCategorias;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -338,7 +340,6 @@ class CategoriasController extends Controller
         }
 
         if($info = CategoriasPrincipales::where('id_servicios', $request->idservicio)
-            ->where('id_categorias', $request->idcategoria)
             ->orderBy('posicion', 'DESC')
             ->first()){
             $suma = $info->posicion + 1;
@@ -377,7 +378,111 @@ class CategoriasController extends Controller
 
 
 
+    // ******************** PRODUCTOS PRINCIPALES DEL SERVICIO /////
 
+
+    public function indexServiciosProductosPrincipales($id){
+
+        $arrayCategorias = Categorias::where('id_servicios', $id)->get();
+        $pilaIdCategorias = array();
+
+        foreach ($arrayCategorias as $info){
+            array_push($pilaIdCategorias, $info->id);
+        }
+
+
+
+        // obtener todos los ID de sub categorias
+        $arraySubCate = SubCategorias::whereIn('id_categorias', $pilaIdCategorias)->get();
+
+        $pilaIdSubCategorias = array();
+
+        foreach ($arraySubCate as $info){
+            array_push($pilaIdSubCategorias, $info->id);
+        }
+
+        // obtener todos los productos de las sub categorias
+
+        $arrayProductos = Productos::whereIn('id_subcategorias', $pilaIdSubCategorias)->get();
+
+
+        return view('backend.admin.configuracion.servicios.productosprincipales.vistaproductosprincipales', compact('id', 'arrayProductos'));
+    }
+
+    public function tablaServiciosProductosPrincipales($id){
+
+        $listado = Populares::where('id_servicios', $id)->orderBy('posicion')->get();
+
+        foreach ($listado as $info){
+
+            $infoProducto = Productos::where('id', $info->id_productos)->first();
+
+            $info->nombre = $infoProducto->nombre;
+            $info->activo = $infoProducto->activo;
+            $info->precio = '$' . number_format((float)$info->precio, 2, '.', ',');
+            $info->imagen = $infoProducto->imagen;
+            $info->utiliza_imagen = $infoProducto->utiliza_imagen;
+        }
+
+        return view('backend.admin.configuracion.servicios.productosprincipales.tablaproductosprincipales', compact('listado'));
+    }
+
+
+    public function nuevoProductosPrincipales(Request $request){
+
+        $regla = array(
+            'idservicio' => 'required',
+            'idproducto' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+        // YA ESTA REGISTRADO EL PRODUCTO
+        if(Populares::where('id_servicios', $request->idservicio)
+            ->where('id_productos', $request->idproducto)
+            ->first()){
+            return ['success' => 1];
+        }
+
+        if($info = Populares::where('id_servicios', $request->idservicio)
+            ->orderBy('posicion', 'DESC')
+            ->first()){
+            $suma = $info->posicion + 1;
+        }else{
+            $suma = 1;
+        }
+
+        $ca = new Populares();
+        $ca->id_servicios = $request->idservicio;
+        $ca->id_productos = $request->idproducto;
+        $ca->posicion = $suma;
+
+        if($ca->save()){
+            return ['success' => 2];
+        }else {
+            return ['success' => 99];
+        }
+    }
+
+
+    public function borrarProductosPrincipales(Request $request){
+
+        $rules = array(
+            'id' => 'required' // id (zonas)
+        );
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){ return ['success' => 0]; }
+
+        if(Populares::where('id', $request->id)->first()){
+            Populares::where('id', $request->id)->delete();
+        }
+
+        return ['success'=> 1];
+
+    }
 
 
 }

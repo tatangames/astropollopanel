@@ -22,7 +22,7 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <h1>Categorias Principal</h1>
+            <h1>Productos Principales</h1>
 
             <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-info btn-sm">
                 <i class="fas fa-pencil-alt"></i>
@@ -37,7 +37,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header" id="card-header-color">
-                <h3 class="card-title" style="color: white">Lista de Categorias Principales</h3>
+                <h3 class="card-title" style="color: white">Lista de Productos Principales</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -68,9 +68,9 @@
                             <div class="col-md-12">
 
                                 <div class="form-group">
-                                    <label>Categorias:</label>
-                                    <select class="form-control" id="select-categoria">
-                                        @foreach($categorias as $item)
+                                    <label>Productos:</label>
+                                    <select class="form-control" id="select-productos">
+                                        @foreach($arrayProductos as $item)
                                             <option value="{{$item->id}}">{{$item->nombre}}</option>
                                         @endforeach
                                     </select>
@@ -104,7 +104,7 @@
     <script type="text/javascript">
         $(document).ready(function(){
             var id = {{ $id }};
-            var ruta = "{{ URL::to('/admin/categorias/servicio/principales/tabla') }}/"+id;
+            var ruta = "{{ URL::to('/admin/productos/servicio/principales/tabla') }}/"+id;
             $('#tablaDatatable').load(ruta);
         });
     </script>
@@ -113,7 +113,7 @@
 
         function recargar(){
             var id = {{ $id }};
-            var ruta = "{{ URL::to('/admin/categorias/servicio/principales/tabla') }}/"+id;
+            var ruta = "{{ URL::to('/admin/productos/servicio/principales/tabla') }}/"+id;
             $('#tablaDatatable').load(ruta);
         }
 
@@ -126,10 +126,10 @@
         //nueva categoria
         function guardarRegistro(){
 
-            var idcategoria = document.getElementById('select-categoria').value;
+            var idproducto = document.getElementById('select-productos').value;
 
-            if(idcategoria === '') {
-                toastr.error('Categoría es requerida');
+            if(idproducto === '') {
+                toastr.error('Producto es requerido');
                 return;
             }
 
@@ -140,19 +140,19 @@
 
             var formData = new FormData();
             formData.append('idservicio', idservicio);
-            formData.append('idcategoria', idcategoria);
+            formData.append('idproducto', idproducto);
 
-            axios.post('/admin/categorias/servicio/principales/nuevo', formData, {
+            axios.post('/admin/productos/servicio/principales/nuevo', formData, {
             })
                 .then((response) => {
                     closeLoading();
 
                     if (response.data.success === 1) {
 
-                        // la categoria ya está registrada
+                        // producto ya está registrada
                         Swal.fire({
                             title: 'No Guardado',
-                            text: "La Categoría ya esta registrada",
+                            text: "El Producto ya esta registrado",
                             icon: 'info',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',
@@ -183,7 +183,7 @@
 
 
 
-        function borrarRegistro(id) {
+        function borrarPrincipal(id) {
             Swal.fire({
                 title: 'Borrar Registro',
                 text: "",
@@ -207,7 +207,7 @@
             var formData = new FormData();
             formData.append('id', id);
 
-            axios.post('/admin/categorias/servicio/principales/borrar', formData, {
+            axios.post('/admin/productos/servicio/principales/borrar', formData, {
             })
                 .then((response) => {
                     closeLoading();

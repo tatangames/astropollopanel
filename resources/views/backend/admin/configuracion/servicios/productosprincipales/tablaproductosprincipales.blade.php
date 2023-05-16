@@ -8,7 +8,10 @@
                         <thead>
                         <tr>
                             <th>Posición</th>
-                            <th>Nombre Categoría</th>
+                            <th>Nombre</th>
+                            <th>Activo</th>
+                            <th>Precio</th>
+                            <th>Imagen</th>
 
                             <th>Opciones</th>
                         </tr>
@@ -18,7 +21,22 @@
                             <tr class="row1" data-id="{{ $dato->id }}">
 
                                 <td>{{ $dato->posicion }}</td>
-                                <td>{{ $dato->nomcategoria }}</td>
+                                <td>{{ $dato->nombre }}</td>
+                                <td>
+                                    @if($dato->activo == 0)
+                                        <span class="badge bg-danger">Desactivado</span>
+                                    @else
+                                        <span class="badge bg-success">Activado</span>
+                                    @endif
+                                </td>
+
+                                <td>{{ $dato->precio }}</td>
+
+                                <td>
+                                    @if($dato->utiliza_imagen == 1)
+                                        <center><img alt="Imagenes" src="{{ url('storage/imagenes/'.$dato->imagen) }}" width="75px" height="75px" /></center>
+                                    @endif
+                                </td>
 
                                 <td>
 

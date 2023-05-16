@@ -1146,8 +1146,8 @@
 
 
         function verProductosPrincipales(){
-
-
+            var id = document.getElementById('id-opciones').value;
+            window.location.href="{{ url('/admin/productos/servicio/principales') }}/"+id;
         }
 
 

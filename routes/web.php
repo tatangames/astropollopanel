@@ -167,6 +167,10 @@ Route::post('/admin/categorias/servicio/principales/borrar', [CategoriasControll
 
 
 // --- PRODUCTOS PRINCIPALES DEL SERVICIO ----
+Route::get('/admin/productos/servicio/principales/{id}', [CategoriasController::class,'indexServiciosProductosPrincipales']);
+Route::get('/admin/productos/servicio/principales/tabla/{id}', [CategoriasController::class,'tablaServiciosProductosPrincipales']);
+Route::post('/admin/productos/servicio/principales/nuevo', [CategoriasController::class,'nuevoProductosPrincipales']);
+Route::post('/admin/productos/servicio/principales/borrar', [CategoriasController::class,'borrarProductosPrincipales']);
 
 
 
