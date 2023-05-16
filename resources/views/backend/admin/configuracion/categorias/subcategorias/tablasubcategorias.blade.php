@@ -7,20 +7,19 @@
                     <table id="table" class="table table-bordered">
                         <thead>
                         <tr>
+                            <th>id</th>
                             <th>Posición</th>
                             <th>Nombre</th>
                             <th>Activo</th>
-                            <th>Horario Menu</th>
-                            <th>Abre</th>
-                            <th>Cierra</th>
-                            <th>Imagen</th>
+
                             <th>Opciones</th>
                         </tr>
                         </thead>
                         <tbody id="tablecontents">
-                        @foreach($categorias as $dato)
+                        @foreach($lista as $dato)
                             <tr class="row1" data-id="{{ $dato->id }}">
 
+                                <td>{{ $dato->id }}</td>
                                 <td>{{ $dato->posicion }}</td>
                                 <td>{{ $dato->nombre }}</td>
 
@@ -32,20 +31,6 @@
                                     @endif
                                 </td>
 
-                                <td>
-                                    @if($dato->usa_horario == 0)
-                                        <span class="badge bg-danger">Desactivado</span>
-                                    @else
-                                        <span class="badge bg-success">Activado</span>
-                                    @endif
-                                </td>
-
-                                <td>{{ $dato->hora_abre }}</td>
-                                <td>{{ $dato->hora_cierra }}</td>
-
-                                <td>
-                                    <center><img alt="Imagenes" src="{{ url('storage/imagenes/'.$dato->imagen) }}" width="75px" height="75px" /></center>
-                                </td>
 
                                 <td>
                                     <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">
@@ -53,10 +38,9 @@
                                     </button>
                                     <br><br>
 
-                                    <button type="button" class="btn btn-success btn-xs" onclick="verSubCategorias({{ $dato->id }})">
-                                        <i class="fas fa-eye" title="Sub Categorias"></i>&nbsp; Sub Categorias
+                                    <button type="button" class="btn btn-success btn-xs" onclick="verProductos({{ $dato->id }})">
+                                        <i class="fas fa-eye" title="Productos"></i>&nbsp; Productos
                                     </button>
-
 
                                 </td>
 
@@ -94,7 +78,7 @@
 
             openLoading();
 
-            axios.post('/admin/categorias/ordenar',  {
+            axios.post('/admin/sub/categorias/ordenar',  {
                 'order': order
             })
                 .then((response) => {

@@ -10,4 +10,9 @@ class SubCategorias extends Model
     use HasFactory;
     protected $table = 'sub_categorias';
     public $timestamps = false;
+
+
+    protected $fillable = [
+        'posicion'
+    ];
 }

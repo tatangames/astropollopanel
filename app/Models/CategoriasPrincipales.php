@@ -8,5 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class CategoriasPrincipales extends Model
 {
     use HasFactory;
+
     protected $table = 'categorias_principales';
-    public $timestamps = false;}
+    public $timestamps = false;
+
+    protected $fillable = [
+        'posicion'
+    ];
+
+}

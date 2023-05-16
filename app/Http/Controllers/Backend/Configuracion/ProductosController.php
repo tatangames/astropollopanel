@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Configuracion;
 use App\Http\Controllers\Controller;
 use App\Models\Categorias;
 use App\Models\Productos;
+use App\Models\SubCategorias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -19,16 +20,17 @@ class ProductosController extends Controller
 
     public function index($id){
 
-        $categoria = Categorias::where('id', $id)->first();
-        $nomcategoria = $categoria->nombre;
-        // recibo id del servicio
-        return view('backend.admin.configuracion.productos.vistaproductos', compact('id', 'nomcategoria'));
+        $subcategoria = SubCategorias::where('id', $id)->first();
+        $nomsubcategoria = $subcategoria->nombre;
+
+        return view('backend.admin.configuracion.productos.vistaproductos', compact('id', 'nomsubcategoria'));
     }
+
 
     // tabla de productos
     public function productosTabla($id){
 
-        $productos = Productos::where('id_categorias', $id)
+        $productos = Productos::where('id_subcategorias', $id)
             ->orderBy('posicion')
             ->get();
 
@@ -45,7 +47,7 @@ class ProductosController extends Controller
 
         $regla = array(
             'nombre' => 'required',
-            'idcategoria' => 'required'
+            'idsubcategoria' => 'required',
         );
 
         $validar = Validator::make($request->all(), $regla);
@@ -73,7 +75,7 @@ class ProductosController extends Controller
                 }
 
                 $ca = new Productos();
-                $ca->id_categorias = $request->idcategoria;
+                $ca->id_subcategorias = $request->idsubcategoria;
                 $ca->nombre = $request->nombre;
                 $ca->imagen = $nombreFoto;
                 $ca->descripcion = $request->descripcion;
@@ -103,11 +105,12 @@ class ProductosController extends Controller
             }
 
             $ca = new Productos();
-            $ca->id_categorias = $request->categoria;
+            $ca->id_subcategorias = $request->idsubcategoria;
             $ca->nombre = $request->nombre;
             $ca->descripcion = $request->descripcion;
             $ca->precio = $request->precio;
             $ca->activo = 1;
+            $ca->imagen = null;
             $ca->posicion = $suma;
             $ca->utiliza_nota = $request->cbnota;
             $ca->nota = $request->nota;
@@ -134,9 +137,12 @@ class ProductosController extends Controller
 
         if($info = Productos::where('id', $request->id)->first()){
 
-            $cate = Categorias::orderBy('nombre')->get();
+            $infoSubCate = SubCategorias::where('id', $info->id_subcategorias)->first();
 
-            return ['success' => 1, 'producto' => $info, 'cate' => $cate];
+            // listado de sub categorias para mover un producto
+            $arraySubCate = SubCategorias::where('id_categorias', $infoSubCate->id_categorias)->get();
+
+            return ['success' => 1, 'producto' => $info, 'arraysub' => $arraySubCate];
         }else{
             return ['success' => 2];
         }
@@ -146,7 +152,8 @@ class ProductosController extends Controller
 
         $rules = array(
             'id' => 'required',
-            'nombre' => 'required'
+            'nombre' => 'required',
+            'idsubcate' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -179,6 +186,7 @@ class ProductosController extends Controller
                         'nota' => $request->nota,
                         'utiliza_imagen' => $request->cbimagen,
                         'imagen' => $nombreFoto,
+                        'id_subcategorias' => $request->idsubcate
                     ]);
 
                     if(Storage::disk('imagenes')->exists($imagenOld)){
@@ -208,6 +216,7 @@ class ProductosController extends Controller
                     'utiliza_nota' => $request->cbnota,
                     'nota' => $request->nota,
                     'utiliza_imagen' => $request->cbimagen,
+                    'id_subcategorias' => $request->idsubcate
                 ]);
 
                 return ['success' => 1];

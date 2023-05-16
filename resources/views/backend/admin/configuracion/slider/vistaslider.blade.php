@@ -24,11 +24,11 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <h1>Slider</h1>
+            <h1>Banner</h1>
 
             <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-info btn-sm">
                 <i class="fas fa-pencil-alt"></i>
-                Nuevo Slider
+                Nuevo Banner
             </button>
         </div>
 
@@ -39,7 +39,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header" id="card-header-color">
-                <h3 class="card-title" style="color: white">Lista de Sliders</h3>
+                <h3 class="card-title" style="color: white">Lista de Banner</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -58,7 +58,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Slider</h4>
+                <h4 class="modal-title">Nuevo Banner</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -70,7 +70,7 @@
                             <div class="col-md-12">
 
                                 <div class="form-group">
-                                    <label>Descripción del Slider</label>
+                                    <label>Descripción del Banner</label>
                                     <input type="text" autocomplete="off" maxlength="200" class="form-control" id="nombre-nuevo">
                                 </div>
 
@@ -152,7 +152,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Editar Slider</h4>
+                <h4 class="modal-title">Editar Banner</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -389,7 +389,7 @@
 
         function modalBorrar(id){
             Swal.fire({
-                title: 'Borrar Slider?',
+                title: 'Borrar Banner?',
                 text: "",
                 icon: 'info',
                 showCancelButton: true,

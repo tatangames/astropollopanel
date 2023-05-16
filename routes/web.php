@@ -80,6 +80,8 @@ Route::post('/admin/servicios/informacion-horario/servicio', [ServiciosControlle
 Route::post('/admin/servicios/editar/horarios', [ServiciosController::class,'editarHorarioServicio']);
 
 
+
+
 // --- CATEGORIAS de servicio---
 Route::get('/admin/categorias/listado/{id}', [CategoriasController::class,'index']);
 Route::get('/admin/categorias/listado/tabla/{id}', [CategoriasController::class,'categoriasTabla']);
@@ -87,6 +89,20 @@ Route::post('/admin/categorias/nuevo', [CategoriasController::class,'nuevaCatego
 Route::post('/admin/categorias/informacion', [CategoriasController::class,'informacionCategorias']);
 Route::post('/admin/categorias/editar', [CategoriasController::class,'editarCategorias']);
 Route::post('/admin/categorias/ordenar', [CategoriasController::class,'ordenarCategorias']);
+
+
+
+
+// --- SUB CATEGORIAS de servicio---
+Route::get('/admin/sub/categorias/listado/{id}', [CategoriasController::class,'indexSubCategorias']);
+Route::get('/admin/sub/categorias/listado/tabla/{id}', [CategoriasController::class,'subCategoriasTabla']);
+Route::post('/admin/sub/categorias/nuevo', [CategoriasController::class,'nuevaSubCategorias']);
+Route::post('/admin/sub/categorias/informacion', [CategoriasController::class,'informacionSubCategorias']);
+Route::post('/admin/sub/categorias/editar', [CategoriasController::class,'editarSubCategorias']);
+Route::post('/admin/sub/categorias/ordenar', [CategoriasController::class,'ordenarSubCategorias']);
+
+
+
 
 
 /// --- ZONAS SERVICIO ---

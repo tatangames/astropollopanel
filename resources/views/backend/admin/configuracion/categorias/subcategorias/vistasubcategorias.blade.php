@@ -22,11 +22,11 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <h1>Categorías</h1>
+            <h1>Sub Categorías</h1>
 
             <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-info btn-sm">
                 <i class="fas fa-pencil-alt"></i>
-                Nueva Categoría
+                Nueva Sub Categoría
             </button>
         </div>
 
@@ -37,7 +37,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header" id="card-header-color">
-                <h3 class="card-title" style="color: white">Lista de Categorías</h3>
+                <h3 class="card-title" style="color: white">Categoría: {{ $nomcategoria }}</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -56,7 +56,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Categoría</h4>
+                <h4 class="modal-title">Nuevo Sub Categoría</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -68,41 +68,8 @@
                             <div class="col-md-12">
 
                                 <div class="form-group">
-                                    <label>Nombre de Categoria</label>
+                                    <label>Nombre de Sub Categoria</label>
                                     <input type="text" maxlength="100" class="form-control" autocomplete="off" id="nombre-nuevo" placeholder="Nombre">
-                                </div>
-
-                                <div class="form-group" >
-                                    <label>Utiliza Horario</label><br>
-                                    <label class="switch" style="margin-top:10px">
-                                        <input type="checkbox" id="toggle-horario">
-                                        <div class="slider round">
-                                            <span class="on">Si</span>
-                                            <span class="off">No</span>
-                                        </div>
-                                    </label>
-                                </div>
-
-                                <p>Si no utiliza Horario esta Categoría, establecer uno por Defecto</p>
-
-                                <div class="form-group">
-                                    <label>Horario abre</label>
-                                    <input type="time" class="form-control" id="hora-abre">
-                                </div>
-                                <div class="form-group">
-                                    <label>Horario cierra</label>
-                                    <input type="time" class="form-control" id="hora-cierra">
-                                </div>
-
-
-                                <div class="form-group">
-                                    <div>
-                                        <label>Imagen</label>
-                                    </div>
-                                    <br>
-                                    <div class="col-md-10">
-                                        <input type="file" style="color:#191818" id="imagen-nuevo" accept="image/jpeg, image/jpg, image/png"/>
-                                    </div>
                                 </div>
 
                             </div>
@@ -124,7 +91,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Editar Categoría</h4>
+                <h4 class="modal-title">Editar Sub Categoría</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -135,7 +102,7 @@
                         <div class="col-md-12">
 
                             <div class="form-group">
-                                <label>Nombre</label>
+                                <label>Nombre de Sub Categoría</label>
                                 <input type="hidden" id="id-editar">
                                 <input type="text" maxlength="100" class="form-control" id="nombre-editar" placeholder="Nombre">
                             </div>
@@ -150,28 +117,6 @@
                                     </div>
                                 </label>
                             </div>
-
-
-                            <div class="form-group">
-                                <label>Utiliza Horario</label><br>
-                                <label class="switch" style="margin-top:10px">
-                                    <input type="checkbox" id="toggle-horario-editar">
-                                    <div class="slider round">
-                                        <span class="on">Si</span>
-                                        <span class="off">No</span>
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Horario abre</label>
-                                <input type="time" class="form-control" id="hora-abre-editar">
-                            </div>
-                            <div class="form-group">
-                                <label>Horario cierra</label>
-                                <input type="time" class="form-control" id="hora-cierra-editar">
-                            </div>
-
 
                         </div>
                     </div>
@@ -199,7 +144,7 @@
     <script type="text/javascript">
         $(document).ready(function(){
             var id = {{ $id }};
-            var ruta = "{{ URL::to('/admin/categorias/listado/tabla/') }}/"+id;
+            var ruta = "{{ URL::to('/admin/sub/categorias/listado/tabla/') }}/"+id;
             $('#tablaDatatable').load(ruta);
         });
     </script>
@@ -208,7 +153,7 @@
 
         function recargar(){
             var id = {{ $id }};
-            var ruta = "{{ URL::to('/admin/categorias/listado/tabla/') }}/"+id;
+            var ruta = "{{ URL::to('/admin/sub/categorias/listado/tabla/') }}/"+id;
             $('#tablaDatatable').load(ruta);
         }
 
@@ -222,13 +167,6 @@
         function guardarRegistro(){
 
             var nombre = document.getElementById('nombre-nuevo').value;
-            var horaabre = document.getElementById('hora-abre').value;
-            var horacierra = document.getElementById('hora-cierra').value;
-            var cbtoggle = document.getElementById('toggle-horario').checked;
-            var imagen = document.getElementById('imagen-nuevo');
-
-            var toggleHorario = cbtoggle? 1 : 0;
-            var id = {{ $id }};
 
             if(nombre === '') {
                 toastr.error('Nombre es requerido');
@@ -240,38 +178,16 @@
                 return;
             }
 
-
-            if (horaabre === '') {
-                toastr.error("Horario Abre horario es requerido");
-                return;
-            }
-
-            if (horacierra === '') {
-                toastr.error("Horario Cierre horario es requerido");
-                return;
-            }
-
-            if(imagen.files && imagen.files[0]){ // si trae imagen
-                if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
-                    toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
-                    return;
-                }
-            }else{
-                toastr.error('Imagen es requerido');
-                return;
-            }
+            // id de categoria
+            var id = {{ $id }};
 
             openLoading();
 
             var formData = new FormData();
             formData.append('id', id);
             formData.append('nombre', nombre);
-            formData.append('imagen', imagen.files[0]);
-            formData.append('horaabre', horaabre);
-            formData.append('horacierra', horacierra);
-            formData.append('toggle', toggleHorario);
 
-            axios.post('/admin/categorias/nuevo', formData, {
+            axios.post('/admin/sub/categorias/nuevo', formData, {
             })
                 .then((response) => {
                     closeLoading();
@@ -295,7 +211,7 @@
             document.getElementById("formulario-editar").reset();
             openLoading();
 
-            axios.post('/admin/categorias/informacion',{
+            axios.post('/admin/sub/categorias/informacion',{
                 'id': id
             })
                 .then((response) => {
@@ -304,19 +220,9 @@
 
                         $('#modalEditar').modal('show');
                         $('#id-editar').val(id);
-                        $('#nombre-editar').val(response.data.categoria.nombre);
+                        $('#nombre-editar').val(response.data.subcategoria.nombre);
 
-                        if(response.data.categoria.usa_horario === 0){
-                            $("#toggle-horario-editar").prop("checked", false);
-                        }else{
-                            $("#toggle-horario-editar").prop("checked", true);
-                        }
-
-                        $('#hora-abre-editar').val(response.data.categoria.hora_abre);
-                        $('#hora-cierra-editar').val(response.data.categoria.hora_cierra);
-
-
-                        if(response.data.categoria.activo === 0){
+                        if(response.data.subcategoria.activo === 0){
                             $("#toggle-activo").prop("checked", false);
                         }else{
                             $("#toggle-activo").prop("checked", true);
@@ -340,13 +246,6 @@
 
             var toggleActivo = cbactivo ? 1 : 0;
 
-            var cbhorario = document.getElementById('toggle-horario-editar').checked;
-            var toggleHorario = cbhorario ? 1 : 0;
-
-            var horaabre = document.getElementById('hora-abre-editar').value;
-            var horacierra = document.getElementById('hora-cierra-editar').value;
-
-
             if(nombre === '') {
                 toastr.error('Nombre es requerido');
                 return;
@@ -357,30 +256,38 @@
                 return;
             }
 
-            if(horaabre === ''){
-                toastr.error('Horario abre es requerido');
-            }
-
-            if(horacierra === ''){
-                toastr.error('Horario cierra es requerido');
-            }
-
 
             openLoading();
             var formData = new FormData();
             formData.append('id', id);
             formData.append('nombre', nombre);
             formData.append('cbactivo', toggleActivo);
-            formData.append('cbhorario', toggleHorario);
-            formData.append('horaabre', horaabre);
-            formData.append('horacierra', horacierra);
 
-            axios.post('/admin/categorias/editar', formData, {
+            axios.post('/admin/sub/categorias/editar', formData, {
             })
                 .then((response) => {
                     closeLoading();
 
                     if (response.data.success === 1) {
+
+                        // no hay ningun producto activo en esta categoria
+                        Swal.fire({
+                            title: 'No Guardado',
+                            text: "La sub categoría no puede ser activada. No se encuentran Productos Activos",
+                            icon: 'info',
+                            showCancelButton: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            cancelButtonText: 'Cancelar',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                            }
+                        })
+
+                    }
+                    else if (response.data.success === 2) {
                         $('#modalEditar').modal('hide');
                         toastr.success('Actualizado correctamente');
                         recargar();
@@ -395,8 +302,8 @@
                 });
         }
 
-        function verSubCategorias(id) {
-            window.location.href="{{ url('/admin/sub/categorias/listado/') }}/"+id;
+        function verProductos(id) {
+            window.location.href="{{ url('/admin/productos/listado') }}/"+id;
         }
 
 

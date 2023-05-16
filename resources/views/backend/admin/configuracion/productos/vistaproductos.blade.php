@@ -28,7 +28,7 @@
 
         </div>
         <div style="margin-top: 10px">
-            <p>Categoría: {{ $nomcategoria }}</p>
+            <p>Sub Categoría: {{ $nomsubcategoria }}</p>
         </div>
     </div>
 </section>
@@ -149,6 +149,14 @@
                 <form id="formulario-editar">
                     <div class="card-body">
                         <div class="col-md-12">
+
+
+                            <div class="form-group">
+                                <label>Puede Mover el Producto de Sub Categoría:</label>
+                                <select class="form-control" id="select-mover">
+
+                                </select>
+                            </div>
 
                             <div class="form-group">
                                 <label>Nombre</label>
@@ -341,7 +349,7 @@
             var idcategoria = {{ $id }};
 
             var formData = new FormData();
-            formData.append('idcategoria', idcategoria);
+            formData.append('idsubcategoria', idcategoria);
             formData.append('nombre', nombre);
             formData.append('imagen', imagen.files[0]);
             formData.append('descripcion', descripcion);
@@ -406,6 +414,16 @@
                             $("#toggle-imagen-editar").prop("checked", true);
                         }
 
+                        document.getElementById("select-mover").options.length = 0;
+
+                        $.each(response.data.arraysub, function( key, val ){
+                            if(response.data.producto.id_subcategorias == val.id){
+                                $('#select-mover').append('<option value="' +val.id +'" selected="selected">'+val.nombre+'</option>');
+                            }else{
+                                $('#select-mover').append('<option value="' +val.id +'">'+val.nombre+'</option>');
+                            }
+                        });
+
                     }else{
                         toastr.error('Error al buscar');
                     }
@@ -428,9 +446,17 @@
             var cbactivo = document.getElementById('toggle-activo').checked;
             var nota = document.getElementById('nota-editar').value;
 
+            // para mover de sub categorias
+            var idsubcate = document.getElementById('select-mover').value;
+
             var check_imagen = cbimagen ? 1 : 0;
             var check_nota = cbnota ? 1 : 0;
             var check_activo = cbactivo ? 1 : 0;
+
+            if(idsubcate === '') {
+                toastr.error('ID Sub categoría es requerido');
+                return;
+            }
 
             if(nombre === '') {
                 toastr.error('Nombre es requerido');
@@ -500,6 +526,8 @@
             formData.append('cbimagen', check_imagen);
             formData.append('cbactivo', check_activo);
             formData.append('nota', nota);
+            formData.append('idsubcate', idsubcate);
+
 
             axios.post('/admin/productos/editar', formData, {
             })

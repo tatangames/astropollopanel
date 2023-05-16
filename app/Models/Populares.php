@@ -10,4 +10,9 @@ class Populares extends Model
     use HasFactory;
     protected $table = 'populares';
     public $timestamps = false;
+
+
+    protected $fillable = [
+        'posicion'
+    ];
 }
