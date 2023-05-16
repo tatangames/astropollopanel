@@ -74,6 +74,16 @@
                         </li>
 
 
+                        <li class="nav-item">
+                            <a href="{{ route('index.cupones.listado') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Cupones</p>
+                            </a>
+                        </li>
+
+
+
+
                     </ul>
                 </li>
 

@@ -12,6 +12,8 @@ use App\Http\Controllers\Backend\Configuracion\CategoriasController;
 use App\Http\Controllers\Backend\Configuracion\ZonasServicioController;
 use App\Http\Controllers\Backend\Configuracion\ProductosController;
 use App\Http\Controllers\Backend\Configuracion\SliderController;
+use App\Http\Controllers\Backend\Configuracion\CuponesController;
+
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
@@ -110,5 +112,14 @@ Route::post('/admin/slider/borrar', [SliderController::class,'borrarSliders']);
 Route::post('/admin/slider/informacion', [SliderController::class,'informacionSlider']);
 Route::post('/admin/slider/editar', [SliderController::class,'editarSlider']);
 Route::post('/admin/slider/ordenar', [SliderController::class,'ordenarSlider']);
+
+// --- CUPONES ---
+Route::get('/admin/cupones/listado', [CuponesController::class,'index'])->name('index.cupones.listado');
+Route::get('/admin/cupones/listado/tabla', [CuponesController::class,'cuponesTabla']);
+Route::post('/admin/cupones/nuevo', [CuponesController::class,'nuevoRegistro']);
+
+Route::post('/admin/cupones/informacion', [CuponesController::class,'informacionCupon']);
+Route::post('/admin/cupones/editar', [CuponesController::class,'editarCupon']);
+
 
 
