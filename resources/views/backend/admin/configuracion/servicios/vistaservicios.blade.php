@@ -416,6 +416,19 @@
                                     </button>
                                 </div>
 
+                                <div class="form-group">
+                                    <button class="form-control btn btn-info btn-sm" type="button" onclick="verCategoriasPrincipales()">
+                                        <i class="fas fa-pencil-alt"></i>
+                                        Categorías Principales
+                                    </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="form-control btn btn-info btn-sm" type="button" onclick="verProductosPrincipales()">
+                                        <i class="fas fa-pencil-alt"></i>
+                                        Productos Principales
+                                    </button>
+                                </div>
 
                                 <div class="form-group">
                                     <button class="form-control btn btn-info btn-sm" type="button" onclick="verCuponesProGratis()">
@@ -1101,30 +1114,41 @@
 
         function verCategorias(){
             var id = document.getElementById('id-opciones').value;
-            window.location.href="{{ url('/admin/categorias/listado/') }}/"+id;
+            window.location.href="{{ url('/admin/categorias/listado') }}/"+id;
         }
 
         function verSlider(){
             var id = document.getElementById('id-opciones').value;
-            window.location.href="{{ url('/admin/slider/listado/') }}/"+id;
+            window.location.href="{{ url('/admin/slider/listado') }}/"+id;
         }
 
 
         function verCuponesProGratis(){
             var id = document.getElementById('id-opciones').value;
-            window.location.href="{{ url('/admin/cupones/servicio/progratis/') }}/"+id;
+            window.location.href="{{ url('/admin/cupones/servicio/progratis') }}/"+id;
         }
 
         function verCuponesDescuentoDinero(){
             var id = document.getElementById('id-opciones').value;
-            window.location.href="{{ url('/admin/cupones/servicio/descdinero/') }}/"+id;
+            window.location.href="{{ url('/admin/cupones/servicio/descdinero') }}/"+id;
         }
 
         function verCuponesDescuentoPorcentaje(){
             var id = document.getElementById('id-opciones').value;
-            window.location.href="{{ url('/admin/cupones/servicio/descporcentaje/') }}/"+id;
+            window.location.href="{{ url('/admin/cupones/servicio/descporcentaje') }}/"+id;
         }
 
+
+        function verCategoriasPrincipales(){
+            var id = document.getElementById('id-opciones').value;
+            window.location.href="{{ url('/admin/categorias/servicio/principales') }}/"+id;
+        }
+
+
+        function verProductosPrincipales(){
+
+
+        }
 
 
 

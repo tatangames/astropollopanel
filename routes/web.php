@@ -158,6 +158,20 @@ Route::post('/admin/cupones/servicio/descporcentaje/nuevo', [CuponesController::
 Route::post('/admin/cupones/servicio/descporcentaje/borrar', [CuponesController::class,'borrarCuponDescuentoPorcentaje']);
 
 
+// --- CATEGORIAS PRINCIPALES DEL SERVICIO ---
+Route::get('/admin/categorias/servicio/principales/{id}', [CategoriasController::class,'indexServiciosCuponDescuentoDinero']);
+Route::get('/admin/categorias/servicio/principales/tabla/{id}', [CategoriasController::class,'tablaServiciosCuponDescuentoDinero']);
+Route::post('/admin/categorias/servicio/principales/nuevo', [CategoriasController::class,'nuevoCategoriaPrincipal']);
+Route::post('/admin/categorias/servicio/principales/borrar', [CategoriasController::class,'borrarCategoriaPrincipal']);
+
+
+
+// --- PRODUCTOS PRINCIPALES DEL SERVICIO ----
+
+
+
+
+
 
 
 

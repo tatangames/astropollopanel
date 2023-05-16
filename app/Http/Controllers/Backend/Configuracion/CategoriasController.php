@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Configuracion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Categorias;
+use App\Models\CategoriasPrincipales;
 use App\Models\Productos;
 use App\Models\SubCategorias;
 use Illuminate\Http\Request;
@@ -289,6 +290,90 @@ class CategoriasController extends Controller
 
 
 
+    // ****************** CATEGORIAS PRINCIPALES DEL SERVICIO  **************************
+
+
+    public function indexServiciosCuponDescuentoDinero($id){
+
+        // viene id de servicio
+
+        $categorias = Categorias::where('id_servicios', $id)->orderBy('nombre')->get();
+        return view('backend.admin.configuracion.servicios.categoriaprincipales.vistacategoriasprincipales', compact('categorias', 'id'));
+    }
+
+    // tabla
+    public function tablaServiciosCuponDescuentoDinero($id){
+
+        $listado = CategoriasPrincipales::where('id_servicios', $id)
+        ->orderBy('posicion', 'ASC')
+            ->get();
+
+        foreach ($listado as $info){
+
+            $infoCategoria = Categorias::where('id', $info->id_categorias)->first();
+            $info->nomcategoria = $infoCategoria->nombre;
+        }
+
+        return view('backend.admin.configuracion.servicios.categoriaprincipales.tablacategoriasprincipales', compact('listado'));
+    }
+
+
+    public function nuevoCategoriaPrincipal(Request $request){
+
+        $regla = array(
+            'idservicio' => 'required',
+            'idcategoria' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+
+        // YA CATEGORIA ESTA REGISTRADA
+        if(CategoriasPrincipales::where('id_servicios', $request->idservicio)
+            ->where('id_categorias', $request->idcategoria)
+            ->first()){
+            return ['success' => 1];
+        }
+
+        if($info = CategoriasPrincipales::where('id_servicios', $request->idservicio)
+            ->where('id_categorias', $request->idcategoria)
+            ->orderBy('posicion', 'DESC')
+            ->first()){
+            $suma = $info->posicion + 1;
+        }else{
+            $suma = 1;
+        }
+
+        $ca = new CategoriasPrincipales();
+        $ca->id_servicios = $request->idservicio;
+        $ca->id_categorias = $request->idcategoria;
+        $ca->posicion = $suma;
+
+        if($ca->save()){
+            return ['success' => 2];
+        }else {
+            return ['success' => 99];
+        }
+    }
+
+
+    public function borrarCategoriaPrincipal(Request $request){
+
+        $rules = array(
+            'id' => 'required' // id (zonas)
+        );
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){ return ['success' => 0]; }
+
+        if(CategoriasPrincipales::where('id', $request->id)->first()){
+            CategoriasPrincipales::where('id', $request->id)->delete();
+        }
+
+        return ['success'=> 1];
+    }
 
 
 
