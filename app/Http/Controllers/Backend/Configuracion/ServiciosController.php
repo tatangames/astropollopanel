@@ -54,10 +54,8 @@ class ServiciosController extends Controller
             $tipo = new Servicios();
 
             $tipo->nombre = $request->nombre;
-            $tipo->telefono = $request->telefono;
-            $tipo->minimo = $request->minimocompra;
-            $tipo->utiliza_minimo = $request->cbminimo;
-            $tipo->tiempo = 10; // tiempo que da cocina para preparar orden por defecto
+            $tipo->utiliza_cupon = $request->togglecupon;
+            $tipo->tiempo_cocina = 10; // tiempo que da cocina para preparar orden por defecto
             $tipo->save();
 
             // guardar Horarios
@@ -150,10 +148,7 @@ class ServiciosController extends Controller
 
                 Servicios::where('id', $request->id)->update([
                     'nombre' => $request->nombre,
-                    'telefono' => $request->telefono,
-                    'minimo' => $request->minimocompra,
-                    'utiliza_minimo' => $request->cbminimo,
-                    'tiempo' => $request->tiempo
+                    'utiliza_cupon' => $request->togglecupon,
                 ]);
 
                 DB::commit();
@@ -161,7 +156,7 @@ class ServiciosController extends Controller
                 return ['success' => 1];
 
             } catch (\Throwable $e) {
-                Log::info('ee' . $e);
+
                 DB::rollback();
                 return ['success' => 99];
             }

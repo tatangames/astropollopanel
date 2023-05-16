@@ -121,5 +121,27 @@ Route::post('/admin/cupones/nuevo', [CuponesController::class,'nuevoRegistro']);
 Route::post('/admin/cupones/informacion', [CuponesController::class,'informacionCupon']);
 Route::post('/admin/cupones/editar', [CuponesController::class,'editarCupon']);
 
+// --- CUPONES ASIGNADOS A SERVICIOS (CUPON PRODUCTO GRATIS)---
+Route::get('/admin/cupones/servicio/progratis/{id}', [CuponesController::class,'indexServiciosCuponProGratis']);
+Route::get('/admin/cupones/servicio/progratis/tabla/{id}', [CuponesController::class,'tablaServiciosCuponProGratis']);
+Route::post('/admin/cupones/servicio/progratis/nuevo', [CuponesController::class,'nuevoCuponProGratis']);
+Route::post('/admin/cupones/servicio/progratis/borrar', [CuponesController::class,'borrarCuponProGratis']);
+
+
+// --- CUPONES ASIGNADOS A SERVICIOS (CUPON DESCUENTO DE DINERO)---
+Route::get('/admin/cupones/servicio/descdinero/{id}', [CuponesController::class,'indexServiciosCuponDescuentoDinero']);
+Route::get('/admin/cupones/servicio/descdinero/tabla/{id}', [CuponesController::class,'tablaServiciosCuponDescuentoDinero']);
+Route::post('/admin/cupones/servicio/descdinero/nuevo', [CuponesController::class,'nuevoCuponDescuentoDinero']);
+Route::post('/admin/cupones/servicio/descdinero/borrar', [CuponesController::class,'borrarCuponDescuentoDinero']);
+
+
+// --- CUPONES ASIGNADOS A SERVICIOS (CUPON DESCUENTO DE PORCENTAJE)---
+Route::get('/admin/cupones/servicio/descporcentaje/{id}', [CuponesController::class,'indexServiciosCuponDescuentoPorcentaje']);
+Route::get('/admin/cupones/servicio/descporcentaje/tabla/{id}', [CuponesController::class,'tablaServiciosCuponDescuentoPorcentaje']);
+Route::post('/admin/cupones/servicio/descporcentaje/nuevo', [CuponesController::class,'nuevoCuponDescuentoPorcentaje']);
+Route::post('/admin/cupones/servicio/descporcentaje/borrar', [CuponesController::class,'borrarCuponDescuentoPorcentaje']);
+
+
+
 
 

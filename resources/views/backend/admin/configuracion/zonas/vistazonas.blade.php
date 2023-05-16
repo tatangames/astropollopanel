@@ -64,7 +64,7 @@
                                 <div class="form-group">
                                     <label>Nombre</label>
                                     <input type="hidden" id="id-actualizar">
-                                    <input type="text" maxlength="50" class="form-control" id="nombre-nuevo" placeholder="Nombre zona">
+                                    <input type="text" maxlength="50" autocomplete="off" class="form-control" id="nombre-nuevo" placeholder="Nombre zona">
                                 </div>
 
                                 <div class="form-group">
@@ -84,12 +84,32 @@
 
                                 <div class="form-group">
                                     <label>Latitud</label>
-                                    <input type="text" maxlength="50" class="form-control" id="latitud-nuevo" placeholder="Latitud" required>
+                                    <input type="text" maxlength="50" autocomplete="off" class="form-control" id="latitud-nuevo" placeholder="Latitud" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Longitud</label>
-                                    <input type="text" maxlength="50" class="form-control" id="longitud-nuevo" placeholder="Longitud" required>
+                                    <input type="text" maxlength="50" autocomplete="off" class="form-control" id="longitud-nuevo" placeholder="Longitud" required>
+                                </div>
+
+                                <hr>
+
+
+                                <div class="form-group" style="margin-left:20px">
+                                    <label>Mínimo de compra</label><br>
+                                    <label class="switch" style="margin-top:10px">
+                                        <input type="checkbox" id="toggle-minimo">
+                                        <div class="slider round">
+                                            <span class="on">Sí</span>
+                                            <span class="off">No</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Mínimo ($)</label>
+                                    <input type="text" class="form-control" autocomplete="off" id="minimocompra-nuevo" placeholder="Mínimo de compra">
                                 </div>
 
 
@@ -125,7 +145,7 @@
                                 <div class="form-group">
                                     <label>Nombre</label>
                                     <input type="hidden" id="id-editar">
-                                    <input type="text" maxlength="50" class="form-control" id="nombre-editar" placeholder="Nombre de Zona">
+                                    <input type="text" maxlength="50" autocomplete="off" class="form-control" id="nombre-editar" placeholder="Nombre de Zona">
                                 </div>
 
                                 <div class="form-group">
@@ -140,17 +160,17 @@
 
                                 <div class="form-group">
                                     <label>Tiempo extra (tiempo que se agregara a una nueva orden)</label>
-                                    <input type="number" value="0" min="0" class="form-control" id="tiempoextra-editar">
+                                    <input type="number" value="0" autocomplete="off" min="0" class="form-control" id="tiempoextra-editar">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Latitud</label>
-                                    <input type="text" maxlength="50" class="form-control" id="latitud-editar" placeholder="Latitud" required>
+                                    <input type="text" maxlength="50" autocomplete="off" class="form-control" id="latitud-editar" placeholder="Latitud" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Longitud</label>
-                                    <input type="text" maxlength="50" class="form-control" id="longitud-editar" placeholder="Longitud" required>
+                                    <input type="text" maxlength="50" autocomplete="off" class="form-control" id="longitud-editar" placeholder="Longitud" required>
                                 </div>
 
                             </div>
@@ -169,11 +189,11 @@
 
                                 <div class="form-group">
                                     <label>Mensaje de Cierre (Para indicar al cliente el porque del Cierre)</label>
-                                    <input type="text" maxlength="100" class="form-control" id="mensaje-editar" placeholder="Explplicar al cliente el Cierre">
+                                    <input type="text" maxlength="100" autocomplete="off" class="form-control" id="mensaje-editar" placeholder="Explplicar al cliente el Cierre">
                                 </div>
 
                                 <div class="form-group" style="margin-left:20px">
-                                    <label>Disponibilidad Zona</label><br>
+                                    <label>Disponibilidad Zona (Usuarios no podran ver la zona para crear una dirección)</label><br>
                                     <label class="switch" style="margin-top:10px">
                                         <input type="checkbox" id="toggle-activo">
                                         <div class="slider round">
@@ -182,6 +202,26 @@
                                         </div>
                                     </label>
                                 </div>
+
+                                <hr>
+
+                                <div class="form-group" style="margin-left:20px">
+                                    <label>Mínimo de compra</label><br>
+                                    <label class="switch" style="margin-top:10px">
+                                        <input type="checkbox" id="toggle-minimo-editar">
+                                        <div class="slider round">
+                                            <span class="on">Sí</span>
+                                            <span class="off">No</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Mínimo ($)</label>
+                                    <input type="text" class="form-control" autocomplete="off" id="minimocompra-editar" placeholder="Mínimo de compra">
+                                </div>
+
 
                             </div>
                         </div>
@@ -314,6 +354,14 @@
                             $("#toggle-activo").prop("checked", true);
                         }
 
+                        if(response.data.zona.utiliza_minimo === 0){
+                            $("#toggle-minimo-editar").prop("checked", false);
+                        }else{
+                            $("#toggle-minimo-editar").prop("checked", true);
+                        }
+
+                        $('#minimocompra-editar').val(response.data.zona.minimo);
+
                     }else{
                         toastr.error('Zona no encontrada');
                     }
@@ -332,6 +380,11 @@
             var tiempoextra = document.getElementById('tiempoextra-nuevo').value;
             var latitud = document.getElementById("latitud-nuevo").value;
             var longitud = document.getElementById("longitud-nuevo").value;
+
+            var cbminimo = document.getElementById('toggle-minimo').checked;
+            var toggleMinimo = cbminimo? 1 : 0;
+            var minimocompra = document.getElementById("minimocompra-nuevo").value;
+
 
             if (nombre === '') {
                 toastr.error("Nombre es requerido");
@@ -397,6 +450,30 @@
                 return;
             }
 
+
+            var reglaNumeroDosDecimal = /^([0-9]+\.?[0-9]{0,2})$/;
+
+            if(minimocompra === ''){
+                toastr.error('Mínimo de compra es requerido');
+                return;
+            }
+
+            if(!minimocompra.match(reglaNumeroDosDecimal)) {
+                toastr.error('Mínimo de compra debe ser número decimal');
+                return;
+            }
+
+            if(minimocompra < 0){
+                toastr.error('Mínimo de compra no debe ser negativo');
+                return;
+            }
+
+            if(minimocompra > 1000000){
+                toastr.error('Mínimo de compra no debe ser mayor a 1 millón');
+                return;
+            }
+
+
             openLoading();
 
             let formData = new FormData();
@@ -406,6 +483,8 @@
             formData.append('tiempoextra', tiempoextra);
             formData.append('latitud', latitud);
             formData.append('longitud', longitud);
+            formData.append('toggleminimo', toggleMinimo);
+            formData.append('minimo', minimocompra);
 
             axios.post('/admin/zonas/registro/nueva', formData, {
             })
@@ -448,6 +527,10 @@
             var latitud = document.getElementById("latitud-editar").value;
             var longitud = document.getElementById("longitud-editar").value;
             var mensaje = document.getElementById("mensaje-editar").value;
+
+            var cbminimo = document.getElementById('toggle-minimo-editar').checked;
+            var toggleMinimo = cbminimo? 1 : 0;
+            var minimocompra = document.getElementById("minimocompra-editar").value;
 
 
             if (nombre === '') {
@@ -521,6 +604,31 @@
             }
 
 
+
+            var reglaNumeroDosDecimal = /^([0-9]+\.?[0-9]{0,2})$/;
+
+            if(minimocompra === ''){
+                toastr.error('Mínimo de compra es requerido');
+                return;
+            }
+
+            if(!minimocompra.match(reglaNumeroDosDecimal)) {
+                toastr.error('Mínimo de compra debe ser número decimal');
+                return;
+            }
+
+            if(minimocompra < 0){
+                toastr.error('Mínimo de compra no debe ser negativo');
+                return;
+            }
+
+            if(minimocompra > 1000000){
+                toastr.error('Mínimo de compra no debe ser mayor a 1 millón');
+                return;
+            }
+
+
+
             let formData = new FormData();
             formData.append('id', id);
             formData.append('nombre', nombre);
@@ -532,6 +640,8 @@
             formData.append('latitud', latitud);
             formData.append('longitud', longitud);
             formData.append('mensaje', mensaje);
+            formData.append('toggleminimo', toggleMinimo);
+            formData.append('minimo', minimocompra);
 
             openLoading();
 

@@ -61,13 +61,13 @@
 
                                     <div class="form-group">
                                         <label>Nombre del Negocio</label>
-                                        <input type="text" maxlength="100" class="form-control" id="nombre-nuevo" placeholder="Nombre del Negocio">
+                                        <input type="text" maxlength="100" autocomplete="off" class="form-control" id="nombre-nuevo" placeholder="Nombre del Negocio">
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Mínimo de Compra</label><br>
+                                        <label>Utiliza Cupón</label><br>
                                         <label class="switch" style="margin-top:10px">
-                                            <input type="checkbox" id="toggle-minimo">
+                                            <input type="checkbox" id="toggle-cupon">
                                             <div class="slider round">
                                                 <span class="on">Si</span>
                                                 <span class="off">No</span>
@@ -75,16 +75,6 @@
                                         </label>
                                     </div>
 
-
-                                    <div class="form-group">
-                                        <label>Mínimo $ compra (para brindar el servicio adomicilio)</label>
-                                        <input type="text" class="form-control" id="minimocompra" value="0">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Teléfono</label>
-                                        <input type="text" maxlength="20" class="form-control" id="telefono-nuevo" placeholder="Telefono">
-                                    </div>
 
                                 </div>
                             </div>
@@ -230,31 +220,15 @@
                                 <input type="text" maxlength="100" class="form-control" id="nombre-editar" placeholder="Nombre del Negocio">
                             </div>
 
-
                             <div class="form-group">
-                                <label>Mínimo de Compra</label><br>
+                                <label>Utiliza Cupón</label><br>
                                 <label class="switch" style="margin-top:10px">
-                                    <input type="checkbox" id="toggle-minimo-editar">
+                                    <input type="checkbox" id="toggle-cupon-editar">
                                     <div class="slider round">
                                         <span class="on">Si</span>
                                         <span class="off">No</span>
                                     </div>
                                 </label>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Mínimo $ compra (para brindar el servicio adomicilio)</label>
-                                <input type="text" class="form-control" id="minimocompra-editar" value="0">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Teléfono</label>
-                                <input type="text" maxlength="20" class="form-control" id="telefono-editar" placeholder="Telefono">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Tiempo de Preparación (Minutos)</label>
-                                <input type="text" class="form-control" id="tiempo-editar" placeholder="Tiempo de Preparacion">
                             </div>
 
                         </div>
@@ -438,7 +412,29 @@
                                 <div class="form-group">
                                     <button class="form-control btn btn-info btn-sm" type="button" onclick="verSlider()">
                                         <i class="fas fa-pencil-alt"></i>
-                                        Slider
+                                        Banner
+                                    </button>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <button class="form-control btn btn-info btn-sm" type="button" onclick="verCuponesProGratis()">
+                                        <i class="fas fa-info"></i>
+                                        Cupones de Productos Gratis
+                                    </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="form-control btn btn-info btn-sm" type="button" onclick="verCuponesDescuentoDinero()">
+                                        <i class="fas fa-info"></i>
+                                        Cupones de Descuento de Dinero
+                                    </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="form-control btn btn-info btn-sm" type="button" onclick="verCuponesDescuentoPorcentaje()">
+                                        <i class="fas fa-info"></i>
+                                        Cupones de Descuento de Porcentaje
                                     </button>
                                 </div>
 
@@ -452,8 +448,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 @extends('backend.menus.footerjs')
@@ -511,13 +505,14 @@
 
 
             var nombre = document.getElementById('nombre-nuevo').value;
-            var telefono = document.getElementById('telefono-nuevo').value;
 
-            var cbminimo = document.getElementById('toggle-minimo').checked;
-            var minimocompra = document.getElementById('minimocompra').value;
+            var cbcupon = document.getElementById('toggle-cupon').checked;
 
             // minimo de compra
-            var toggleMinimo = cbminimo ? 1 : 0;
+            var toggleCupon = cbcupon ? 1 : 0;
+
+
+
 
             var horalunes1 = document.getElementById('horalunes1').value;
             var horalunes2 = document.getElementById('horalunes2').value;
@@ -572,63 +567,7 @@
                 return;
             }
 
-            if (telefono === '') {
-                toastr.error("Telefono es requerido");
-                return;
-            }
 
-            if(telefono.length > 20){
-                toastr.error("20 caracteres máximo para telefono");
-                return;
-            }
-
-            var reglaNumeroDosDecimal = /^([0-9]+\.?[0-9]{0,2})$/;
-
-
-            if(toggleMinimo === 1){
-                if(minimocompra === ''){
-                    toastr.error("Minimo de compra es requerido");
-                    return;
-                }
-
-                // validacion
-
-                if(!minimocompra.match(reglaNumeroDosDecimal)) {
-                    toastr.error('Minimo de compra es invalido');
-                    return;
-                }
-                if(minimocompra < 0){
-                    toastr.error('Minimo de compra no puede ser negativo')
-                    return;
-                }
-
-                if(minimocompra > 1000000){
-                    toastr.error('Minimo de compra no debe superar 1 millon')
-                    return;
-                }
-            }else{
-                if(minimocompra === ''){
-                    minimocompra = 0;
-                }else{
-
-                    // validacion
-
-                    if(!minimocompra.match(reglaNumeroDosDecimal)) {
-                        toastr.error('Minimo de compra es invalido');
-                        return;
-                    }
-
-                    if(minimocompra < 0){
-                        toastr.error('Minimo de compra no puede ser negativo')
-                        return;
-                    }
-
-                    if(minimocompra > 1000000){
-                        toastr.error('Minimo de compra no debe superar 1 millon')
-                        return;
-                    }
-                }
-            }
 
             // VALIDACION DE HORARIOS
 
@@ -728,10 +667,8 @@
 
                 var formData = new FormData();
                 formData.append('nombre', nombre);
-                formData.append('telefono', telefono);
 
-                formData.append('cbminimo', toggleMinimo);
-                formData.append('minimocompra', minimocompra);
+                formData.append('togglecupon', toggleCupon);
 
                 formData.append('horalunes1', horalunes1);
                 formData.append('horalunes2', horalunes2);
@@ -808,17 +745,12 @@
 
                         $('#id-editar-servicio').val(id);
                         $('#nombre-editar').val(response.data.servicio.nombre);
-                        $('#tiempo-editar').val(response.data.servicio.tiempo);
 
-                        if(response.data.servicio.utiliza_minimo === 0){
-                            $("#toggle-minimo-editar").prop("checked", false);
+                        if(response.data.servicio.utiliza_cupon === 0){
+                            $("#toggle-cupon-editar").prop("checked", false);
                         }else{
-                            $("#toggle-minimo-editar").prop("checked", true);
+                            $("#toggle-cupon-editar").prop("checked", true);
                         }
-
-                        $('#minimocompra-editar').val(response.data.servicio.minimo);
-
-                        $('#telefono-editar').val(response.data.servicio.telefono);
 
                     }else{
                         toastr.error('Informacion no encontrada');
@@ -845,16 +777,10 @@
 
             var id = document.getElementById('id-editar-servicio').value;
             var nombre = document.getElementById('nombre-editar').value;
-            var telefono = document.getElementById('telefono-editar').value;
-            var tiempo = document.getElementById('tiempo-editar').value;
 
+            var cbcupon = document.getElementById('toggle-cupon-editar').checked;
 
-            var cbminimo = document.getElementById('toggle-minimo-editar').checked;
-
-            // minimo de compra
-            var toggleMinimo = cbminimo ? 1 : 0;
-
-            var minimocompra = document.getElementById('minimocompra-editar').value;
+            var toggleCupon = cbcupon ? 1 : 0;
 
 
             if (nombre === '') {
@@ -867,96 +793,12 @@
                 return;
             }
 
-            if (telefono === '') {
-                toastr.error("Telefono es requerido");
-                return;
-            }
-
-            if(telefono.length > 20){
-                toastr.error("20 caracteres máximo para telefono");
-                return;
-            }
-
-            var reglaNumeroDosDecimal = /^([0-9]+\.?[0-9]{0,2})$/;
-
-
-            if(toggleMinimo === 1){
-                if(minimocompra === ''){
-                    toastr.error("Minimo de compra es requerido");
-                    return;
-                }
-
-                // validacion
-
-                if(!minimocompra.match(reglaNumeroDosDecimal)) {
-                    toastr.error('Minimo de compra es invalido');
-                    return;
-                }
-                if(minimocompra < 0){
-                    toastr.error('Minimo de compra no puede ser negativo')
-                    return;
-                }
-
-                if(minimocompra > 1000000){
-                    toastr.error('Minimo de compra no debe superar 1 millon')
-                    return;
-                }
-            }else{
-                if(minimocompra === ''){
-                    minimocompra = 0;
-                }else{
-
-                    // validacion
-
-                    if(!minimocompra.match(reglaNumeroDosDecimal)) {
-                        toastr.error('Minimo de compra es invalido');
-                        return;
-                    }
-
-                    if(minimocompra < 0){
-                        toastr.error('Minimo de compra no puede ser negativo')
-                        return;
-                    }
-
-                    if(minimocompra > 1000000){
-                        toastr.error('Minimo de compra no debe superar 1 millon')
-                        return;
-                    }
-                }
-            }
-
-            if(tiempo === '') {
-                toastr.error('Tiempo es requerido')
-                return;
-            }
-
-            var reglaNumeroEntero = /^[0-9]\d*$/;
-
-
-            if(!tiempo.match(reglaNumeroEntero)) {
-                toastr.error('Tiempo debe ser numero Entero');
-                return;
-            }
-
-            if(tiempo < 0){
-                toastr.error('Tiempo no puede ser negativo')
-                return;
-            }
-
-            if(tiempo > 1000000){
-                toastr.error('Tiempo no debe superar 1 millon')
-                return;
-            }
-
 
             openLoading();
             var formData = new FormData();
             formData.append('id', id);
             formData.append('nombre', nombre);
-            formData.append('telefono', telefono);
-            formData.append('cbminimo', toggleMinimo);
-            formData.append('minimocompra', minimocompra);
-            formData.append('tiempo', tiempo);
+            formData.append('togglecupon', toggleCupon);
 
                 axios.post('/admin/servicios/editar-servicio', formData, {
                 })
@@ -1265,6 +1107,22 @@
         function verSlider(){
             var id = document.getElementById('id-opciones').value;
             window.location.href="{{ url('/admin/slider/listado/') }}/"+id;
+        }
+
+
+        function verCuponesProGratis(){
+            var id = document.getElementById('id-opciones').value;
+            window.location.href="{{ url('/admin/cupones/servicio/progratis/') }}/"+id;
+        }
+
+        function verCuponesDescuentoDinero(){
+            var id = document.getElementById('id-opciones').value;
+            window.location.href="{{ url('/admin/cupones/servicio/descdinero/') }}/"+id;
+        }
+
+        function verCuponesDescuentoPorcentaje(){
+            var id = document.getElementById('id-opciones').value;
+            window.location.href="{{ url('/admin/cupones/servicio/descporcentaje/') }}/"+id;
         }
 
 

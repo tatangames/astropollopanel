@@ -39,7 +39,9 @@ class ZonasController extends Controller
         $rules = array(
             'nombre' => 'required',
             'latitud' => 'required',
-            'longitud' => 'required'
+            'longitud' => 'required',
+            'toggleminimo' => 'required',
+            'minimo' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -56,6 +58,8 @@ class ZonasController extends Controller
         $zona->activo = 0;
         $zona->tiempo_extra = $request->tiempoextra;
         $zona->mensaje_bloqueo = null;
+        $zona->utiliza_minimo = $request->toggleminimo;
+        $zona->minimo = $request->minimo;
 
         if($zona->save()){
             return ['success'=>1];
@@ -92,6 +96,8 @@ class ZonasController extends Controller
             'togglea' => 'required',
             'latitud' => 'required',
             'longitud' => 'required',
+            'toggleminimo' => 'required',
+            'minimo' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -101,12 +107,8 @@ class ZonasController extends Controller
         if(Zonas::where('id', $request->id)->first()){
 
             if($request->togglea == 1){
-                if(ZonasPoligono::where('id_zonas', $request->id)->first()){
-
-                    // no hacer nada
-                }else{
+                if(!ZonasPoligono::where('id_zonas', $request->id)->first()){
                     // no puede activar porque no tiene poligonos
-
                     return ['success' => 2];
                 }
             }
@@ -122,7 +124,9 @@ class ZonasController extends Controller
                 'hora_cerrado_delivery' => $request->horacerrado,
                 'activo' => $request->togglea,
                 'tiempo_extra' => $request->tiempoextra,
-                'mensaje_bloqueo' => $request->mensaje
+                'mensaje_bloqueo' => $request->mensaje,
+                'utiliza_minimo' => $request->toggleminimo,
+                'minimo' => $request->minimo
             ]);
 
             return ['success' => 1];

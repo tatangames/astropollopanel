@@ -18,11 +18,12 @@ class CreateServiciosTable extends Migration
 
             $table->string('nombre', 100);
 
-            // numero del local
-            $table->string('telefono', 20);
-
             // si utiliza cupon
             $table->boolean('utiliza_cupon');
+
+            // Tiempo que da cocina predeterminadamente
+
+            $table->integer('tiempo_cocina');
 
         });
     }

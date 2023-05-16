@@ -75,7 +75,7 @@
 
                                     <div class="form-group">
                                         <label>Límite de usos</label>
-                                        <input type="number" class="form-control" id="limite-usos" value="0">
+                                        <input type="number" class="form-control" id="limite-usos" placeholder="0">
                                     </div>
 
                                 </div>
@@ -277,7 +277,7 @@
 
                     if(response.data.success === 2){
 
-                        $('#modalAgregar').modal('show');
+                        $('#modalAgregar').modal('hide');
                         toastr.success('Cupón registrado');
                         recargar();
 

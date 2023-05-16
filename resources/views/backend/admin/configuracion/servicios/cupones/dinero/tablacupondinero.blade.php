@@ -7,44 +7,25 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 10%">Nombre</th>
-                                <th style="width: 6%">Utiliza Cupón </th>
-                                <th style="width: 7%">Opciones</th>
+                                <th style="width: 10%">Nombre de Cupón</th>
+                                <th style="width: 6%">Monto de Descuento</th>
+                                <th style="width: 10%">Opciones</th>
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($servicios as $dato)
+                            @foreach($lista as $dato)
 
                                 <tr>
-                                    <td>{{ $dato->nombre }}</td>
+                                    <td>{{ $dato->nombrecupon }}</td>
+                                    <td>{{ $dato->dinero }}</td>
 
                                     <td>
-                                        @if($dato->utiliza_cupon == 0)
-                                            <span class="badge bg-danger">No</span>
-                                        @else
-                                            <span class="badge bg-success">Si</span>
-                                        @endif
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacionBorrar({{ $dato->id }})">
+                                            <i class="fas fa-trash" title="Borrar"></i>&nbsp; Borrar
+                                        </button>
                                     </td>
 
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacionServicio({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Editar"></i>&nbsp; Editar
-                                        </button>
-
-                                        <br><br>
-
-                                        <button type="button" class="btn btn-success btn-xs" onclick="modalHorario({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Horarios"></i>&nbsp; Horarios
-                                        </button>
-                                        <br><br>
-
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="abrirModalOpciones({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Opciones"></i>&nbsp; Opciones
-                                        </button>
-
-
-                                    </td>
                                 </tr>
 
                             @endforeach
