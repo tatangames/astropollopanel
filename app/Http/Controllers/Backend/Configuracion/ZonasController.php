@@ -40,7 +40,6 @@ class ZonasController extends Controller
             'nombre' => 'required',
             'latitud' => 'required',
             'longitud' => 'required',
-            'toggleminimo' => 'required',
             'minimo' => 'required'
         );
 
@@ -58,7 +57,6 @@ class ZonasController extends Controller
         $zona->activo = 0;
         $zona->tiempo_extra = $request->tiempoextra;
         $zona->mensaje_bloqueo = null;
-        $zona->utiliza_minimo = $request->toggleminimo;
         $zona->minimo = $request->minimo;
 
         if($zona->save()){
@@ -96,7 +94,6 @@ class ZonasController extends Controller
             'togglea' => 'required',
             'latitud' => 'required',
             'longitud' => 'required',
-            'toggleminimo' => 'required',
             'minimo' => 'required'
         );
 
@@ -125,7 +122,6 @@ class ZonasController extends Controller
                 'activo' => $request->togglea,
                 'tiempo_extra' => $request->tiempoextra,
                 'mensaje_bloqueo' => $request->mensaje,
-                'utiliza_minimo' => $request->toggleminimo,
                 'minimo' => $request->minimo
             ]);
 

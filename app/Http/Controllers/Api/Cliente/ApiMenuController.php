@@ -164,7 +164,7 @@ class ApiMenuController extends Controller
 
                 $arrayProductos = DB::table('populares AS pop')
                     ->join('productos AS pro', 'pop.id_productos', '=', 'pro.id')
-                    ->select('pro.id', 'pro.nombre', 'pro.imagen', 'pro.precio', 'pop.posicion')
+                    ->select('pro.id', 'pro.nombre', 'pro.imagen', 'pro.utiliza_imagen', 'pro.precio', 'pop.posicion')
                     ->whereIn('pro.id', $pilaIdPopulares)
                     ->orderBy('pop.posicion')
                     ->get();
@@ -183,7 +183,7 @@ class ApiMenuController extends Controller
                     'success' => 3,
                     'slider' => $slider,
                     'categorias' => $arrayCategorias,
-                    'populares' => $arrayPopulares,
+                    'populares' => $arrayProductos,
                     'haycategorias' => $hayCategorias,
                     'haypopulares' => $hayPopulares
                 ];

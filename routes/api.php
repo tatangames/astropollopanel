@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\Cliente\ApiClienteController;
 use App\Http\Controllers\Api\Cliente\ApiDireccionesController;
 use App\Http\Controllers\Api\Cliente\ApiMenuController;
 use App\Http\Controllers\Api\Carrito\CarritoComprasController;
-
+use App\Http\Controllers\Api\Procesar\ProcesarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +76,8 @@ Route::post('cliente/carrito/ver/proceso-orden', [CarritoComprasController::clas
 Route::post('cliente/verificar/cupon', [CarritoComprasController::class, 'verificarCupon']);
 
 
+// ENVIO DE LA ORDEN DEL CLIENTE
+Route::post('cliente/proceso/enviar/orden', [ProcesarController::class, 'enviarOrdenRestaurante']);
 
 
 

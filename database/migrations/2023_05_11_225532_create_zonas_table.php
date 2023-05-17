@@ -38,7 +38,6 @@ class CreateZonasTable extends Migration
 
             // minimo de compra en la zona
             $table->decimal('minimo', 10,2);
-            $table->boolean('utiliza_minimo');
 
 
         });

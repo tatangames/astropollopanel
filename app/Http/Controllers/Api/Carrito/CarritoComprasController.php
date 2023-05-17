@@ -573,8 +573,8 @@ class CarritoComprasController extends Controller
 
                             // * cupon valido para producto gratis, solo se retorna texto
                             $titulo = "Nota";
-                            $mensaje = "Cupón aplica para Producto Gratis";
-                            return ['success' => 2, 'titulo' => $titulo, 'mensaje' => $mensaje, 'nombre' => $infoCuponProGratis->nombre];
+                            $mensaje = "Cupón aplica para: " . $infoCuponProGratis->nombre;
+                            return ['success' => 2, 'titulo' => $titulo, 'mensaje' => $mensaje];
 
                         }else{
                             $titulo = "Nota";
@@ -600,9 +600,9 @@ class CarritoComprasController extends Controller
 
                             $aplico = '$' . number_format((float)$infoCuponDescuentoDin->dinero, 2, '.', '');
 
-                            // * cupon valido para producto gratis, solo se retorna texto
+                            // * cupon valido para descuento de dinero
                             $titulo = "Nota";
-                            $mensaje = "Cupón aplica descuento de " . $aplico;
+                            $mensaje = "Cupón aplica descuento de " . $aplico . " \n Total a Cancelar " . $resta;
                             return ['success' => 3, 'titulo' => $titulo, 'mensaje' => $mensaje, 'aplico' => $aplico, 'resta' => $resta];
 
                         }else{
@@ -633,11 +633,11 @@ class CarritoComprasController extends Controller
                             $final = '$' . number_format((float)$final, 2, '.', '');
 
 
-                            // * cupon valido para producto gratis, solo se retorna texto
+                            // * cupon valido para descuento de porcentaje
                             $titulo = "Nota";
                             $mensaje = "Cupón aplica descuento de " . $aplico;
                             return ['success' => 4, 'titulo' => $titulo, 'mensaje' => $mensaje, 'aplico' => $aplico,
-                                'resultado' => $final];
+                                'resta' => $final];
 
                         }else{
                             $titulo = "Nota";

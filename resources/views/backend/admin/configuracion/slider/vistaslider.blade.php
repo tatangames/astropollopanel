@@ -93,7 +93,7 @@
                                     <label>Producto:</label>
                                     <select class="form-control" id="select-producto-nuevo">
                                         <option value=""> Seleccionar opción</option>
-                                        @foreach($productos as $dd)
+                                        @foreach($arrayProductos as $dd)
                                             <option value="{{ $dd->id }}"> {{ $dd->nombre }}</option>
                                         @endforeach
                                     </select>

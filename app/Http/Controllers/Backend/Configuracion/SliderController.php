@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Categorias;
 use App\Models\Productos;
 use App\Models\Slider;
+use App\Models\SubCategorias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -22,19 +23,32 @@ class SliderController extends Controller
     public function index($id){
         // id servicios
 
-        // obtener listado de categorias del servicio
-        $listaCa = Categorias::where('id_servicios', $id)->get();
-        $pilaIdProductos = array();
 
-        foreach ($listaCa as $info) {
-            array_push($pilaIdProductos, $info->id);
+
+        $arrayCategorias = Categorias::where('id_servicios', $id)->get();
+        $pilaIdCategorias = array();
+
+        foreach ($arrayCategorias as $info){
+            array_push($pilaIdCategorias, $info->id);
         }
 
-        $productos = Productos::whereIn('id_categorias', $pilaIdProductos)
-            ->orderBy('nombre')
-            ->get();
 
-        return view('backend.admin.configuracion.slider.vistaslider', compact('productos', 'id'));
+
+        // obtener todos los ID de sub categorias
+        $arraySubCate = SubCategorias::whereIn('id_categorias', $pilaIdCategorias)->get();
+
+        $pilaIdSubCategorias = array();
+
+        foreach ($arraySubCate as $info){
+            array_push($pilaIdSubCategorias, $info->id);
+        }
+
+        // obtener todos los productos de las sub categorias
+
+        $arrayProductos = Productos::whereIn('id_subcategorias', $pilaIdSubCategorias)->get();
+
+
+        return view('backend.admin.configuracion.slider.vistaslider', compact('arrayProductos', 'id'));
     }
 
     public function sliderTabla($id){

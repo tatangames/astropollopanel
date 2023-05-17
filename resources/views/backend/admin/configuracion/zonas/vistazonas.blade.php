@@ -95,20 +95,8 @@
                                 <hr>
 
 
-                                <div class="form-group" style="margin-left:20px">
-                                    <label>Mínimo de compra</label><br>
-                                    <label class="switch" style="margin-top:10px">
-                                        <input type="checkbox" id="toggle-minimo">
-                                        <div class="slider round">
-                                            <span class="on">Sí</span>
-                                            <span class="off">No</span>
-                                        </div>
-                                    </label>
-                                </div>
-
-
                                 <div class="form-group">
-                                    <label>Mínimo ($)</label>
+                                    <label>Mínimo de compra ($)</label>
                                     <input type="text" class="form-control" autocomplete="off" id="minimocompra-nuevo" placeholder="Mínimo de compra">
                                 </div>
 
@@ -189,7 +177,7 @@
 
                                 <div class="form-group">
                                     <label>Mensaje de Cierre (Para indicar al cliente el porque del Cierre)</label>
-                                    <input type="text" maxlength="100" autocomplete="off" class="form-control" id="mensaje-editar" placeholder="Explplicar al cliente el Cierre">
+                                    <input type="text" maxlength="100" autocomplete="off" class="form-control" id="mensaje-editar" placeholder="Explicar al cliente el Cierre">
                                 </div>
 
                                 <div class="form-group" style="margin-left:20px">
@@ -205,20 +193,8 @@
 
                                 <hr>
 
-                                <div class="form-group" style="margin-left:20px">
-                                    <label>Mínimo de compra</label><br>
-                                    <label class="switch" style="margin-top:10px">
-                                        <input type="checkbox" id="toggle-minimo-editar">
-                                        <div class="slider round">
-                                            <span class="on">Sí</span>
-                                            <span class="off">No</span>
-                                        </div>
-                                    </label>
-                                </div>
-
-
                                 <div class="form-group">
-                                    <label>Mínimo ($)</label>
+                                    <label>Mínimo de compra ($)</label>
                                     <input type="text" class="form-control" autocomplete="off" id="minimocompra-editar" placeholder="Mínimo de compra">
                                 </div>
 
@@ -354,11 +330,6 @@
                             $("#toggle-activo").prop("checked", true);
                         }
 
-                        if(response.data.zona.utiliza_minimo === 0){
-                            $("#toggle-minimo-editar").prop("checked", false);
-                        }else{
-                            $("#toggle-minimo-editar").prop("checked", true);
-                        }
 
                         $('#minimocompra-editar').val(response.data.zona.minimo);
 
@@ -381,8 +352,7 @@
             var latitud = document.getElementById("latitud-nuevo").value;
             var longitud = document.getElementById("longitud-nuevo").value;
 
-            var cbminimo = document.getElementById('toggle-minimo').checked;
-            var toggleMinimo = cbminimo? 1 : 0;
+
             var minimocompra = document.getElementById("minimocompra-nuevo").value;
 
 
@@ -483,7 +453,6 @@
             formData.append('tiempoextra', tiempoextra);
             formData.append('latitud', latitud);
             formData.append('longitud', longitud);
-            formData.append('toggleminimo', toggleMinimo);
             formData.append('minimo', minimocompra);
 
             axios.post('/admin/zonas/registro/nueva', formData, {
@@ -528,8 +497,7 @@
             var longitud = document.getElementById("longitud-editar").value;
             var mensaje = document.getElementById("mensaje-editar").value;
 
-            var cbminimo = document.getElementById('toggle-minimo-editar').checked;
-            var toggleMinimo = cbminimo? 1 : 0;
+
             var minimocompra = document.getElementById("minimocompra-editar").value;
 
 
@@ -640,7 +608,6 @@
             formData.append('latitud', latitud);
             formData.append('longitud', longitud);
             formData.append('mensaje', mensaje);
-            formData.append('toggleminimo', toggleMinimo);
             formData.append('minimo', minimocompra);
 
             openLoading();
@@ -700,48 +667,6 @@
 
 
 
-
-
-        // cerrar o abrir todas las zonas
-        function cerrarAbrir(){
-            var toggle = document.getElementById('toggle-cerrado-abierto').checked;
-            var mensaje = document.getElementById("mensaje-cerrado").value;
-
-            if (mensaje === '') {
-                toastr.error("Mensaje es requerido");
-                return false;
-            }
-
-            var toggle_1 = 0;
-            if(toggle){
-                toggle_1 = 1;
-            }
-
-            let formData = new FormData();
-            formData.append('toggle', toggle_1);
-            formData.append('mensaje', mensaje);
-
-            var spinHandle = loadingOverlay().activate();
-
-            axios.post('/admin/zona/actualizar-marcados', formData, {
-            })
-                .then((response) => {
-                    loadingOverlay().cancel(spinHandle);
-
-                    if (response.data.success == 1) {
-                        toastr.success('Actualizado');
-                        var ruta = "{{ URL::to('admin/zona/tablas/zona') }}";
-                        $('#tablaDatatable').load(ruta);
-                        $('#modalOpcion').modal('hide');
-                    } else {
-                        toastr.error('Error desconocido');
-                    }
-                })
-                .catch((error) => {
-                    toastr.error('Error del servidor');
-                    loadingOverlay().cancel(spinHandle);
-                });
-        }
 
 
 

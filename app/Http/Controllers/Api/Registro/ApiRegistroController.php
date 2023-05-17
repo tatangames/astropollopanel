@@ -16,6 +16,7 @@ class ApiRegistroController extends Controller
         $rules = array(
             'usuario' => 'required',
             'password' => 'required',
+            'version' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -52,6 +53,7 @@ class ApiRegistroController extends Controller
         $usuario->activo = 1;
         $usuario->token_fcm = $request->token_fcm;
         $usuario->borrar_carrito = 0;
+        $usuario->appregistro = $request->version;
 
         if($usuario->save()){
 

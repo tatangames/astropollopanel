@@ -184,6 +184,12 @@ Route::post('/admin/clientes/informacion/editar', [ClientesController::class,'ed
 Route::get('/admin/clientes/direcciones/listado/{id}', [ClientesController::class,'indexListaDirecciones']);
 Route::get('/admin/clientes/direcciones/listado/tabla/{id}', [ClientesController::class,'tablaClientesDirecciones']);
 
+// revisar si direccion tiene coordenadas reales donde se registro
+Route::post('/admin/clientes/tiene/gps/coordenadas', [ClientesController::class,'infoCoordenadasReales']);
+
+
+Route::get('/admin/clientes/direcciones/mapa/registrado/{id}', [ClientesController::class,'mapaDireccionRegistrado']);
+Route::get('/admin/clientes/direcciones/mapa/real/{id}', [ClientesController::class,'mapaDireccionReal']);
 
 
 

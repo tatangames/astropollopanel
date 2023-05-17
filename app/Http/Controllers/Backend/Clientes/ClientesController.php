@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Clientes;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clientes;
+use App\Models\DireccionCliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -81,10 +82,64 @@ class ClientesController extends Controller
 
     public function indexListaDirecciones($id){
 
-        return "vista";
+        return view('backend.admin.clientes.direcciones.vistadireccion', compact('id'));
     }
 
 
+    public function tablaClientesDirecciones($id){
+
+        $lista = DireccionCliente::where('id_cliente', $id)->get();
+
+        return view('backend.admin.clientes.direcciones.tabladireccion', compact('lista'));
+    }
+
+    public function infoCoordenadasReales(Request $request){
+
+        $rules = array(
+            'id' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){return ['success' => 0]; }
+
+        if($info = DireccionCliente::where('id', $request->id)->first()){
+
+            if(empty($info->latitudreal)){
+                return ['success' => 1];
+            }
+
+            return ['success' => 2];
+        }else{
+            return ['success' => 99];
+        }
+    }
+
+
+
+    public function mapaDireccionRegistrado($id){
+
+        $googleapi = config('googleapi.Google_API');
+
+        $poligono = DireccionCliente::where('id', $id)->first();
+
+        $latitud = $poligono->latitud;
+        $longitud = $poligono->longitud;
+
+        return view('backend.admin.clientes.direcciones.mapa.maparegistrado', compact('latitud', 'longitud', 'googleapi'));
+    }
+
+
+    public function mapaDireccionReal($id){
+        $googleapi = config('googleapi.Google_API');
+
+        $poligono = DireccionCliente::where('id', $id)->first();
+
+        $latitud = $poligono->latitudreal;
+        $longitud = $poligono->longitudreal;
+
+        return view('backend.admin.clientes.direcciones.mapa.mapareal', compact('latitud', 'longitud', 'googleapi'));
+    }
 
 
 
