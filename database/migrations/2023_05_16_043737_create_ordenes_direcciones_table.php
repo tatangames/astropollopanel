@@ -32,8 +32,6 @@ class CreateOrdenesDireccionesTable extends Migration
             // que dispositivo se pidio
             $table->string('appversion', 100);
 
-
-            $table->foreign('id_cliente')->references('id')->on('clientes');
             $table->foreign('id_ordenes')->references('id')->on('ordenes');
         });
     }

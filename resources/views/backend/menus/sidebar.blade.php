@@ -90,6 +90,32 @@
                         </li>
 
 
+                        <li class="nav-item">
+                            <a href="{{ route('index.ordenes.pendientes') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ordenes Pendientes</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.ordenes.iniciadas.hoy') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ordenes Iniciadas Hoy</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.ordenes.canceladas.hoy') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ordenes Canceladas Hoy</p>
+                            </a>
+                        </li>
+
+
+
+
 
                     </ul>
                 </li>

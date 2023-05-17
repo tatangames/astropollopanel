@@ -76,8 +76,15 @@ Route::post('cliente/carrito/ver/proceso-orden', [CarritoComprasController::clas
 Route::post('cliente/verificar/cupon', [CarritoComprasController::class, 'verificarCupon']);
 
 
-// ENVIO DE LA ORDEN DEL CLIENTE
+
+
+// ***********   ENVIO DE LA ORDEN DEL CLIENTE************
 Route::post('cliente/proceso/enviar/orden', [ProcesarController::class, 'enviarOrdenRestaurante']);
+
+
+
+
+
 
 // informacion del cliente
 Route::post('cliente/informacion/personal', [ApiClienteController::class, 'informacionCliente']);

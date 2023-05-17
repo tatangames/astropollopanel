@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\Configuracion\ProductosController;
 use App\Http\Controllers\Backend\Configuracion\SliderController;
 use App\Http\Controllers\Backend\Configuracion\CuponesController;
 use App\Http\Controllers\Backend\Clientes\ClientesController;
+use App\Http\Controllers\Backend\Ordenes\OrdenesController;
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
@@ -190,6 +191,34 @@ Route::post('/admin/clientes/tiene/gps/coordenadas', [ClientesController::class,
 
 Route::get('/admin/clientes/direcciones/mapa/registrado/{id}', [ClientesController::class,'mapaDireccionRegistrado']);
 Route::get('/admin/clientes/direcciones/mapa/real/{id}', [ClientesController::class,'mapaDireccionReal']);
+
+
+
+
+// ***********  ORDENES **************
+
+
+// --- ORDENES PENDIENTES DE CONTESTACION ----
+Route::get('/admin/ordenes/pendientes/listado', [OrdenesController::class,'indexOrdenesPendientes'])->name('index.ordenes.pendientes');
+Route::get('/admin/ordenes/pendientes/listado/tabla', [OrdenesController::class,'tablaOrdenesPendientes']);
+Route::post('/admin/ordenes/pendientes/infocliente', [OrdenesController::class,'informacionClienteOrden']);
+Route::get('/admin/ordenes/pendientes/mapa/{id}', [OrdenesController::class,'mapaDireccionRegistrado']);
+
+
+// --- ORDENES INICIADAS HOY ---
+Route::get('/admin/ordenes/iniciadashoy/listado', [OrdenesController::class,'indexOrdenesIniciadasHoy'])->name('index.ordenes.iniciadas.hoy');
+Route::get('/admin/ordenes/iniciadashoy/listado/tabla', [OrdenesController::class,'tablaOrdenesIniciadasHoy']);
+
+Route::post('/admin/ordenes/iniciadashoy/infoproceso', [OrdenesController::class,'informacionProcesoOrdenIniciadas']);
+
+
+// --- ORDENES CANCELADAS HOY ---
+
+Route::get('/admin/ordenes/canceladashoy/listado', [OrdenesController::class,'indexOrdenesCanceladasHoy'])->name('index.ordenes.canceladas.hoy');
+Route::get('/admin/ordenes/canceladashoy/listado/tabla', [OrdenesController::class,'tablaOrdenesCanceladasHoy']);
+
+
+
 
 
 

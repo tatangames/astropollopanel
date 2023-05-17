@@ -19,11 +19,6 @@
             Nueva Zona
         </button>
 
-        <button type="button" onclick="modalOpcion()" class="btn btn-info btn-sm">
-            <i class="fas fa-pencil-alt"></i>
-            Cerrar o Abrir Zonas
-        </button>
-
     </div>
 </section>
 
@@ -213,51 +208,6 @@
 </div>
 
 
-<!-- modal para abrir o cerrar todas las zonas -->
-<div class="modal fade" id="modalOpcion">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Abrir o cerrar Todas las Zonas</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formulario-opcion">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-
-                                <div class="form-group" style="margin-left:20px">
-                                    <label>Cierre de Zona</label><br>
-                                    <label class="switch" style="margin-top:10px">
-                                        <input type="checkbox" id="toggle-cerrado-abierto">
-                                        <div class="slider round">
-                                            <span class="on">Abrir</span>
-                                            <span class="off">Cerrar</span>
-                                        </div>
-                                    </label>
-                                </div>
-
-
-                                <div class="form-group">
-                                    <label>Mensaje de Cierre (Para indicar al cliente el porque del Cierre)</label>
-                                    <input type="text" maxlength="50" class="form-control" id="mensaje-cerrado" value="Cerrado por lluvias">
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="cerrarAbrir()">Guardar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @extends('backend.menus.footerjs')
 @section('archivos-js')

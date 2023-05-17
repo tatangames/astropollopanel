@@ -32,6 +32,7 @@ class CreateOrdenesTable extends Migration
             $table->integer('tiempo_estimada')->default(0);
 
 
+
             // 0: NO INICIADA   1: ORDEN INICIADA
             $table->boolean('estado_iniciada');
             $table->dateTime('fecha_iniciada')->nullable();
