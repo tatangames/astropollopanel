@@ -347,11 +347,6 @@
 
                             $('#fechacompleto-orden').val(val.fecha_preparada);
 
-
-
-
-
-
                         });
 
 
@@ -370,6 +365,12 @@
                     toastr.error('Error del servidor');
                 });
         }
+
+
+        function verProductos(id){
+            window.location.href="{{ url('/admin/ordenes/productos/listado') }}/"+id;
+        }
+
 
 
     </script>

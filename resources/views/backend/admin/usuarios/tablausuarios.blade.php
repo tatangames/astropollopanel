@@ -7,47 +7,27 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 8%"># de Orden</th>
-                                <th style="width: 10%">Fecha de Orden</th>
-                                <th style="width: 10%">Total</th>
-                                <th style="width: 10%">Restaurante</th>
-                                <th style="width: 10%">Cliente</th>
-                                <th style="width: 10%">Dirección</th>
-                                <th style="width: 10%">Cupón</th>
-                                <th style="width: 10%">Opciones</th>
+                                <th style="width: 15%">Restaurante</th>
+                                <th style="width: 20%">Usuario</th>
+                                <th style="width: 20%">Opciones</th>
+
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($ordenes as $dato)
+                            @foreach($listado as $dato)
 
                                 <tr>
-                                    <td>{{ $dato->id }}</td>
-                                    <td>{{ $dato->fecha_orden }}</td>
-                                    <td>{{ $dato->total_orden }}</td>
+                                    <td>{{ $dato->usuario }}</td>
                                     <td>{{ $dato->restaurante }}</td>
-                                    <td>{{ $dato->cliente }}</td>
-                                    <td>{{ $dato->direccion }}</td>
-                                    <td>
-                                        @if($dato->sicupon == 0)
-                                            <span>No</span>
-                                        @else
-                                            <span class="badge bg-success">Si</span>
-                                        @endif
-                                    </td>
-
-
-
-
                                     <td>
 
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verCliente({{ $dato->id }})">
-                                            <i class="fa fa-location-arrow" title="Cliente"></i>&nbsp; Cliente
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="borrarRegistro({{ $dato->id }})">
+                                            <i class="fas fa-trash" title="Borrar Registro"></i>&nbsp; Borrar Registro
                                         </button>
 
-                                        <br><br>
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verProductos({{ $dato->id }})">
-                                            <i class="fa fa-location-arrow" title="Productos"></i>&nbsp; Productos
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="cambioPassword({{ $dato->id }})">
+                                            <i class="fas fa-edit" title="Cambiar contraseña"></i>&nbsp; Cambiar contraseña
                                         </button>
 
                                     </td>

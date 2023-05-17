@@ -418,6 +418,11 @@
         }
 
 
+        function verProductos(id){
+            window.location.href="{{ url('/admin/ordenes/productos/listado') }}/"+id;
+        }
+
+
     </script>
 
 

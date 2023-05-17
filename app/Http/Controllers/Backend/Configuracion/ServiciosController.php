@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Configuracion;
 use App\Http\Controllers\Controller;
 use App\Models\HorarioServicio;
 use App\Models\Servicios;
+use App\Models\UsuariosServicios;
 use App\Models\Zonas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -202,6 +203,36 @@ class ServiciosController extends Controller
             return ['success' => 2];
         }
     }
+
+
+
+
+    //**********************************************************
+
+
+    public function indexUsuariosRestaurantes(){
+
+        $servicios = Servicios::orderBy('nombre')->get();
+        return view('backend.admin.usuarios.vistausuarios', compact('servicios'));
+    }
+
+
+    public function tablaUsuariosRestaurantes(){
+
+        $lista = UsuariosServicios::orderBy('id', 'ASC')->get();
+
+        foreach ($lista as $info){
+
+            $infoServicio = Servicios::where('id', $info->id_servicios)->first();
+
+            $info->restaurante = $infoServicio->nombre;
+        }
+
+        return view('backend.admin.usuarios.tablausuarios', compact('lista'));
+    }
+
+
+
 
 
 

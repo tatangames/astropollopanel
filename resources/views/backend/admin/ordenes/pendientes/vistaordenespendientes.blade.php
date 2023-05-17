@@ -89,10 +89,6 @@
                                 <button type="button" class="btn btn-primary" onclick="mapaRegistro()">Mapa</button>
                             </div>
 
-
-
-
-
                         </div>
                     </div>
                 </form>
@@ -178,6 +174,10 @@
             window.location.href="{{ url('/admin/ordenes/pendientes/mapa/') }}/"+id;
         }
 
+
+        function verProductos(id){
+            window.location.href="{{ url('/admin/ordenes/productos/listado') }}/"+id;
+        }
 
 
     </script>

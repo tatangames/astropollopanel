@@ -396,7 +396,7 @@
         }
 
         function verSubCategorias(id) {
-            window.location.href="{{ url('/admin/sub/categorias/listado/') }}/"+id;
+            window.location.href="{{ url('/admin/sub/categorias/listado') }}/"+id;
         }
 
 

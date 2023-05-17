@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Clientes;
 use App\Models\DireccionCliente;
 use App\Models\Ordenes;
+use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
+use App\Models\Productos;
 use App\Models\Servicios;
 use App\Models\Zonas;
 use Carbon\Carbon;
@@ -283,6 +285,38 @@ class OrdenesController extends Controller
 
 
         return view('backend.admin.ordenes.canceladas.tablaordenescanceladashoy', compact('ordenes'));
+    }
+
+
+
+
+    //*********************************************************************
+
+    public function indexListaProductosOrdenes($id){
+        return view('backend.admin.ordenes.productos.vistaproductosordenes', compact('id'));
+    }
+
+
+    public function tablaProductosOrdenes($id){
+
+        $lista = OrdenesDescripcion::where('id_ordenes', $id)->get();
+
+        foreach ($lista as $info){
+
+            $infoProducto = Productos::where('id', $info->id_producto)->first();
+
+            $info->nombrepro = $infoProducto->nombre;
+            $info->usaimagen = $infoProducto->utiliza_imagen;
+            $info->imagen = $infoProducto->imagen;
+
+            // multiplicar
+            $multi = $info->cantidad * $info->precio;
+            $info->multiplicado = '$' . number_format((float)$multi, 2, '.', ',');
+
+            $info->precio = '$' . number_format((float)$info->precio, 2, '.', ',');
+        }
+
+        return view('backend.admin.ordenes.productos.tablaproductosordenes', compact('lista'));
     }
 
 

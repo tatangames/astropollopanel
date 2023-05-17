@@ -45,6 +45,11 @@
                                             <i class="fa fa-location-arrow" title="Proceso"></i>&nbsp; Proceso
                                         </button>
 
+                                        <br><br>
+                                        <button type="button" class="btn btn-success btn-xs" onclick="verProductos({{ $dato->id }})">
+                                            <i class="fa fa-location-arrow" title="Productos"></i>&nbsp; Productos
+                                        </button>
+
                                     </td>
                                 </tr>
 

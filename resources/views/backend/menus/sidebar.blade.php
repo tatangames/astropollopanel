@@ -114,7 +114,12 @@
                         </li>
 
 
-
+                        <li class="nav-item">
+                            <a href="{{ route('index.usuarios.restaurantes') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Usuario Restaurante</p>
+                            </a>
+                        </li>
 
 
                     </ul>

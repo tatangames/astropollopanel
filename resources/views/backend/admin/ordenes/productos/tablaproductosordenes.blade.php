@@ -7,50 +7,37 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 8%"># de Orden</th>
-                                <th style="width: 10%">Fecha de Orden</th>
-                                <th style="width: 10%">Total</th>
-                                <th style="width: 10%">Restaurante</th>
-                                <th style="width: 10%">Cliente</th>
-                                <th style="width: 10%">Dirección</th>
-                                <th style="width: 10%">Cupón</th>
-                                <th style="width: 10%">Opciones</th>
+
+                                <th style="width: 8%">Nombre</th>
+                                <th style="width: 8%">Cantidad</th>
+                                <th style="width: 8%">Precio</th>
+                                <th style="width: 8%">Total</th>
+                                <th style="width: 8%">Nota de Producto</th>
+                                <th style="width: 8%">Imagen</th>
+
+
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($ordenes as $dato)
+                            @foreach($lista as $dato)
 
                                 <tr>
-                                    <td>{{ $dato->id }}</td>
-                                    <td>{{ $dato->fecha_orden }}</td>
-                                    <td>{{ $dato->total_orden }}</td>
-                                    <td>{{ $dato->restaurante }}</td>
-                                    <td>{{ $dato->cliente }}</td>
-                                    <td>{{ $dato->direccion }}</td>
+                                    <td>{{ $dato->nombrepro }}</td>
+                                    <td>{{ $dato->cantidad }}</td>
+                                    <td>{{ $dato->precio }}</td>
+                                    <td>{{ $dato->multiplicado }}</td>
+                                    <td>{{ $dato->nota }}</td>
                                     <td>
-                                        @if($dato->sicupon == 0)
-                                            <span>No</span>
-                                        @else
-                                            <span class="badge bg-success">Si</span>
+                                        @if($dato->usaimagen == 1)
+                                            <center><img alt="Imagenes" src="{{ url('storage/imagenes/'.$dato->imagen) }}" width="75px" height="75px" /></center>
                                         @endif
                                     </td>
 
 
 
 
-                                    <td>
 
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verCliente({{ $dato->id }})">
-                                            <i class="fa fa-location-arrow" title="Cliente"></i>&nbsp; Cliente
-                                        </button>
-
-                                        <br><br>
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verProductos({{ $dato->id }})">
-                                            <i class="fa fa-location-arrow" title="Productos"></i>&nbsp; Productos
-                                        </button>
-
-                                    </td>
                                 </tr>
 
                             @endforeach

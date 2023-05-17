@@ -218,9 +218,16 @@ Route::get('/admin/ordenes/canceladashoy/listado', [OrdenesController::class,'in
 Route::get('/admin/ordenes/canceladashoy/listado/tabla', [OrdenesController::class,'tablaOrdenesCanceladasHoy']);
 
 
+// --- PRODUCTOS DE LA ORDEN ---
+
+Route::get('/admin/ordenes/productos/listado/{id}', [OrdenesController::class,'indexListaProductosOrdenes']);
+Route::get('/admin/ordenes/productos/listado/tabla/{id}', [OrdenesController::class,'tablaProductosOrdenes']);
 
 
+// --- USUARIOS PARA MANEJAR EL RESTAURANTE ---
 
+Route::get('/admin/restaurantes/usuario', [ServiciosController::class,'indexUsuariosRestaurantes'])->name('index.usuarios.restaurantes');
+Route::get('/admin/restaurantes/usuario/tabla', [ServiciosController::class,'tablaUsuariosRestaurantes']);
 
 
 
