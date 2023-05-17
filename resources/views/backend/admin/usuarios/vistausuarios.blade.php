@@ -119,12 +119,21 @@
                             <div class="col-md-12">
 
                                 <div class="form-group">
-                                    <label>Nueva Contraseña</label>
+                                    <label>Usuario</label>
                                     <input type="hidden" id="id-editar">
-                                    <input type="text" autocomplete="off" maxlength="16" class="form-control" id="password-editar">
+                                    <input type="text" autocomplete="off" maxlength="100" class="form-control" id="usuario-editar">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Nombre</label>
+                                    <input type="text" autocomplete="off" maxlength="100" class="form-control" id="nombre-editar">
                                 </div>
 
 
+                                <div class="form-group">
+                                    <label>Nueva Contraseña (Dejar en blanco sino se modificará)</label>
+                                    <input type="text" autocomplete="off" maxlength="16" class="form-control" id="password-editar">
+                                </div>
 
                             </div>
                         </div>
@@ -272,7 +281,7 @@
 
             Swal.fire({
                 title: 'Bloquear Usuario',
-                text: "Esto bloquea el usuario y no podra iniciar sesión o iniciar ordenes",
+                text: "Esto bloquea el usuario y no podrá iniciar sesión o iniciar ordenes",
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#28a745',
@@ -313,28 +322,63 @@
         }
 
 
+        function verInformacion(id){
 
-        function cambioPassword(id){
             document.getElementById("formulario-editar").reset();
-            $('#modalEditar').modal('show');
 
-            $('#id-editar').val(id);
+            openLoading();
+
+
+            axios.post('/admin/restaurantes/usuario/informacion', {
+                'id': id
+            })
+                .then((response) => {
+                    closeLoading()
+
+                    if (response.data.success === 1) {
+
+                        $('#id-editar').val(id);
+
+                        $('#nombre-editar').val(response.data.info.nombre);
+                        $('#usuario-editar').val(response.data.info.usuario);
+
+                        $('#modalEditar').modal('show');
+                    }
+
+                    else {
+                        toastr.error('Error al guardar');
+                    }
+                })
+                .catch((error) => {
+                    closeLoading();
+                    toastr.error('Error del servidor');
+                });
+
         }
-
-
 
         function editar() {
             var id = document.getElementById('id-editar').value;
             var password = document.getElementById('password-editar').value;
+            var nombre = document.getElementById('nombre-editar').value;
+            var usuario = document.getElementById('usuario-editar').value;
 
-            if (password === '') {
-                toastr.error("Contraseña nueva es requerido");
+
+            if(nombre === ''){
+                toastr.error('Nombre es requerido');
                 return;
             }
+
+            if(usuario === ''){
+                toastr.error('Usuario es requerido');
+                return;
+            }
+
 
             let formData = new FormData();
             formData.append('id', id);
             formData.append('password', password);
+            formData.append('nombre', nombre);
+            formData.append('usuario', usuario);
 
             openLoading();
 
@@ -343,9 +387,29 @@
                 .then((response) => {
                     closeLoading()
 
-                     if (response.data.success === 1) {
-                        toastr.success('Contraseña actualizada');
+                    if(response.data.success === 1){
+
+                        Swal.fire({
+                            title: 'No Guardado',
+                            text: "El Usuario ya se encuentra registrado",
+                            icon: 'info',
+                            showCancelButton: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            cancelButtonText: 'Cancelar',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                            }
+                        })
+                    }
+
+                    else if (response.data.success === 2) {
+                        toastr.success('Registro actualizado');
                         $('#modalEditar').modal('hide');
+
+                        recargar();
                     }
 
                     else {
@@ -357,10 +421,6 @@
                     toastr.error('Error del servidor');
                 });
         }
-
-
-
-
 
     </script>
 

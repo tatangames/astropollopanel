@@ -230,6 +230,7 @@ Route::get('/admin/restaurantes/usuario', [ServiciosController::class,'indexUsua
 Route::get('/admin/restaurantes/usuario/tabla', [ServiciosController::class,'tablaUsuariosRestaurantes']);
 Route::post('/admin/restaurantes/usuario/nuevo', [ServiciosController::class,'registrarUsuarioRestaurante']);
 Route::post('/admin/restaurantes/usuario/bloquear', [ServiciosController::class,'bloquearUsuarioRestaurante']);
+Route::post('/admin/restaurantes/usuario/informacion', [ServiciosController::class,'informacionUsuarioRestaurante']);
 Route::post('/admin/restaurantes/usuario/actualizar', [ServiciosController::class,'actualizarUsuarioRestaurante']);
 
 

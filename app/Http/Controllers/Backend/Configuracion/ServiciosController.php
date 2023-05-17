@@ -302,24 +302,65 @@ class ServiciosController extends Controller
     }
 
 
-    public function actualizarUsuarioRestaurante(Request $request){
+    public function informacionUsuarioRestaurante(Request $request){
 
         $regla = array(
             'id' => 'required',
-            'password' => 'required'
         );
 
         $validar = Validator::make($request->all(), $regla);
 
         if ($validar->fails()){return ['success' => 0]; }
 
-        UsuariosServicios::where('id', $request->id)->update([
-            'password' => Hash::make($request->password)
-        ]);
+        if($info = UsuariosServicios::where('id', $request->id)->first()){
 
-        return ['success' => 1];
+            return ['success' => 1, 'info' => $info];
+        }else{
+            return ['success' => 2];
+        }
+
     }
 
+
+    public function actualizarUsuarioRestaurante(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+            'nombre' => 'required',
+            'usuario' => 'required',
+        );
+
+        // password
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+
+        // VERIFICAR USUARIO NO REPETIDO
+        if(UsuariosServicios::where('usuario', $request->usuario)
+            ->where('id', '!=', $request->id)->first()){
+
+            return ['success' => 1];
+        }
+
+        // ACTUALIZAR DATOS
+
+
+
+        UsuariosServicios::where('id', $request->id)->update([
+            'nombre' => $request->nombre,
+            'usuario' => $request->usuario,
+        ]);
+
+        if($request->password != null){
+            UsuariosServicios::where('id', $request->id)->update([
+                'password' => Hash::make($request->password)
+            ]);
+        }
+
+        return ['success' => 2];
+    }
 
 
 

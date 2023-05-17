@@ -24,12 +24,14 @@
                                     <td>{{ $dato->nombre }}</td>
                                     <td>
 
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="borrarRegistro({{ $dato->id }})">
-                                            <i class="fas fa-trash" title="Bloquear"></i>&nbsp; Bloquear
+
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="verInformacion({{ $dato->id }})">
+                                            <i class="fas fa-edit" title="Editar"></i>&nbsp; Editar
                                         </button>
                                         <br><br>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="cambioPassword({{ $dato->id }})">
-                                            <i class="fas fa-edit" title="Cambiar contraseña"></i>&nbsp; Cambiar contraseña
+
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="borrarRegistro({{ $dato->id }})">
+                                            <i class="fas fa-trash" title="Bloquear"></i>&nbsp; Bloquear
                                         </button>
 
                                     </td>
