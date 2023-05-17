@@ -149,4 +149,33 @@ class ApiClienteController extends Controller
             return ['success' => 2];
         }
     }
+
+
+
+    public function informacionCliente(Request $request){
+
+        $rules = array(
+            'id' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){return ['success' => 0]; }
+
+        if($info = Clientes::where('id', $request->id)->first()){
+
+            return ['success' => 1, 'usuario' => $info->usuario];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+
+
+
+
+
+
+
+
 }
