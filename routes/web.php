@@ -224,6 +224,14 @@ Route::get('/admin/ordenes/productos/listado/{id}', [OrdenesController::class,'i
 Route::get('/admin/ordenes/productos/listado/tabla/{id}', [OrdenesController::class,'tablaProductosOrdenes']);
 
 
+// --- TODAS LAS ORDENES JUNTAS ---
+
+
+
+
+
+
+
 // --- USUARIOS PARA MANEJAR EL RESTAURANTE ---
 
 Route::get('/admin/restaurantes/usuario', [ServiciosController::class,'indexUsuariosRestaurantes'])->name('index.usuarios.restaurantes');
@@ -241,6 +249,16 @@ Route::get('/admin/motoristas/usuario/tabla', [ServiciosController::class,'tabla
 Route::post('/admin/motoristas/usuario/nuevo', [ServiciosController::class,'registrarMotoristaRestaurante']);
 Route::post('/admin/motoristas/usuario/informacion', [ServiciosController::class,'informacionMotoristaRestaurante']);
 Route::post('/admin/motoristas/usuario/editar', [ServiciosController::class,'actualizarMotoristaRestaurante']);
+
+// informacion de las ordenes entregas por los motoristas
+
+
+
+
+
+// MOSTRAR LISTA DE SERVICIOS PARA DESPUES OBTENER LISTADO DE ORDENES
+
+
 
 
 
