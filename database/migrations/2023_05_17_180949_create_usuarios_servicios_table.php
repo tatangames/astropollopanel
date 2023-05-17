@@ -23,6 +23,11 @@ class CreateUsuariosServiciosTable extends Migration
             // token para enviar notificaciones
             $table->string('token_fcm', 100)->nullable();
 
+            $table->boolean('bloqueado');
+
+            // nombre de la persona
+            $table->string('nombre', 100);
+
             $table->foreign('id_servicios')->references('id')->on('servicios');
         });
     }

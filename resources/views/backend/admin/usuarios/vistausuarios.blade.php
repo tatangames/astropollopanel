@@ -75,12 +75,17 @@
 
                                 <div class="form-group">
                                     <label>Usuario</label>
-                                    <input type="text" maxlength="20" disabled class="form-control" id="usuario-nuevo">
+                                    <input type="text" autocomplete="off" maxlength="20" class="form-control" id="usuario-nuevo">
                                 </div>
 
                                 <div class="form-group">
                                     <label>Contraseña</label>
-                                    <input type="text" maxlength="16" disabled class="form-control" id="password-nuevo">
+                                    <input type="text" autocomplete="off" maxlength="16" class="form-control" id="password-nuevo">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Nombre del Usuario</label>
+                                    <input type="text" autocomplete="off" maxlength="100" class="form-control" id="nombre-nuevo">
                                 </div>
 
                             </div>
@@ -102,7 +107,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Editar Zona Servicio</h4>
+                <h4 class="modal-title">Editar Contraseña</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -114,8 +119,9 @@
                             <div class="col-md-12">
 
                                 <div class="form-group">
-                                    <label>Fecha ingreso</label>
-                                    <input type="text" disabled class="form-control" id="fecha-editar">
+                                    <label>Nueva Contraseña</label>
+                                    <input type="hidden" id="id-editar">
+                                    <input type="text" autocomplete="off" maxlength="16" class="form-control" id="password-editar">
                                 </div>
 
 
@@ -170,28 +176,41 @@
         // agregar
         function nuevo(){
 
-            var idservicio = document.getElementById('select-servicios').value;
+            var idservicio = document.getElementById('select-servicio').value;
+            var usuario = document.getElementById('usuario-nuevo').value;
+            var password = document.getElementById('password-nuevo').value;
+            var nombre = document.getElementById('nombre-nuevo').value;
 
-
-
-
-            if(selectzona === ''){
-                toastr.error('Zona es requerida');
+            if(idservicio === ''){
+                toastr.error('Restaurante es requerida');
                 return;
             }
 
-            if(selectservicio === ''){
-                toastr.error('Servicio es requerida');
+            if(usuario === ''){
+                toastr.error('Usuario es requerida');
                 return;
             }
+
+            if(password === ''){
+                toastr.error('Contraseña es requerida');
+                return;
+            }
+
+            if(nombre === ''){
+                toastr.error('Nombre es requerida');
+                return;
+            }
+
 
             openLoading();
 
             let formData = new FormData();
-            formData.append('zonaservicio', selectzona);
-            formData.append('servicio', selectservicio);
+            formData.append('idservicio', idservicio);
+            formData.append('usuario', usuario);
+            formData.append('password', password);
+            formData.append('nombre', nombre);
 
-            axios.post('/admin/zonaservicios/nuevo', formData, {
+            axios.post('/admin/restaurantes/usuario/nuevo', formData, {
             })
                 .then((response) => {
                     closeLoading();
@@ -200,7 +219,7 @@
 
                         Swal.fire({
                             title: 'Error al Guardar',
-                            text: "Esta Zona ya tiene un Servicio Asignado",
+                            text: "Este Restaurante ya tiene asignado 1 usuario",
                             icon: 'info',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',
@@ -213,9 +232,30 @@
                             }
                         })
 
-                    } else if (response.data.success === 2) {
+                    }
+
+                    else if(response.data.success === 2){
+
+                        Swal.fire({
+                            title: 'Error al Guardar',
+                            text: "El usuario ya esta registrado para un Restaurante, siempre se toma en cuenta los usuarios bloqueados",
+                            icon: 'info',
+                            showCancelButton: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            cancelButtonText: 'Cancelar',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                            }
+                        })
+
+                    }
+
+                    else if (response.data.success === 3) {
                         $('#modalAgregar').modal('hide');
-                        toastr.success('Zona servicio agregado');
+                        toastr.success('Usuario registrado');
                         recargar();
                     }  else {
                         toastr.error('Error al guardar');
@@ -228,44 +268,42 @@
                 });
         }
 
-
-        //
         function borrarRegistro(id){
 
             Swal.fire({
-                title: 'Borrar Registro',
-                text: "Esto elimina el Servicio asignado a la Zona",
+                title: 'Bloquear Usuario',
+                text: "Esto bloquea el usuario y no podra iniciar sesión o iniciar ordenes",
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#28a745',
                 cancelButtonColor: '#d33',
                 cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Borrar'
+                confirmButtonText: 'Bloquear'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    borrar(id);
+                    bloquear(id);
                 }
             })
 
         }
 
-        // editar tipo servicio zona
-        function borrar(id){
+        // editar
+        function bloquear(id){
 
             openLoading();
             var formData = new FormData();
             formData.append('id', id);
 
-            axios.post('/admin/zonaservicios/borrar', formData, {
+            axios.post('/admin/restaurantes/usuario/bloquear', formData, {
             })
                 .then((response) => {
                     closeLoading();
                     if (response.data.success === 1) {
-                        toastr.success('Registro borrado');
+                        toastr.success('Registro bloqueado');
                         recargar();
                     }
                     else {
-                        toastr.error('Error al borrar');
+                        toastr.error('Error al bloquear');
                     }
                 })
                 .catch((error) => {
@@ -273,6 +311,56 @@
                     toastr.error('Error de servidor');
                 });
         }
+
+
+
+        function cambioPassword(id){
+            document.getElementById("formulario-editar").reset();
+            $('#modalEditar').modal('show');
+
+            $('#id-editar').val(id);
+        }
+
+
+
+        function editar() {
+            var id = document.getElementById('id-editar').value;
+            var password = document.getElementById('password-editar').value;
+
+            if (password === '') {
+                toastr.error("Contraseña nueva es requerido");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append('id', id);
+            formData.append('password', password);
+
+            openLoading();
+
+            axios.post('/admin/restaurantes/usuario/actualizar', formData, {
+            })
+                .then((response) => {
+                    closeLoading()
+
+                     if (response.data.success === 1) {
+                        toastr.success('Contraseña actualizada');
+                        $('#modalEditar').modal('hide');
+                    }
+
+                    else {
+                        toastr.error('Error al guardar');
+                    }
+                })
+                .catch((error) => {
+                    closeLoading();
+                    toastr.error('Error del servidor');
+                });
+        }
+
+
+
+
 
     </script>
 

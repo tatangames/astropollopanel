@@ -228,6 +228,36 @@ Route::get('/admin/ordenes/productos/listado/tabla/{id}', [OrdenesController::cl
 
 Route::get('/admin/restaurantes/usuario', [ServiciosController::class,'indexUsuariosRestaurantes'])->name('index.usuarios.restaurantes');
 Route::get('/admin/restaurantes/usuario/tabla', [ServiciosController::class,'tablaUsuariosRestaurantes']);
+Route::post('/admin/restaurantes/usuario/nuevo', [ServiciosController::class,'registrarUsuarioRestaurante']);
+Route::post('/admin/restaurantes/usuario/bloquear', [ServiciosController::class,'bloquearUsuarioRestaurante']);
+Route::post('/admin/restaurantes/usuario/actualizar', [ServiciosController::class,'actualizarUsuarioRestaurante']);
+
+
+// --- MOTORISTAS PARA LOS RESTAURANTES ---
+
+Route::get('/admin/motoristas/usuario', [ServiciosController::class,'indexMotoristasRestaurantes'])->name('index.motoristas.restaurantes');
+Route::get('/admin/motoristas/usuario/tabla', [ServiciosController::class,'tablaMotoristasRestaurantes']);
+Route::post('/admin/motoristas/usuario/nuevo', [ServiciosController::class,'registrarMotoristaRestaurante']);
+Route::post('/admin/motoristas/usuario/informacion', [ServiciosController::class,'informacionMotoristaRestaurante']);
+Route::post('/admin/motoristas/usuario/editar', [ServiciosController::class,'actualizarMotoristaRestaurante']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

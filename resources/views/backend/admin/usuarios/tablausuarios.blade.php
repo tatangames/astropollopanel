@@ -9,23 +9,25 @@
                             <tr>
                                 <th style="width: 15%">Restaurante</th>
                                 <th style="width: 20%">Usuario</th>
-                                <th style="width: 20%">Opciones</th>
+                                <th style="width: 20%">Nombre</th>
+                                <th style="width: 12%">Opciones</th>
 
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($listado as $dato)
+                            @foreach($lista as $dato)
 
                                 <tr>
-                                    <td>{{ $dato->usuario }}</td>
                                     <td>{{ $dato->restaurante }}</td>
+                                    <td>{{ $dato->usuario }}</td>
+                                    <td>{{ $dato->nombre }}</td>
                                     <td>
 
                                         <button type="button" class="btn btn-primary btn-xs" onclick="borrarRegistro({{ $dato->id }})">
-                                            <i class="fas fa-trash" title="Borrar Registro"></i>&nbsp; Borrar Registro
+                                            <i class="fas fa-trash" title="Bloquear"></i>&nbsp; Bloquear
                                         </button>
-
+                                        <br><br>
                                         <button type="button" class="btn btn-primary btn-xs" onclick="cambioPassword({{ $dato->id }})">
                                             <i class="fas fa-edit" title="Cambiar contraseña"></i>&nbsp; Cambiar contraseña
                                         </button>

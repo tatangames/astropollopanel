@@ -4,13 +4,16 @@ namespace App\Http\Controllers\Backend\Configuracion;
 
 use App\Http\Controllers\Controller;
 use App\Models\HorarioServicio;
+use App\Models\MotoristasServicios;
 use App\Models\Servicios;
 use App\Models\UsuariosServicios;
 use App\Models\Zonas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ServiciosController extends Controller
 {
@@ -219,7 +222,9 @@ class ServiciosController extends Controller
 
     public function tablaUsuariosRestaurantes(){
 
-        $lista = UsuariosServicios::orderBy('id', 'ASC')->get();
+        $lista = UsuariosServicios::orderBy('id', 'ASC')
+            ->where('bloqueado', 0)
+            ->get();
 
         foreach ($lista as $info){
 
@@ -232,8 +237,214 @@ class ServiciosController extends Controller
     }
 
 
+    public function registrarUsuarioRestaurante(Request $request){
+
+        $regla = array(
+            'idservicio' => 'required',
+            'usuario' => 'required',
+            'password' => 'required',
+            'nombre' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+
+        // SOLO 1 USUARIO POR RESTAURANTE Y SE IGNORAN LOS BLOQUEADOS
+        if(UsuariosServicios::where('id_servicios', $request->idservicio)
+            ->where('bloqueado', 0)
+            ->first()){
+
+            return ['success' => 1];
+        }
+
+        // NO USUARIOS REPETIDOS
+        if(UsuariosServicios::where('usuario', $request->usuario)
+            ->first()){
+            return ['success' => 2];
+        }
+
+        // obtener los usuarios que han sido bloqueados
+
+        $usuario = new UsuariosServicios();
+        $usuario->id_servicios = $request->idservicio;
+        $usuario->usuario = $request->usuario;
+        $usuario->password = Hash::make($request->password);
+        $usuario->token_fcm = null;
+        $usuario->bloqueado = 0;
+        $usuario->nombre = $request->nombre;
+
+        if($usuario->save()){
+            return ['success' => 3];
+        }else{
+            return ['success' => 99];
+        }
+    }
 
 
 
+    public function bloquearUsuarioRestaurante(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+        UsuariosServicios::where('id', $request->id)->update([
+            'bloqueado' => 1
+        ]);
+
+        return ['success' => 1];
+    }
+
+
+    public function actualizarUsuarioRestaurante(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+            'password' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+        UsuariosServicios::where('id', $request->id)->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return ['success' => 1];
+    }
+
+
+
+
+    ///*******************************************************************
+
+
+    public function indexMotoristasRestaurantes(){
+        $servicios = Servicios::orderBy('nombre')->get();
+
+        return view('backend.admin.motoristas.vistamotoristas', compact('servicios'));
+    }
+
+
+    public function tablaMotoristasRestaurantes(){
+
+        $lista = MotoristasServicios::orderBy('usuario', 'ASC')->get();
+
+        foreach ($lista as $info){
+
+            $infoServicio = Servicios::where('id', $info->id_servicios)->first();
+            $info->restaurante = $infoServicio->nombre;
+        }
+
+        return view('backend.admin.motoristas.tablamotoristas', compact('lista'));
+    }
+
+
+    public function registrarMotoristaRestaurante(Request $request){
+
+        $regla = array(
+            'idservicio' => 'required',
+            'usuario' => 'required',
+            'password' => 'required',
+            'nombre' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+
+        // NO USUARIOS REPETIDOS
+        if(MotoristasServicios::where('usuario', $request->usuario)
+            ->first()){
+            return ['success' => 1];
+        }
+
+        // obtener los usuarios que han sido bloqueados
+
+        $usuario = new MotoristasServicios();
+        $usuario->id_servicios = $request->idservicio;
+        $usuario->usuario = $request->usuario;
+        $usuario->password = Hash::make($request->password);
+        $usuario->token_fcm = null;
+        $usuario->bloqueado = 0;
+        $usuario->nombre = $request->nombre;
+
+        if($usuario->save()){
+            return ['success' => 2];
+        }else{
+            return ['success' => 99];
+        }
+
+    }
+
+
+    public function informacionMotoristaRestaurante(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+        if($info = MotoristasServicios::where('id', $request->id)->first()){
+
+            return ['success' => 1, 'info' => $info];
+        }else{
+            return ['success' => 2];
+        }
+
+    }
+
+
+    public function actualizarMotoristaRestaurante(Request $request){
+
+
+        $regla = array(
+            'id' => 'required',
+            'nombre' => 'required',
+            'usuario' => 'required',
+            'activo' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+
+        // VERIICAR USUARIO NO REPETIDO
+        if(MotoristasServicios::where('usuario', $request->usuario)
+            ->where('id', '!=', $request->id)->first()){
+
+            return ['success' => 1];
+        }
+
+        // ACTUALIZAR DATOS
+
+
+
+        MotoristasServicios::where('id', $request->id)->update([
+            'nombre' => $request->nombre,
+            'usuario' => $request->usuario,
+            'activo' => $request->activo
+        ]);
+
+        if($request->password != null){
+            MotoristasServicios::where('id', $request->id)->update([
+                'password' => Hash::make($request->password)
+            ]);
+        }
+
+        return ['success' => 2];
+    }
 
 }

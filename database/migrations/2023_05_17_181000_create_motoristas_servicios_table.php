@@ -21,11 +21,12 @@ class CreateMotoristasServiciosTable extends Migration
             $table->string('usuario', 20)->unique();
             $table->string('password', 255);
 
-            // para bloquear usuario
-            $table->boolean('activo');
-
             // token para enviar notificaciones
             $table->string('token_fcm', 100)->nullable();
+
+            $table->string('nombre', 100);
+
+            $table->boolean('activo');
 
             $table->foreign('id_servicios')->references('id')->on('servicios');
         });
