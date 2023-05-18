@@ -58,6 +58,11 @@ return [
             'root' => storage_path('app/public/imagenes'),
         ],
 
+        'correoimg' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/correoimg'),
+        ],
+
     ],
 
     /*

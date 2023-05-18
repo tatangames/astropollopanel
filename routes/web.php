@@ -53,6 +53,17 @@ Route::post('/admin/permisos/extra-borrar', [PermisoController::class, 'borrarPe
 Route::get('/admin/editar-perfil/index', [PerfilController::class,'indexEditarPerfil'])->name('admin.perfil');
 Route::post('/admin/editar-perfil/actualizar', [PerfilController::class, 'editarUsuario']);
 
+
+// *** ENVIO DE CORREO PRUEBA
+Route::post('/admin/enviar/correo', [LoginController::class, 'enviarCorreoTest']);
+
+
+
+
+
+
+
+
 // --- SIN PERMISOS VISTA 403 ---
 Route::get('sin-permisos', [ControlController::class,'indexSinPermiso'])->name('no.permisos.index');
 

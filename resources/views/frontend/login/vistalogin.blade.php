@@ -218,7 +218,29 @@
 
     // modal para recuperar contrasena
     function modalRecuperar(){
-        console.log('entra');
+
+        openLoading();
+
+        usuario = "dfsdf";
+        let formData = new FormData();
+        formData.append('usuario', usuario);
+
+        axios.post('admin/enviar/correo', formData, {
+        })
+            .then((response) => {
+                closeLoading()
+
+                console.log(response);
+
+
+            })
+            .catch((error) => {
+                closeLoading()
+                toastr.error("Error en la respuesta");
+            });
+
+
+
     }
 
 

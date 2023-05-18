@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Administrador;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+
+use App\Mail\CorreoPasswordMail;
+
 
 class LoginController extends Controller
 {
@@ -18,6 +22,18 @@ class LoginController extends Controller
     public function index(){
         return view('frontend.login.vistalogin');
     }
+
+
+    public function enviarCorreoTest(){
+
+        $data = ["name" => 'jonathan morr'];
+
+        Mail::to("tatangamess@gmail.com")
+            ->send(new CorreoPasswordMail($data));
+
+        return ['success' => 2];
+    }
+
 
     // verificar usuario y contraseña para iniciar sesión
     public function login(Request $request){
