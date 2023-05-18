@@ -429,7 +429,7 @@ class ProcesarController extends Controller
                     $orden->id_cupones = $idCupones;
                     $orden->total_cupon = $totalCarritoCupon;
                     $orden->mensaje_cupon = $mensajeCupon;
-                    $orden->visible = 0;
+                    $orden->visible = 1;
                     $orden->visible_p = 0;
                     $orden->visible_p2 = 0;
                     $orden->visible_p3 = 0;

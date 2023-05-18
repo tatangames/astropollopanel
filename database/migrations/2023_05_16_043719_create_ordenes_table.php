@@ -69,7 +69,14 @@ class CreateOrdenesTable extends Migration
             $table->string('mensaje_cupon', 400)->nullable();
 
 
+
+            // LA ORDEN ES VISIBLE POR EL CLIENTE EN EL LISTADO DE ORDENES ACTIVAS
             $table->boolean('visible');
+
+
+
+
+
             $table->boolean('visible_p');
             $table->boolean('visible_p2');
             $table->boolean('visible_p3');
