@@ -26,7 +26,16 @@ class LoginController extends Controller
 
     public function enviarCorreoTest(){
 
-        $data = ["name" => 'jonathan morr'];
+
+        $codigo = '';
+        for($i = 0; $i < 6; $i++) {
+            $codigo .= mt_rand(0, 9);
+        }
+
+        $usuario = "pepe";
+
+        $data = ["usuario" => $usuario,
+                "codigo" => $codigo];
 
         Mail::to("tatangamess@gmail.com")
             ->send(new CorreoPasswordMail($data));
