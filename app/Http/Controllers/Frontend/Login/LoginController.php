@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 use App\Mail\CorreoPasswordMail;
-
+use OneSignal;
 
 class LoginController extends Controller
 {
@@ -25,6 +25,40 @@ class LoginController extends Controller
 
 
     public function enviarCorreoTest(){
+
+
+
+
+
+        $mensaje = "ordnee";
+        $titulo = "mensaje eee";
+
+        $userId = "77a9a189-ceb6-49c3-bb11-f48452f185a9";
+
+        $contents = array(
+            "en" => $mensaje
+        );
+
+        $params = array(
+
+            'contents' => $contents,
+            'include_player_ids' => is_array($userId) ? $userId : array($userId)
+        );
+
+        $params['headings'] = array(
+            "en" => $titulo
+        );
+
+
+
+        OneSignal::sendNotificationCustom($params);
+
+
+
+
+
+
+
 
 
         $codigo = '';
