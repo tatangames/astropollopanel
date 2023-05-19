@@ -20,6 +20,11 @@
                     Nuevo Zona Servicio
                 </button>
             </div>
+
+            <div class="col-sm-12" style="margin-top: 15px">
+                <p>El Botón Borrar Registro solo estara disponible por 15 minutos si quiere borrarlo</p>
+            </div>
+
         </div>
     </div>
 </section>

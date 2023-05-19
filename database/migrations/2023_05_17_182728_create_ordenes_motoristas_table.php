@@ -22,7 +22,7 @@ class CreateOrdenesMotoristasTable extends Migration
             // FECHA QUE AGARRO LA ORDEN
             $table->dateTime('fecha');
 
-            $table->integer('experiencia');
+            $table->integer('experiencia')->nullable();
             // nota del cliente
             $table->string('mensaje', 200)->nullable();
 

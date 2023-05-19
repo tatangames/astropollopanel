@@ -8,10 +8,11 @@
                             <thead>
                             <tr>
                                 <th style="width: 15%">Restaurante</th>
-                                <th style="width: 20%">Usuario</th>
-                                <th style="width: 20%">Nombre</th>
-                                <th style="width: 20%">Disponible</th>
-                                <th style="width: 12%">Opciones</th>
+                                <th style="width: 15%">Usuario</th>
+                                <th style="width: 15%">Nombre</th>
+                                <th style="width: 10%">Disponible</th>
+                                <th style="width: 10%">Perfil</th>
+                                <th style="width: 8%">Opciones</th>
 
                             </tr>
                             </thead>
@@ -30,6 +31,10 @@
                                         @else
                                             <span class="badge bg-success">Sí</span>
                                         @endif
+                                    </td>
+
+                                    <td>
+                                        <center><img alt="Imagenes" src="{{ url('storage/imagenes/'.$dato->imagen) }}" width="75px" height="75px" /></center>
                                     </td>
 
                                     <td>

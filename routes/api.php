@@ -85,6 +85,29 @@ Route::post('cliente/proceso/enviar/orden', [ProcesarController::class, 'enviarO
 
 
 
+// LISTADO DE ORDENES ACTIVAS DEL CLIENTE
+Route::post('cliente/ordenes/listado/activas', [OrdenesController::class, 'verListadoOrdenesActivasCliente']);
+
+// VER ESTADO DE ORDEN INDIVIDUAL
+
+Route::post('cliente/orden/informacion/estado',  [OrdenesController::class, 'informacionOrdenIndividual']);
+
+
+// ver motorista de la orden
+Route::post('cliente/orden/ver/motorista',  [OrdenesController::class, 'verMotoristaOrden']);
+
+
+// calificar orden y completarla
+Route::post('cliente/orden/completar/calificacion',  [OrdenesController::class, 'calificarLaOrden']);
+
+
+
+
+
+
+
+
+
 
 
 
@@ -110,12 +133,6 @@ Route::post('cliente/direcciones/elegir/direccion', [ApiClienteController::class
 Route::post('cliente/eliminar/direccion/seleccionada', [ApiClienteController::class, 'eliminarDireccionSeleccionadaCliente']);
 
 
-// LISTADO DE ORDENES ACTIVAS DEL CLIENTE
-Route::post('cliente/ordenes/listado/activas', [OrdenesController::class, 'verListadoOrdenesActivasCliente']);
-
-// VER ESTADO DE ORDEN INDIVIDUAL
-
-Route::post('cliente/orden/informacion/estado',  [OrdenesController::class, 'informacionOrdenIndividual']);
 
 
 

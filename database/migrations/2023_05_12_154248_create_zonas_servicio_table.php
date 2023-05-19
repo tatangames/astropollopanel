@@ -18,6 +18,11 @@ class CreateZonasServicioTable extends Migration
             $table->bigInteger('id_zonas')->unsigned();
             $table->bigInteger('id_servicios')->unsigned();
 
+
+            // para ocultar boton borrar registro por 15 minutos
+            $table->dateTime('fecha');
+
+
             $table->foreign('id_zonas')->references('id')->on('zonas');
             $table->foreign('id_servicios')->references('id')->on('servicios');
         });

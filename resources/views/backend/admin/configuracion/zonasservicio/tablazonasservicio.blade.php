@@ -8,8 +8,8 @@
                             <thead>
                             <tr>
                                 <th style="width: 15%">Nombre de Zona</th>
-                                <th style="width: 20%">Nombre del Negocio</th>
-                                <th style="width: 20%">Opciones</th>
+                                <th style="width: 20%">Nombre del Restaurante</th>
+                                <th style="width: 8%">Opciones</th>
 
                             </tr>
                             </thead>
@@ -21,9 +21,15 @@
                                     <td>{{ $dato->nombrezona }}</td>
                                     <td>{{ $dato->nombrenegocio }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="borrarRegistro({{ $dato->id }})">
+
+                                        @if($dato->puedeborrar == 1)
+
+                                        <button type="button" class="btn btn-danger btn-xs" onclick="borrarRegistro({{ $dato->id }})">
                                             <i class="fas fa-trash" title="Borrar Registro"></i>&nbsp; Borrar Registro
                                         </button>
+
+                                        @endif
+
                                     </td>
                                 </tr>
 

@@ -28,8 +28,8 @@ class CreateOrdenesTable extends Migration
             $table->dateTime('fecha_orden');
 
 
-            // TIEMPO ESTIMADA DE ENTREGA PARA EL CLIENTE + SUMA DE ZONA EN MINUTOS
-            $table->integer('tiempo_estimada')->default(0);
+            // FECHA ESTIMADA DE ENTREGA PARA EL CLIENTE + SUMA DE ZONA
+            $table->dateTime('fecha_estimada')->default(0);
 
 
 

@@ -416,7 +416,7 @@ class ProcesarController extends Controller
                     $orden->nota_orden = $request->nota;
                     $orden->total_orden = $totalCarrito;
                     $orden->fecha_orden = $fecha;
-                    $orden->tiempo_estimada = 0;
+                    $orden->fecha_estimada = null;
                     $orden->estado_iniciada = 0;
                     $orden->fecha_iniciada = null;
                     $orden->estado_preparada = 0;

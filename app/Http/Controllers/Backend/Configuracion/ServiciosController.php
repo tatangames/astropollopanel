@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ServiciosController extends Controller
 {
@@ -394,7 +396,9 @@ class ServiciosController extends Controller
             'idservicio' => 'required',
             'usuario' => 'required',
             'password' => 'required',
-            'nombre' => 'required'
+            'nombre' => 'required',
+            'vehiculo' => 'required',
+            'placa' => 'required'
         );
 
         $validar = Validator::make($request->all(), $regla);
@@ -410,20 +414,39 @@ class ServiciosController extends Controller
 
         // obtener los usuarios que han sido bloqueados
 
-        $usuario = new MotoristasServicios();
-        $usuario->id_servicios = $request->idservicio;
-        $usuario->usuario = $request->usuario;
-        $usuario->password = Hash::make($request->password);
-        $usuario->token_fcm = null;
-        $usuario->bloqueado = 0;
-        $usuario->nombre = $request->nombre;
 
-        if($usuario->save()){
-            return ['success' => 2];
+        $cadena = Str::random(15);
+        $tiempo = microtime();
+        $union = $cadena.$tiempo;
+        $nombre = str_replace(' ', '_', $union);
+
+        $extension = '.'.$request->imagen->getClientOriginalExtension();
+        $nombreFoto = $nombre.strtolower($extension);
+        $avatar = $request->file('imagen');
+        $upload = Storage::disk('imagenes')->put($nombreFoto, \File::get($avatar));
+
+        if($upload){
+
+            $usuario = new MotoristasServicios();
+            $usuario->id_servicios = $request->idservicio;
+            $usuario->usuario = $request->usuario;
+            $usuario->password = Hash::make($request->password);
+            $usuario->token_fcm = null;
+            $usuario->activo = 0;
+            $usuario->nombre = $request->nombre;
+            $usuario->vehiculo = $request->vehiculo;
+            $usuario->placa = $request->placa;
+            $usuario->imagen = $nombreFoto;
+
+
+            if($usuario->save()){
+                return ['success' => 2];
+            }else{
+                return ['success' => 99];
+            }
         }else{
             return ['success' => 99];
         }
-
     }
 
 
@@ -454,7 +477,9 @@ class ServiciosController extends Controller
             'id' => 'required',
             'nombre' => 'required',
             'usuario' => 'required',
-            'activo' => 'required'
+            'activo' => 'required',
+            'vehiculo' => 'required',
+            'placa' => 'required'
         );
 
         $validar = Validator::make($request->all(), $regla);
@@ -472,20 +497,70 @@ class ServiciosController extends Controller
         // ACTUALIZAR DATOS
 
 
+        $infoMotorista = MotoristasServicios::where('id', $request->id)->first();
 
-        MotoristasServicios::where('id', $request->id)->update([
-            'nombre' => $request->nombre,
-            'usuario' => $request->usuario,
-            'activo' => $request->activo
-        ]);
 
-        if($request->password != null){
+        if($request->hasFile('imagen')){
+
+            $cadena = Str::random(15);
+            $tiempo = microtime();
+            $union = $cadena.$tiempo;
+            $nombre = str_replace(' ', '_', $union);
+
+            $extension = '.'.$request->imagen->getClientOriginalExtension();
+            $nombreFoto = $nombre.strtolower($extension);
+            $avatar = $request->file('imagen');
+            $upload = Storage::disk('imagenes')->put($nombreFoto, \File::get($avatar));
+
+            if($upload){
+                $imagenOld = $infoMotorista->imagen;
+
+
+                MotoristasServicios::where('id', $request->id)->update([
+                    'nombre' => $request->nombre,
+                    'usuario' => $request->usuario,
+                    'activo' => $request->activo,
+                    'vehiculo' => $request->vehiculo,
+                    'placa' => $request->placa,
+                    'imagen' => $nombreFoto
+                ]);
+
+                if($request->password != null){
+                    MotoristasServicios::where('id', $request->id)->update([
+                        'password' => Hash::make($request->password)
+                    ]);
+                }
+
+                if(Storage::disk('imagenes')->exists($imagenOld)){
+                    Storage::disk('imagenes')->delete($imagenOld);
+                }
+
+                return ['success' => 2];
+
+            }else{
+                return ['success' => 99];
+            }
+        }else{
+            // solo guardar datos
+
             MotoristasServicios::where('id', $request->id)->update([
-                'password' => Hash::make($request->password)
+                'nombre' => $request->nombre,
+                'usuario' => $request->usuario,
+                'activo' => $request->activo,
+                'vehiculo' => $request->vehiculo,
+                'placa' => $request->placa,
             ]);
+
+            if($request->password != null){
+                MotoristasServicios::where('id', $request->id)->update([
+                    'password' => Hash::make($request->password)
+                ]);
+            }
+
+            return ['success' => 2];
         }
 
-        return ['success' => 2];
+
     }
 
 }

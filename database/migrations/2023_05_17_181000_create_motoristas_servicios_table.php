@@ -26,7 +26,14 @@ class CreateMotoristasServiciosTable extends Migration
 
             $table->string('nombre', 100);
 
+            $table->string('vehiculo', 50);
+            $table->string('placa', 50);
+
+
+
             $table->boolean('activo');
+
+            $table->string('imagen', 100);
 
             $table->foreign('id_servicios')->references('id')->on('servicios');
         });

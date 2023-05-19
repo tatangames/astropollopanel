@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Servicios;
 use App\Models\Zonas;
 use App\Models\ZonasServicio;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use DateTime;
+
+
 
 class ZonasServicioController extends Controller
 {
@@ -37,6 +41,27 @@ class ZonasServicioController extends Controller
 
             $info->nombrezona = $infoZona->nombre;
             $info->nombrenegocio = $infoServicio->nombre;
+
+
+
+            $fechaRegistro = Carbon::parse($info->fecha);
+
+            $tiempoSumado = $fechaRegistro->addMinute(15)->format('Y-m-d H:i:s');
+            $fechaHoy = Carbon::now('America/El_Salvador')->format('Y-m-d H:i:s');
+
+
+            $d1 = new DateTime($tiempoSumado);
+            $d2 = new DateTime($fechaHoy);
+
+            if ($d1 > $d2){
+                // PUEDE BORRAR REGISTRO
+
+                $info->puedeborrar = 1;
+            }else {
+                // YA NO PUEDE BORRAR REGISTRO
+                $info->puedeborrar = 0;
+            }
+
         }
 
         return view('backend.admin.configuracion.zonasservicio.tablazonasservicio', compact('listado'));
@@ -59,9 +84,12 @@ class ZonasServicioController extends Controller
             return ['success' => 1];
         }
 
+        $fecha = Carbon::now('America/El_Salvador');
+
         $ca = new ZonasServicio();
         $ca->id_zonas = $request->zonaservicio;
         $ca->id_servicios = $request->servicio;
+        $ca->fecha = $fecha;
 
         if($ca->save()){
             return ['success' => 2];

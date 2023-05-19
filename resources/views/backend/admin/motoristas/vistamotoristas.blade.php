@@ -84,6 +84,28 @@
                                     <input type="text" autocomplete="off" maxlength="100" class="form-control" id="nombre-nuevo">
                                 </div>
 
+                                <div class="form-group">
+                                    <label>Vehículo</label>
+                                    <input type="text" autocomplete="off" maxlength="50" class="form-control" id="vehiculo-nuevo">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Placa</label>
+                                    <input type="text" autocomplete="off" maxlength="50" class="form-control" id="placa-nuevo">
+                                </div>
+
+                                <div class="form-group">
+                                    <div>
+                                        <label>Foto del Motorista</label>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-10">
+                                        <input type="file" style="color:#191818" id="imagen-nuevo" accept="image/jpeg, image/jpg, image/png"/>
+                                    </div>
+                                </div>
+
+
+
                             </div>
                         </div>
                     </div>
@@ -133,7 +155,17 @@
 
 
                                 <div class="form-group">
-                                    <label>Disponible</label><br>
+                                    <label>Vehículo</label>
+                                    <input type="text" autocomplete="off" maxlength="50" class="form-control" id="vehiculo-editar">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Placa</label>
+                                    <input type="text" autocomplete="off" maxlength="50" class="form-control" id="placa-editar">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Disponible (Desactiva Motorista y no podra ver ordenes)</label><br>
                                     <label class="switch" style="margin-top:10px">
                                         <input type="checkbox" id="toggle-activo">
                                         <div class="slider round">
@@ -141,6 +173,17 @@
                                             <span class="off">No</span>
                                         </div>
                                     </label>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div>
+                                        <label>Foto del Motorista</label>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-10">
+                                        <input type="file" style="color:#191818" id="imagen-editar" accept="image/jpeg, image/jpg, image/png"/>
+                                    </div>
                                 </div>
 
 
@@ -198,6 +241,10 @@
             var usuario = document.getElementById('usuario-nuevo').value;
             var password = document.getElementById('password-nuevo').value;
             var nombre = document.getElementById('nombre-nuevo').value;
+            var vehiculo = document.getElementById('vehiculo-nuevo').value;
+            var placa = document.getElementById('placa-nuevo').value;
+            var imagen = document.getElementById('imagen-nuevo');
+
 
             if(idservicio === ''){
                 toastr.error('Restaurante es requerida');
@@ -219,6 +266,27 @@
                 return;
             }
 
+            if(vehiculo === ''){
+                toastr.error('Vehiculo es requerida');
+                return;
+            }
+
+            if(placa === ''){
+                toastr.error('Placa es requerida');
+                return;
+            }
+
+            if(imagen.files && imagen.files[0]){ // si trae imagen
+                if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
+                    toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
+                    return;
+                }
+            }else{
+                toastr.error('Foto es requerida');
+                return;
+            }
+
+
             openLoading();
 
             let formData = new FormData();
@@ -226,6 +294,11 @@
             formData.append('usuario', usuario);
             formData.append('password', password);
             formData.append('nombre', nombre);
+            formData.append('vehiculo', vehiculo);
+            formData.append('placa', placa);
+            formData.append('imagen', imagen.files[0]);
+
+
 
             axios.post('/admin/motoristas/usuario/nuevo', formData, {
             })
@@ -283,6 +356,8 @@
 
                         $('#nombre-editar').val(response.data.info.nombre);
                         $('#usuario-editar').val(response.data.info.usuario);
+                        $('#vehiculo-editar').val(response.data.info.vehiculo);
+                        $('#placa-editar').val(response.data.info.placa);
 
 
                         if(response.data.info.activo === 0){
@@ -313,9 +388,14 @@
 
             var usuario = document.getElementById('usuario-editar').value;
             var nombre = document.getElementById('nombre-editar').value;
+            var vehiculo = document.getElementById('vehiculo-editar').value;
+            var placa = document.getElementById('placa-editar').value;
 
             var cbActivo = document.getElementById('toggle-activo').checked;
             var toggleActivo = cbActivo ? 1 : 0;
+
+            var imagen = document.getElementById('imagen-editar');
+
 
 
             if (usuario === '') {
@@ -329,17 +409,39 @@
                 return;
             }
 
+            if (vehiculo === '') {
+                toastr.error("Vehiculo es requerido");
+                return;
+            }
+
+            if (placa === '') {
+                toastr.error("Placa es requerido");
+                return;
+            }
+
             if (password.length > 16) {
                 toastr.error("Contraseña máximo 16 caracteres");
                 return;
             }
+
+            if(imagen.files && imagen.files[0]){ // si trae imagen
+                if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
+                    toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
+                    return;
+                }
+            }
+
 
             let formData = new FormData();
             formData.append('id', id);
             formData.append('password', password);
             formData.append('usuario', usuario);
             formData.append('nombre', nombre);
+            formData.append('vehiculo', vehiculo);
+            formData.append('placa', placa);
             formData.append('activo', toggleActivo);
+            formData.append('imagen', imagen.files[0]);
+
 
             openLoading();
 
