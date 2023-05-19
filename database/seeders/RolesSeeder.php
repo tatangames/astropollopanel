@@ -16,13 +16,37 @@ class RolesSeeder extends Seeder
     public function run()
     {
 
-        // administrador con todos los permisos
-        $role1 = Role::create(['name' => 'Super-Admin']);
+        // ADMINISTRADOR PARA MANEJAR LOS ROLES Y PERMISOS
+        $roleAdmin = Role::create(['name' => 'Admin']);
 
-        Permission::create(['name' => 'seccion.estadisticas', 'description' => 'Vista para estadisticas de la App'])->syncRoles($role1);
+        // REALIZA TODAS LAS FUNCIONES MENOS LOS ROLES Y PERMISOS
+        $roleEditor = Role::create(['name' => 'Editor']);
 
-        // roles y permisos
-        Permission::create(['name' => 'seccion.permisos', 'description' => 'Vista para permisos'])->syncRoles($role1);
+        // MANEJA CALL CENTER
+        $roleColaborador = Role::create(['name' => 'Colaborador']);
+
+
+        // Roles y Permisos
+        Permission::create(['name' => 'sidebar.roles.y.permisos', 'description' => 'Vista para permisos'])->syncRoles($roleAdmin);
+
+
+        Permission::create(['name' => 'sidebar.zonas', 'description' => 'Vista para creacion de zonas'])->syncRoles($roleEditor);
+
+        Permission::create(['name' => 'sidebar.ordenes', 'description' => 'Vista para ver ordenes'])->syncRoles($roleEditor);
+
+        Permission::create(['name' => 'sidebar.usuarios', 'description' => 'Vista para ver usuarios de todos'])->syncRoles($roleEditor);
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }

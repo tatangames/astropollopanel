@@ -10,6 +10,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
 
+                @can('sidebar.roles.y.permisos')
                 <li class="nav-item">
 
                     <a href="#" class="nav-link nav-">
@@ -37,19 +38,26 @@
 
                     </ul>
                 </li>
+                @endcan
 
 
+
+
+                @can('sidebar.zonas')
                 <li class="nav-item">
 
                     <a href="#" class="nav-link nav-">
                         <i class="far fa-edit"></i>
                         <p>
-                            Configuración
+                            Zonas
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
 
                     <ul class="nav nav-treeview">
+
+
+
                         <li class="nav-item">
                             <a href="{{ route('index.vistas.zonas') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -61,7 +69,7 @@
                         <li class="nav-item">
                             <a href="{{ route('index.servicios.listado') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Servicios</p>
+                                <p>Restaurantes</p>
                             </a>
                         </li>
 
@@ -69,7 +77,7 @@
                         <li class="nav-item">
                             <a href="{{ route('index.zonas.servicio.listado') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Zonas Servicio</p>
+                                <p>Zona Restaurante</p>
                             </a>
                         </li>
 
@@ -82,56 +90,103 @@
                         </li>
 
 
-                        <li class="nav-item">
-                            <a href="{{ route('index.clientes.listado') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Clientes Registrados</p>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a href="{{ route('index.ordenes.pendientes') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Ordenes Pendientes</p>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a href="{{ route('index.ordenes.iniciadas.hoy') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Ordenes Iniciadas Hoy</p>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a href="{{ route('index.ordenes.canceladas.hoy') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Ordenes Canceladas Hoy</p>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a href="{{ route('index.usuarios.restaurantes') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Usuario Restaurante</p>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a href="{{ route('index.motoristas.restaurantes') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Motorista Restaurante</p>
-                            </a>
-                        </li>
-
-
                     </ul>
                 </li>
+                @endcan
+
+
+
+                @can('sidebar.ordenes')
+                    <li class="nav-item">
+
+                        <a href="#" class="nav-link nav-">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Ordenes
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+
+                        <ul class="nav nav-treeview">
+
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.ordenes.pendientes') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Ordenes Pendientes</p>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.ordenes.iniciadas.hoy') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Ordenes Iniciadas Hoy</p>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.ordenes.canceladas.hoy') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Ordenes Canceladas Hoy</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                @endcan
+
+
+
+
+                    @can('sidebar.usuarios')
+                        <li class="nav-item">
+
+                            <a href="#" class="nav-link nav-">
+                                <i class="far fa-edit"></i>
+                                <p>
+                                    Usuarios
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+
+
+                                <li class="nav-item">
+                                    <a href="{{ route('index.usuarios.restaurantes') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Usuario Restaurante</p>
+                                    </a>
+                                </li>
+
+
+
+                                <li class="nav-item">
+                                    <a href="{{ route('index.motoristas.restaurantes') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Motorista Restaurante</p>
+                                    </a>
+                                </li>
+
+
+
+                                <li class="nav-item">
+                                    <a href="{{ route('index.clientes.listado') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Clientes Registrados</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    @endcan
+
+
+
+
+
 
 
 

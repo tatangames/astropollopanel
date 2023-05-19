@@ -18,19 +18,24 @@ class ControlController extends Controller
         $user = Auth::user();
 
         // ADMINISTRADOR SISTEMA
-        if($user->hasRole('Super-Admin')){
+        if($user->hasRole('Admin')){
             $ruta = 'admin.roles.index';
         }
 
+        else if($user->hasRole('Editor')){
+            $ruta = 'index.ordenes.pendientes';
+        }
+
+        else if($user->hasRole('Colaborador')){
+            $ruta = '';
+        }
 
         else{
             // no tiene ningun permiso de vista, redirigir a pantalla sin permisos
             $ruta = 'no.permisos.index';
         }
 
-        $titulo = "Cocinero";
-
-        return view('backend.index', compact( 'ruta', 'user', 'titulo'));
+        return view('backend.index', compact( 'ruta', 'user'));
     }
 
     // redirecciona a vista sin permisos

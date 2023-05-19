@@ -14,8 +14,8 @@
             <h1>Lista de Zonas</h1>
         </div>
 
-        <button type="button" onclick="abrirModalAgregar()" class="btn btn-info btn-sm">
-            <i class="fas fa-pencil-alt"></i>
+        <button type="button" onclick="abrirModalAgregar()" style="margin-top: 20px" class="btn btn-success btn-sm">
+            <i class="fas fa-plus"></i>
             Nueva Zona
         </button>
 
@@ -24,7 +24,7 @@
 
 <section class="content">
     <div class="container-fluid">
-        <div class="card card-info">
+        <div class="card card-blue">
             <div class="card-header">
                 <h3 class="card-title">Zonas</h3>
             </div>
@@ -103,7 +103,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="nuevo()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="nuevo()">Guardar</button>
             </div>
         </div>
     </div>
@@ -171,7 +171,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Mensaje de Cierre (Para indicar al cliente el porque del Cierre)</label>
+                                    <label>Mensaje de Cierre (Para indicar al cliente el porqué del Cierre)</label>
                                     <input type="text" maxlength="100" autocomplete="off" class="form-control" id="mensaje-editar" placeholder="Explicar al cliente el Cierre">
                                 </div>
 
@@ -201,7 +201,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="btnGuardar" onclick="editar()">Guardar</button>
+                <button type="button" class="btn btn-success" id="btnGuardar" onclick="editar()">Guardar</button>
             </div>
         </div>
     </div>

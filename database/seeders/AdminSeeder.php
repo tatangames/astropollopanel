@@ -19,7 +19,30 @@ class AdminSeeder extends Seeder
             'nombre' => 'Administrador',
             'usuario' => 'admin',
             'password' => bcrypt('1234'),
-            'activo' => '1'
-        ])->assignRole('Super-Admin');
+            'activo' => '1',
+            'correo' => 'tatangamess@gmail.com',
+            'token_correo' => null,
+            'token_fecha' => null
+        ])->assignRole('Admin');
+
+        Administrador::create([
+            'nombre' => 'Editor',
+            'usuario' => 'editor',
+            'password' => bcrypt('1234'),
+            'activo' => '1',
+            'correo' => 'tatangamess@gmail.com',
+            'token_correo' => null,
+            'token_fecha' => null
+        ])->assignRole('Editor');
+
+        Administrador::create([
+            'nombre' => 'Colaborador',
+            'usuario' => 'colaborador',
+            'password' => bcrypt('1234'),
+            'activo' => '1',
+            'correo' => 'tatangamess@gmail.com',
+            'token_correo' => null,
+            'token_fecha' => null
+        ])->assignRole('Colaborador');
     }
 }

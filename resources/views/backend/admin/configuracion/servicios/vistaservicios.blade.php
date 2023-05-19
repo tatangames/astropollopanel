@@ -10,13 +10,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-12">
-                <h1>Lista Servicios</h1>
+                <h1>Restaurantes</h1>
             </div>
             <div style="margin-top:15px; margin-left:15px">
 
                 <button type="button" onclick="modalNuevo()" class="btn btn-success btn-sm">
-                    <i class="fas fa-pencil-alt"></i>
-                    Nuevo Servicio
+                    <i class="fas fa-plus"></i>
+                    Nuevo Restaurante
                 </button>
 
             </div>
@@ -26,9 +26,9 @@
 
 <section class="content">
     <div class="container-fluid">
-        <div class="card card-info">
+        <div class="card card-blue">
             <div class="card-header">
-                <h3 class="card-title">Listado de Servicios</h3>
+                <h3 class="card-title">Lista de Restaurante Registrados</h3>
             </div>
         </div>
         <div class="card-body">
@@ -47,7 +47,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Servicio</h4>
+                <h4 class="modal-title">Nuevo Restaurante</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -60,8 +60,8 @@
                                 <div class="col-md-12">
 
                                     <div class="form-group">
-                                        <label>Nombre del Negocio</label>
-                                        <input type="text" maxlength="100" autocomplete="off" class="form-control" id="nombre-nuevo" placeholder="Nombre del Negocio">
+                                        <label>Nombre del Restaurante</label>
+                                        <input type="text" maxlength="100" autocomplete="off" class="form-control" id="nombre-nuevo" placeholder="Nombre del Restaurante">
                                     </div>
 
                                     <div class="form-group">
@@ -191,7 +191,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarServicio()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="guardarServicio()">Guardar</button>
             </div>
         </div>
     </div>
@@ -203,7 +203,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Editar servicio</h4>
+                <h4 class="modal-title">Editar Restaurante</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -214,10 +214,10 @@
                         <div class="col-md-12">
 
                             <div class="form-group">
-                                <label>Nombre del Negocio</label>
+                                <label>Nombre del Restaurante</label>
 
                                 <input type="hidden" id="id-editar-servicio">
-                                <input type="text" maxlength="100" class="form-control" id="nombre-editar" placeholder="Nombre del Negocio">
+                                <input type="text" maxlength="100" class="form-control" id="nombre-editar" placeholder="Nombre del Restaurante">
                             </div>
 
                             <div class="form-group">
@@ -237,7 +237,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="editarservicio()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="editarservicio()">Guardar</button>
             </div>
         </div>
     </div>
@@ -375,7 +375,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="editarHoras()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="editarHoras()">Guardar</button>
 
             </div>
         </div>
@@ -416,6 +416,8 @@
                                     </button>
                                 </div>
 
+                                <hr>
+
                                 <div class="form-group">
                                     <button class="form-control btn btn-info btn-sm" type="button" onclick="verCategoriasPrincipales()">
                                         <i class="fas fa-pencil-alt"></i>
@@ -429,6 +431,8 @@
                                         Productos Principales
                                     </button>
                                 </div>
+
+                                <hr>
 
                                 <div class="form-group">
                                     <button class="form-control btn btn-info btn-sm" type="button" onclick="verCuponesProGratis()">
