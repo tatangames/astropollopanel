@@ -34,6 +34,7 @@ class CreateSliderTable extends Migration
             $table->boolean('activo');
 
             $table->foreign('id_producto')->references('id')->on('productos');
+            $table->foreign('id_servicios')->references('id')->on('servicios');
         });
     }
 

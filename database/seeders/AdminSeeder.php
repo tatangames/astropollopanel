@@ -40,9 +40,14 @@ class AdminSeeder extends Seeder
             'usuario' => 'colaborador',
             'password' => bcrypt('1234'),
             'activo' => '1',
-            'correo' => 'tatangamess@gmail.com',
+            'correo' => '',
             'token_correo' => null,
             'token_fecha' => null
         ])->assignRole('Colaborador');
+
+
+
+
+
     }
 }

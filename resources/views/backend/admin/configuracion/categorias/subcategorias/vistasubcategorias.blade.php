@@ -15,7 +15,7 @@
     }
 
     #card-header-color {
-        background-color: #673AB7 !important;
+        background-color: #007bff !important;
     }
 </style>
 
@@ -24,8 +24,8 @@
         <div class="row">
             <h1>Sub Categorías</h1>
 
-            <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-info btn-sm">
-                <i class="fas fa-pencil-alt"></i>
+            <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i>
                 Nueva Sub Categoría
             </button>
         </div>
@@ -79,7 +79,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarRegistro()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="guardarRegistro()">Guardar</button>
             </div>
         </div>
     </div>
@@ -124,7 +124,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="editar()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="editar()">Guardar</button>
             </div>
         </div>
     </div>

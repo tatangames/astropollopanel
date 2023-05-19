@@ -14,15 +14,15 @@
         table-layout:fixed;
     }
     #card-header-color {
-        background-color: #673AB7 !important;
+        background-color: #007bff !important;
     }
 </style>
 
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <button type="button" style="margin-left: 10px" onclick="modalNuevo()" class="btn btn-info btn-sm">
-                <i class="fas fa-pencil-alt"></i>
+            <button type="button" style="margin-left: 10px" onclick="modalNuevo()" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i>
                 Nuevo Producto
             </button>
 
@@ -128,7 +128,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="nuevo()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="nuevo()">Guardar</button>
             </div>
         </div>
     </div>
@@ -230,7 +230,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="editar()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="editar()">Guardar</button>
             </div>
         </div>
     </div>

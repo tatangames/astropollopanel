@@ -17,7 +17,7 @@
     }
 
     #card-header-color {
-        background-color: #673AB7 !important;
+        background-color: #007bff !important;
     }
 </style>
 
@@ -26,8 +26,8 @@
         <div class="row">
             <h1>Banner</h1>
 
-            <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-info btn-sm">
-                <i class="fas fa-pencil-alt"></i>
+            <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i>
                 Nuevo Banner
             </button>
         </div>
@@ -120,7 +120,7 @@
                                     </label>
                                 </div>
 
-                                <p>Si no utiliza Horario este Slider, establecer uno por Defecto</p>
+                                <p>Si no utiliza Horario este Banner, establecer uno por Defecto</p>
 
                                 <div class="form-group">
                                     <label>Horario abre</label>
@@ -140,7 +140,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="nuevo()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="nuevo()">Guardar</button>
             </div>
         </div>
     </div>
@@ -163,7 +163,10 @@
                         <div class="col-md-12">
 
                             <div class="form-group" style="margin-left:0px">
-                                <label>Slider Disponible</label><br>
+
+                                <input type="hidden" id="id-editar">
+
+                                <label>Banner Disponible</label><br>
                                 <label class="switch" style="margin-top:10px">
                                     <input type="checkbox" id="toggle-activo-editar">
                                     <div class="slider round">
@@ -179,7 +182,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="editar()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="editar()">Guardar</button>
             </div>
         </div>
     </div>
@@ -372,6 +375,7 @@
             })
                 .then((response) => {
                     closeLoading();
+
                     if (response.data.success === 1) {
                         $('#modalEditar').modal('hide');
                         toastr.success('Actualizado correctamente');
@@ -413,7 +417,29 @@
             })
                 .then((response) => {
                     closeLoading();
+
                     if (response.data.success === 1) {
+
+                        // DEBE HABER 1 SLIDER MINIMO
+
+                        Swal.fire({
+                            title: 'Error al Borrar',
+                            text: "Se necesita 1 Banner Mínimo",
+                            icon: 'info',
+                            showCancelButton: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            cancelButtonText: 'Cancelar',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                            }
+                        })
+
+
+                    }
+                    else if (response.data.success === 2) {
                         $('#modalEditar').modal('hide');
                         toastr.success('Borrado correctamente');
                         recargar();

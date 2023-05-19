@@ -419,7 +419,7 @@ class CategoriasController extends Controller
 
             $info->nombre = $infoProducto->nombre;
             $info->activo = $infoProducto->activo;
-            $info->precio = '$' . number_format((float)$info->precio, 2, '.', ',');
+            $info->precio = '$' . number_format((float)$infoProducto->precio, 2, '.', ',');
             $info->imagen = $infoProducto->imagen;
             $info->utiliza_imagen = $infoProducto->utiliza_imagen;
         }

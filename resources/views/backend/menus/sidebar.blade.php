@@ -190,6 +190,20 @@
 
 
 
+                    <li class="nav-item">
+                        <a href="{{ route('index.callcenter.generarorden') }}" target="frameprincipal" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Crear Orden</p>
+                        </a>
+                    </li>
+
+
+
+
+
+
+
+
 
             <!-- fin del acordeon -->
             </ul>

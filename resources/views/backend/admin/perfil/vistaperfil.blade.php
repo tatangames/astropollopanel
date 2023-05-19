@@ -34,12 +34,12 @@
 
                             <div class="form-group">
                                 <label>Nueva Contraseña</label>
-                                <input type="text" maxlength="16" class="form-control" id="password" placeholder="Contraseña">
+                                <input type="text" autocomplete="off" maxlength="16" class="form-control" id="password" placeholder="Contraseña">
                             </div>
 
                             <div class="form-group">
                                 <label>Repetir Contraseña</label>
-                                <input type="text" maxlength="16" class="form-control" id="password1" placeholder="Contraseña">
+                                <input type="text" autocomplete="off" maxlength="16" class="form-control" id="password1" placeholder="Contraseña">
                             </div>
 
                         </div>

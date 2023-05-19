@@ -7,7 +7,6 @@
                     <table id="table" class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>id</th>
                             <th>Posición</th>
                             <th>Nombre</th>
                             <th>Activo</th>
@@ -19,7 +18,6 @@
                         @foreach($lista as $dato)
                             <tr class="row1" data-id="{{ $dato->id }}">
 
-                                <td>{{ $dato->id }}</td>
                                 <td>{{ $dato->posicion }}</td>
                                 <td>{{ $dato->nombre }}</td>
 

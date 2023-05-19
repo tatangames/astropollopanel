@@ -22,7 +22,7 @@
 
                                 <td>
 
-                                    <button type="button" class="btn btn-danger btn-xs" onclick="borrarPrincipal({{ $dato->id }})">
+                                    <button type="button" class="btn btn-danger btn-xs" onclick="borrarRegistro({{ $dato->id }})">
                                         <i class="fas fa-trash" title="Borrar"></i>&nbsp; Borrar
                                     </button>
 

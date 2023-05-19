@@ -428,7 +428,7 @@
                                 <div class="form-group">
                                     <button class="form-control btn btn-info btn-sm" type="button" onclick="verProductosPrincipales()">
                                         <i class="fas fa-pencil-alt"></i>
-                                        Productos Principales
+                                        Productos Populares
                                     </button>
                                 </div>
 

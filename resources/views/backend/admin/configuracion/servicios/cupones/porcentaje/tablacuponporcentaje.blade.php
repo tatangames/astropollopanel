@@ -7,9 +7,9 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 10%">Nombre de Cupón</th>
-                                <th style="width: 6%">Monto de Porcentaje (%)</th>
-                                <th style="width: 10%">Opciones</th>
+                                <th style="width: 8%">Nombre de Cupón</th>
+                                <th style="width: 12%">Monto de Porcentaje (%)</th>
+                                <th style="width: 6%">Opciones</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -21,7 +21,7 @@
                                     <td>{{ $dato->porcentaje }}</td>
 
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacionBorrar({{ $dato->id }})">
+                                        <button type="button" class="btn btn-danger btn-xs" onclick="informacionBorrar({{ $dato->id }})">
                                             <i class="fas fa-trash" title="Borrar"></i>&nbsp; Borrar
                                         </button>
                                     </td>

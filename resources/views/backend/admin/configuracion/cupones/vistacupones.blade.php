@@ -15,7 +15,7 @@
             <div style="margin-top:15px; margin-left:15px">
 
                 <button type="button" onclick="modalNuevo()" class="btn btn-success btn-sm">
-                    <i class="fas fa-pencil-alt"></i>
+                    <i class="fas fa-plus"></i>
                     Nuevo Cupón
                 </button>
 
@@ -87,7 +87,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarCupon()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="guardarCupon()">Guardar</button>
             </div>
         </div>
     </div>
@@ -137,7 +137,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="editarCupon()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="editarCupon()">Guardar</button>
             </div>
         </div>
     </div>

@@ -27,7 +27,7 @@ class ControlController extends Controller
         }
 
         else if($user->hasRole('Colaborador')){
-            $ruta = '';
+            $ruta = 'index.callcenter.generarorden';
         }
 
         else{

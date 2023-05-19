@@ -23,15 +23,12 @@ class SliderController extends Controller
     public function index($id){
         // id servicios
 
-
-
         $arrayCategorias = Categorias::where('id_servicios', $id)->get();
         $pilaIdCategorias = array();
 
         foreach ($arrayCategorias as $info){
             array_push($pilaIdCategorias, $info->id);
         }
-
 
 
         // obtener todos los ID de sub categorias
@@ -134,7 +131,7 @@ class SliderController extends Controller
 
         if(Slider::where('id', $request->idslider)->first()){
 
-            Slider::where('id', $request->id)->update([
+            Slider::where('id', $request->idslider)->update([
                 'activo' => $request->toggleactivo,
             ]);
 
@@ -169,13 +166,21 @@ class SliderController extends Controller
 
         if($info = Slider::where('id', $request->id)->first()){
 
+            $conteo = Slider::where('id_servicios', $info->id_servicios)
+                ->where('id', '!=', $info->id)
+                ->count();
+
+            if($conteo <= 0){
+                return ['success' => 1];
+            }
+
             if(Storage::disk('imagenes')->exists($info->imagen)){
                 Storage::disk('imagenes')->delete($info->imagen);
             }
 
             Slider::where('id', $request->id)->delete();
 
-            return ['success' => 1];
+            return ['success' => 2];
         }else{
             return ['success' => 99];
         }

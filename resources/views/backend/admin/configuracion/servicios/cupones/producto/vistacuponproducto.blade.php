@@ -15,7 +15,7 @@
     }
 
     #card-header-color {
-        background-color: #673AB7 !important;
+        background-color: #007bff !important;
     }
 </style>
 
@@ -24,8 +24,8 @@
         <div class="row">
             <h1>Cupones Asignados</h1>
 
-            <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-info btn-sm">
-                <i class="fas fa-pencil-alt"></i>
+            <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i>
                 Agregar Cupón
             </button>
         </div>
@@ -89,7 +89,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarRegistro()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="guardarRegistro()">Guardar</button>
             </div>
         </div>
     </div>
@@ -184,7 +184,7 @@
 
                     }
 
-                    if (response.data.success === 2) {
+                    else if (response.data.success === 2) {
                         $('#modalAgregar').modal('hide');
                         toastr.success('Registrado correctamente');
                         recargar();
@@ -206,8 +206,8 @@
                 text: "",
                 icon: 'info',
                 showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#e50808',
+                confirmButtonText: 'Borrar',
                 cancelButtonText: "Cancelar"
             }).then((result) => {
                 if (result.isConfirmed) {

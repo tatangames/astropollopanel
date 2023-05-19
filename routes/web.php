@@ -15,6 +15,9 @@ use App\Http\Controllers\Backend\Configuracion\SliderController;
 use App\Http\Controllers\Backend\Configuracion\CuponesController;
 use App\Http\Controllers\Backend\Clientes\ClientesController;
 use App\Http\Controllers\Backend\Ordenes\OrdenesController;
+use App\Http\Controllers\Backend\CallCenter\CallCenterController;
+
+
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
@@ -193,7 +196,7 @@ Route::post('/admin/categorias/servicio/principales/borrar', [CategoriasControll
 
 
 
-// --- PRODUCTOS PRINCIPALES DEL SERVICIO ----
+// --- PRODUCTOS POPULARES DEL SERVICIO ----
 Route::get('/admin/productos/servicio/principales/{id}', [CategoriasController::class,'indexServiciosProductosPrincipales']);
 Route::get('/admin/productos/servicio/principales/tabla/{id}', [CategoriasController::class,'tablaServiciosProductosPrincipales']);
 Route::post('/admin/productos/servicio/principales/nuevo', [CategoriasController::class,'nuevoProductosPrincipales']);
@@ -280,7 +283,11 @@ Route::post('/admin/motoristas/usuario/editar', [ServiciosController::class,'act
 
 
 
-// MOSTRAR LISTA DE SERVICIOS PARA DESPUES OBTENER LISTADO DE ORDENES
+// CALL CENTER
+
+Route::get('/admin/callcenter/generar/orden', [CallCenterController::class,'indexGenerarOrden'])->name('index.callcenter.generarorden');
+Route::get('/admin/callcenter/generar/orden/direcciones', [CallCenterController::class,'listaDireccionTelefono']);
+
 
 
 

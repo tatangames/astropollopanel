@@ -15,17 +15,17 @@
     }
 
     #card-header-color {
-        background-color: #673AB7 !important;
+        background-color: #007bff !important;
     }
 </style>
 
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <h1>Productos Principales</h1>
+            <h1>Productos Populares</h1>
 
-            <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-info btn-sm">
-                <i class="fas fa-pencil-alt"></i>
+            <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-success btn-sm">
+                <i class="fas fa-plus"></i>
                 Nuevo Registro
             </button>
         </div>
@@ -37,7 +37,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header" id="card-header-color">
-                <h3 class="card-title" style="color: white">Lista de Productos Principales</h3>
+                <h3 class="card-title" style="color: white">Lista de Productos Populares</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -83,7 +83,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarRegistro()">Guardar</button>
+                <button type="button" class="btn btn-success" onclick="guardarRegistro()">Guardar</button>
             </div>
         </div>
     </div>
