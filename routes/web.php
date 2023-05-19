@@ -55,7 +55,22 @@ Route::post('/admin/editar-perfil/actualizar', [PerfilController::class, 'editar
 
 
 // *** ENVIO DE CORREO PRUEBA
-Route::post('/admin/enviar/correo', [LoginController::class, 'enviarCorreoTest']);
+
+// --- VISTA PARA INGRESAR CORREO ---
+Route::get('/admin/ingreso/de/correo', [LoginController::class,'indexIngresoDeCorreo']);
+Route::post('/admin/enviar/correo/password', [LoginController::class, 'enviarCorreoAdministrador']);
+
+
+// VISTA AQUI SE INGRESA LA NUEVA CONTRASEÑA PORQUE EL LINK ES VALIDO
+Route::get('/admin/resetear/contrasena/administrador/{token}', [LoginController::class,'indexIngresoNuevaPasswordLink']);
+
+// VISTA SIN TOKEN PARA REDIRECCION
+Route::get('/admin/resetear/contrasena/administrador', [LoginController::class,'indexIngresoNuevaPasswordLinkRedireccion']);
+
+
+// ACTUALIZACION DE CONTRASENA
+
+Route::post('/admin/administrador/actualizacion/password', [LoginController::class, 'actualizarPasswordAdministrador']);
 
 
 
@@ -202,8 +217,6 @@ Route::post('/admin/clientes/tiene/gps/coordenadas', [ClientesController::class,
 
 Route::get('/admin/clientes/direcciones/mapa/registrado/{id}', [ClientesController::class,'mapaDireccionRegistrado']);
 Route::get('/admin/clientes/direcciones/mapa/real/{id}', [ClientesController::class,'mapaDireccionReal']);
-
-
 
 
 // ***********  ORDENES **************

@@ -19,6 +19,10 @@ class CreateAdministradorTable extends Migration
             $table->string('usuario', 25)->unique();
             $table->string('password', 255);
 
+            $table->string('correo', 100)->nullable();
+            $table->string('token_correo', 100)->nullable();
+            $table->dateTime('token_fecha')->nullable();
+
             // para inactivar el acceso al sistema al usuario
             $table->boolean('activo');
         });

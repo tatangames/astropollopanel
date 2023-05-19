@@ -43,6 +43,8 @@ class PermisoController extends Controller
         $u->usuario = $request->usuario;
         $u->password = bcrypt($request->password);
         $u->activo = 1;
+        $u->token_correo = null;
+        $u->token_fecha = null;
 
         if ($u->save()) {
             $u->assignRole($request->rol);
