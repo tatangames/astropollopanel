@@ -63,6 +63,12 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label>Descripción de la Zona</label>
+                                    <input type="text" maxlength="300" autocomplete="off" class="form-control" id="descripcion-nuevo" placeholder="Descripción zona">
+                                </div>
+
+
+                                <div class="form-group">
                                     <label>Hora Abre la Zona</label>
                                     <input type="time" class="form-control" id="horaabierto-nuevo">
                                 </div>
@@ -130,6 +136,12 @@
                                     <input type="hidden" id="id-editar">
                                     <input type="text" maxlength="50" autocomplete="off" class="form-control" id="nombre-editar" placeholder="Nombre de Zona">
                                 </div>
+
+                                <div class="form-group">
+                                    <label>Descripción de la Zona</label>
+                                    <input type="text" maxlength="300" autocomplete="off" class="form-control" id="descripcion-editar" placeholder="Descripción zona">
+                                </div>
+
 
                                 <div class="form-group">
                                     <label>Hora Abre la Zona</label>
@@ -267,6 +279,7 @@
                         $('#mensaje-editar').val(response.data.zona.mensaje_bloqueo)
                         $('#latitud-editar').val(response.data.zona.latitud);
                         $('#longitud-editar').val(response.data.zona.longitud);
+                        $('#descripcion-editar').val(response.data.zona.descripcion);
 
                         if(response.data.zona.saturacion === 0){
                             $("#toggle-problema").prop("checked", false);
@@ -301,9 +314,14 @@
             var tiempoextra = document.getElementById('tiempoextra-nuevo').value;
             var latitud = document.getElementById("latitud-nuevo").value;
             var longitud = document.getElementById("longitud-nuevo").value;
-
+            var descripcion = document.getElementById("descripcion-nuevo").value;
 
             var minimocompra = document.getElementById("minimocompra-nuevo").value;
+
+            if (descripcion === '') {
+                toastr.error("Descripción es requerido");
+                return;
+            }
 
 
             if (nombre === '') {
@@ -404,6 +422,7 @@
             formData.append('latitud', latitud);
             formData.append('longitud', longitud);
             formData.append('minimo', minimocompra);
+            formData.append('descripcion', descripcion);
 
             axios.post('/admin/zonas/registro/nueva', formData, {
             })
@@ -446,9 +465,16 @@
             var latitud = document.getElementById("latitud-editar").value;
             var longitud = document.getElementById("longitud-editar").value;
             var mensaje = document.getElementById("mensaje-editar").value;
-
+            var descripcion = document.getElementById("descripcion-editar").value;
 
             var minimocompra = document.getElementById("minimocompra-editar").value;
+
+
+            if (descripcion === '') {
+                toastr.error("Descripción es requerido");
+                return;
+            }
+
 
 
             if (nombre === '') {
@@ -559,7 +585,7 @@
             formData.append('longitud', longitud);
             formData.append('mensaje', mensaje);
             formData.append('minimo', minimocompra);
-
+            formData.append('descripcion', descripcion);
             openLoading();
 
             axios.post('/admin/zonas/editar-zona', formData, {

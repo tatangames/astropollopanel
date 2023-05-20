@@ -57,8 +57,6 @@ Route::get('/admin/editar-perfil/index', [PerfilController::class,'indexEditarPe
 Route::post('/admin/editar-perfil/actualizar', [PerfilController::class, 'editarUsuario']);
 
 
-// *** ENVIO DE CORREO PRUEBA
-
 // --- VISTA PARA INGRESAR CORREO ---
 Route::get('/admin/ingreso/de/correo', [LoginController::class,'indexIngresoDeCorreo']);
 Route::post('/admin/enviar/correo/password', [LoginController::class, 'enviarCorreoAdministrador']);

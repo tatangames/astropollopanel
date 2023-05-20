@@ -8,7 +8,9 @@
                             <thead>
                             <tr>
 
-                                <th style="width: 10%">Nombre</th>
+                                <th style="width: 10%">Nombre Zona</th>
+                                <th style="width: 10%">Descripción</th>
+                                <th style="width: 10%">Mínimo de Compra</th>
                                 <th style="width: 10%">Abre/Cierre Zona</th>
                                 <th style="width: 10%">Mensaje Cierre</th>
                                 <th style="width: 10%">Hora Abierto</th>
@@ -24,6 +26,8 @@
 
                                 <tr>
                                     <td>{{ $dato->nombre }}</td>
+                                    <td>{{ $dato->descripcion }}</td>
+                                    <td>{{ $dato->minimo }}</td>
                                     <td>
                                         @if($dato->saturacion == 0)
                                             <span class="badge bg-danger">Desactivado</span>

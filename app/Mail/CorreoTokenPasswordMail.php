@@ -12,7 +12,7 @@ class CorreoTokenPasswordMail extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * Create a new message instance.
+     * UTILIZADO PARA PANEL DE CONTROL EN LOGIN
      *
      * @return void
      */

@@ -36,6 +36,9 @@ class CreateZonasTable extends Migration
             $table->integer('tiempo_extra');
 
 
+            $table->string('descripcion', 300);
+
+
             // minimo de compra en la zona
             $table->decimal('minimo', 10,2);
 

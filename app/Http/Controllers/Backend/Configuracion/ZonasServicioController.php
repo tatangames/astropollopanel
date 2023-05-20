@@ -41,8 +41,7 @@ class ZonasServicioController extends Controller
 
             $info->nombrezona = $infoZona->nombre;
             $info->nombrenegocio = $infoServicio->nombre;
-
-
+            $info->descripcion = $infoZona->descripcion;
 
             $fechaRegistro = Carbon::parse($info->fecha);
 

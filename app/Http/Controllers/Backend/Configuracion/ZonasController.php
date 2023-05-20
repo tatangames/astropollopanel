@@ -27,6 +27,8 @@ class ZonasController extends Controller
 
             $info->hora_abierto_delivery = date("h:i A", strtotime($info->hora_abierto_delivery));
             $info->hora_cerrado_delivery = date("h:i A", strtotime($info->hora_cerrado_delivery));
+
+            $info->minimo = '$' . number_format((float)$info->minimo, 2, '.', ',');
         }
 
 
@@ -58,6 +60,7 @@ class ZonasController extends Controller
         $zona->tiempo_extra = $request->tiempoextra;
         $zona->mensaje_bloqueo = null;
         $zona->minimo = $request->minimo;
+        $zona->descripcion = $request->descripcion;
 
         if($zona->save()){
             return ['success'=>1];
@@ -122,7 +125,8 @@ class ZonasController extends Controller
                 'activo' => $request->togglea,
                 'tiempo_extra' => $request->tiempoextra,
                 'mensaje_bloqueo' => $request->mensaje,
-                'minimo' => $request->minimo
+                'minimo' => $request->minimo,
+                'descripcion' => $request->descripcion
             ]);
 
             return ['success' => 1];
@@ -182,7 +186,12 @@ class ZonasController extends Controller
 
         $poligono = ZonasPoligono::where('id_zonas', $id)->get();
 
-        return view('backend.admin.configuracion.zonas.mapa.vistamapa', compact('poligono', 'googleapi'));
+        $infoZona = Zonas::where('id', $id)->first();
+
+        $latitud = $infoZona->latitud;
+        $longitud = $infoZona->longitud;
+
+        return view('backend.admin.configuracion.zonas.mapa.vistamapa', compact('poligono', 'googleapi', 'latitud', 'longitud'));
     }
 
 }

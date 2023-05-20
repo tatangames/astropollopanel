@@ -12,7 +12,7 @@ class CorreoPasswordMail extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * Create a new message instance.
+     * UTILIZADO PARA APLICACION MOVIL
      *
      * @return void
      */

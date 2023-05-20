@@ -8,6 +8,7 @@
                             <thead>
                             <tr>
                                 <th style="width: 15%">Nombre de Zona</th>
+                                <th style="width: 15%">Descripción de Zona</th>
                                 <th style="width: 20%">Nombre del Restaurante</th>
                                 <th style="width: 8%">Opciones</th>
 
@@ -19,6 +20,7 @@
 
                                 <tr>
                                     <td>{{ $dato->nombrezona }}</td>
+                                    <td>{{ $dato->descripcion }}</td>
                                     <td>{{ $dato->nombrenegocio }}</td>
                                     <td>
 

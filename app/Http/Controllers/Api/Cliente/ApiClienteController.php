@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Cliente;
 
 use App\Http\Controllers\Controller;
+use App\Mail\CorreoPasswordMail;
 use App\Models\CarritoExtra;
 use App\Models\CarritoTemporal;
 use App\Models\Clientes;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ApiClienteController extends Controller
@@ -73,6 +75,7 @@ class ApiClienteController extends Controller
     }
 
     public function enviarCodigoCorreo(Request $request){
+
         $rules = array(
             'correo' => 'required',
         );
@@ -91,22 +94,16 @@ class ApiClienteController extends Controller
 
             Clientes::where('id', $info->id)->update(['codigo_correo' => $codigo]);
 
-            $fecha = Carbon::now('America/El_Salvador');
+            $data = ["codigo" => $codigo,
+                "usuario" => $info->usuario];
 
-            // intentos de cuando intento recuperar contraseña
-            $dato = new IntentosCorreo();
-            $dato->correo = $request->correo;
-            $dato->fecha = $fecha;
-            $dato->save();
+            Mail::to($request->correo)
+                ->send(new CorreoPasswordMail($data));
 
-            // $correo = new SendEmailCodigo($codigo);
-            // Mail::to($request->correo)->send($correo);
-
-            // envio de correo
-            SendEmailJobs::dispatch($codigo, $request->correo);
 
             return ['success' => 1];
         }else{
+            // CORREO NO ENCONTRADO
             return ['success' => 2];
         }
     }
@@ -115,7 +112,7 @@ class ApiClienteController extends Controller
     {
         $rules = array(
             'codigo' => 'required',
-            'correo' => 'required'
+            'correo' => 'required',
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -129,9 +126,11 @@ class ApiClienteController extends Controller
             ->where('codigo_correo', $request->codigo)
             ->first()) {
 
+
             // puede cambiar contraseña
             return ['success' => 1, 'id' => $info->id];
         } else {
+
             // codigo incorrecto
             return ['success' => 2];
         }
@@ -151,7 +150,9 @@ class ApiClienteController extends Controller
 
         if(Clientes::where('id', $request->id)->first()){
 
-            Clientes::where('id', $request->id)->update(['password' => Hash::make($request->password)]);
+            Clientes::where('id', $request->id)
+                ->update(['password' => Hash::make($request->password),
+                         'codigo_correo' => null]);
 
             return ['success' => 1];
         }else{

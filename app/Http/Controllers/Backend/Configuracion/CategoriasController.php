@@ -118,20 +118,62 @@ class CategoriasController extends Controller
 
         if ($validator->fails()){return ['success' => 0]; }
 
-        if(Categorias::where('id', $request->id)->first()){
+        if($infoCategoria = Categorias::where('id', $request->id)->first()){
 
-            $verificar = true;
+            if($request->hasFile('imagen')){
+
+                $cadena = Str::random(15);
+                $tiempo = microtime();
+                $union = $cadena.$tiempo;
+                $nombre = str_replace(' ', '_', $union);
+
+                $extension = '.'.$request->imagen->getClientOriginalExtension();
+                $nombreFoto = $nombre.strtolower($extension);
+                $avatar = $request->file('imagen');
+                $upload = Storage::disk('imagenes')->put($nombreFoto, \File::get($avatar));
+
+                if($upload){
+                    $imagenOld = $infoCategoria->imagen;
+
+                    Categorias::where('id', $request->id)->update([
+                        'nombre' => $request->nombre,
+                        'activo' => $request->cbactivo,
+                        'usa_horario' => $request->cbhorario,
+                        'hora_abre' => $request->horaabre,
+                        'hora_cierra' => $request->horacierra,
+                        'imagen' => $nombreFoto
+                    ]);
+
+                    if(Storage::disk('imagenes')->exists($imagenOld)){
+                        Storage::disk('imagenes')->delete($imagenOld);
+                    }
+
+                    return ['success' => 1];
+
+                }else{
+                    return ['success' => 2];
+                }
+            }else{
 
 
-            Categorias::where('id', $request->id)->update([
-                'nombre' => $request->nombre,
-                'activo' => $request->cbactivo,
-                'usa_horario' => $request->cbhorario,
-                'hora_abre' => $request->horaabre,
-                'hora_cierra' => $request->horacierra
-            ]);
+                Categorias::where('id', $request->id)->update([
+                    'nombre' => $request->nombre,
+                    'activo' => $request->cbactivo,
+                    'usa_horario' => $request->cbhorario,
+                    'hora_abre' => $request->horaabre,
+                    'hora_cierra' => $request->horacierra
+                ]);
 
-            return ['success' => 1];
+
+                return ['success' => 1];
+            }
+
+
+
+
+
+
+
         }else{
             return ['success' => 99];
         }

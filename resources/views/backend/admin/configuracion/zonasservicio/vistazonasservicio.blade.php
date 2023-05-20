@@ -12,12 +12,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-12">
-                <h1>Zona servicios</h1>
+                <h1>Zona Restaurante</h1>
             </div>
             <div style="margin-top:15px;">
                 <button type="button" onclick="abrirModalAgregar()" class="btn btn-success btn-sm">
                     <i class="fas fa-pencil-alt"></i>
-                    Nuevo Zona Servicio
+                    Nuevo Zona Restaurante
                 </button>
             </div>
 
@@ -33,7 +33,7 @@
     <div class="container-fluid">
         <div class="card card-info">
             <div class="card-header">
-                <h3 class="card-title">Zona Servicios</h3>
+                <h3 class="card-title">Zona Restaurante</h3>
             </div>
         </div>
         <div class="card-body">
@@ -53,7 +53,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Zona Servicio</h4>
+                <h4 class="modal-title">Nuevo Zona Restaurante</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -65,16 +65,16 @@
                             <div class="col-md-12">
 
                                 <div class="form-group">
-                                    <label>Zona:</label>
+                                    <label>Zona (Descripción):</label>
                                     <select class="form-control" id="select-zonas">
                                         @foreach($zonas as $item)
-                                            <option value="{{$item->id}}">{{$item->nombre}}</option>
+                                            <option value="{{$item->id}}">{{$item->descripcion}}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Servicio:</label>
+                                    <label>Restaurante:</label>
                                     <select class="form-control" id="select-servicios">
                                         @foreach($servicios as $item)
                                             <option value="{{$item->id}}">{{$item->nombre}}</option>
@@ -101,7 +101,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Editar Zona Servicio</h4>
+                <h4 class="modal-title">Editar Zona Restaurante</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -197,7 +197,7 @@
 
                         Swal.fire({
                             title: 'Error al Guardar',
-                            text: "Esta Zona ya tiene un Servicio Asignado",
+                            text: "Esta Zona ya tiene un Restaurante Asignado",
                             icon: 'info',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',
@@ -212,7 +212,7 @@
 
                     } else if (response.data.success === 2) {
                         $('#modalAgregar').modal('hide');
-                        toastr.success('Zona servicio agregado');
+                        toastr.success('Zona Restaurante agregado');
                         recargar();
                     }  else {
                         toastr.error('Error al guardar');
@@ -231,7 +231,7 @@
 
             Swal.fire({
                 title: 'Borrar Registro',
-                text: "Esto elimina el Servicio asignado a la Zona",
+                text: "Esto elimina el Restaurante asignado a la Zona",
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#28a745',

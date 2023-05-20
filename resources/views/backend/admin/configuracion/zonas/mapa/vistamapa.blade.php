@@ -33,9 +33,14 @@
         var infoWindow;
 
         function initMap() {
+
+
+            var latitud = {{ $latitud }};
+            var longitud = {{ $longitud }};
+
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 15,
-                center: {lat: 14.331033, lng: -89.442309},
+                center: {lat: latitud, lng: longitud},
                 mapTypeId: 'terrain'
             });
 

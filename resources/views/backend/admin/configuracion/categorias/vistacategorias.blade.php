@@ -173,6 +173,17 @@
                             </div>
 
 
+                            <div class="form-group">
+                                <div>
+                                    <label>Imagen</label>
+                                </div>
+                                <br>
+                                <div class="col-md-10">
+                                    <input type="file" style="color:#191818" id="imagen-editar" accept="image/jpeg, image/jpg, image/png"/>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                 </form>
@@ -345,7 +356,7 @@
 
             var horaabre = document.getElementById('hora-abre-editar').value;
             var horacierra = document.getElementById('hora-cierra-editar').value;
-
+            var imagen = document.getElementById('imagen-editar');
 
             if(nombre === '') {
                 toastr.error('Nombre es requerido');
@@ -366,6 +377,14 @@
             }
 
 
+            if(imagen.files && imagen.files[0]){ // si trae imagen
+                if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
+                    toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
+                    return;
+                }
+            }
+
+
             openLoading();
             var formData = new FormData();
             formData.append('id', id);
@@ -374,6 +393,8 @@
             formData.append('cbhorario', toggleHorario);
             formData.append('horaabre', horaabre);
             formData.append('horacierra', horacierra);
+            formData.append('imagen', imagen.files[0]);
+
 
             axios.post('/admin/categorias/editar', formData, {
             })
