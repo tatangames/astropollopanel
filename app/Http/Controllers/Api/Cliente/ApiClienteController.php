@@ -206,18 +206,21 @@ class ApiClienteController extends Controller
 
             $infoHorario = HorarioServicio::where('id_servicios', $infoZonaServicio->id_servicios)->get();
 
-            $mensaje = "Cerrado";
 
             foreach ($infoHorario as $info){
                 $hora1 = date("h:i A", strtotime($info->hora1));
                 $hora2 = date("h:i A", strtotime($info->hora2));
 
-                $info->horario = $hora1 . " / " . $hora2;
+                if($info->cerrado == 1){
+                    $info->horario = "Cerrado";
+                }else{
+                    $info->horario = $hora1 . " / " . $hora2;
+                }
+
             }
 
             return ['success' => 1,
                 'restaurante' => $infoServicio->nombre,
-                'mensaje' => $mensaje,
                 'horario' => $infoHorario,];
         }else{
             return ['success' => 2];
