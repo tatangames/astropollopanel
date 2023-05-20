@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Clientes;
 use App\Models\MotoristasServicios;
 use App\Models\Ordenes;
+use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesMotoristas;
-use Carbon\Carbon;
+use App\Models\Productos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class OrdenesController extends Controller
+class ApiOrdenesController extends Controller
 {
 
     public function verListadoOrdenesActivasCliente(Request $request)
@@ -45,7 +47,6 @@ class OrdenesController extends Controller
 
                 $info->direccion = $infoDireccion->direccion;
 
-
                 // CUPONES
                 $haycupon = 0;
                 $totalAPagar = $info->total_orden;
@@ -60,9 +61,7 @@ class OrdenesController extends Controller
                         $totalAPagar = $info->total_cupon;
 
                     }
-
                 }
-
 
                 $info->totalformat = '$' . number_format((float)$totalAPagar, 2, '.', ',');
 
@@ -91,6 +90,8 @@ class OrdenesController extends Controller
 
                 $info->haycupon = $haycupon;
                 $info->estado = $estado;
+
+
             }
 
             return ['success' => 1, 'ordenes' => $orden];
@@ -256,8 +257,84 @@ class OrdenesController extends Controller
         }
     }
 
+
+    public function listadoProductosOrdenes(Request $request){
+
+        $reglaDatos = array(
+            'ordenid' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if($infoOrden = Ordenes::where('id', $request->ordenid)->first()){
+
+
+            $lista = OrdenesDescripcion::where('id_ordenes', $infoOrden->id)->get();
+
+            foreach ($lista as $info){
+
+                $infoProducto = Productos::where('id', $info->id_producto)->first();
+                $info->nombreproducto = $infoProducto->nombre;
+
+                $info->idordendescrip = $info->id;
+
+                $info->utiliza_imagen = $infoProducto->utiliza_imagen;
+                $info->imagen = $infoProducto->imagen;
+
+                $multi = $info->cantidad * $info->precio;
+                $info->multiplicado = '$' . number_format((float)$multi, 2, '.', ',');
+            }
+
+            return ['success' => 1, 'productos' => $lista];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+
+
+    public function infoProductoOrdenadoIndividual(Request $request){
+
+
+        $reglaDatos = array(
+            'idordendescrip' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if($infoOrdenDescr = OrdenesDescripcion::where('id', $request->idordendescrip)->first()){
+
+            $lista = OrdenesDescripcion::where('id', $infoOrdenDescr->id)->get();
+
+            foreach ($lista as $info){
+
+                $infoProducto = Productos::where('id', $info->id_producto)->first();
+                $info->nombreproducto = $infoProducto->nombre;
+
+                $info->utiliza_imagen = $infoProducto->utiliza_imagen;
+                $info->imagen = $infoProducto->imagen;
+
+                $info->descripcion = $infoProducto->descripcion;
+
+                $multi = $info->cantidad * $info->precio;
+                $info->multiplicado = '$' . number_format((float)$multi, 2, '.', ',');
+
+                $info->precio = '$' . number_format((float)$info->precio, 2, '.', ',');
+            }
+
+            return ['success' => 1, 'productos' => $lista];
+        }else{
+            return ['success' => 2];
+        }
+
+
+    }
+
+
+
+
 }
-
-
-
-

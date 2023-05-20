@@ -7,8 +7,8 @@ use App\Http\Controllers\Api\Cliente\ApiClienteController;
 use App\Http\Controllers\Api\Cliente\ApiDireccionesController;
 use App\Http\Controllers\Api\Cliente\ApiMenuController;
 use App\Http\Controllers\Api\Carrito\CarritoComprasController;
-use App\Http\Controllers\Api\Procesar\ProcesarController;
-use App\Http\Controllers\Api\Ordenes\OrdenesController;
+use App\Http\Controllers\Api\Procesar\ApiProcesarController;
+use App\Http\Controllers\Api\Ordenes\ApiOrdenesController;
 
 
 /*
@@ -81,24 +81,33 @@ Route::post('cliente/verificar/cupon', [CarritoComprasController::class, 'verifi
 
 
 // ***********   ENVIO DE LA ORDEN DEL CLIENTE************
-Route::post('cliente/proceso/enviar/orden', [ProcesarController::class, 'enviarOrdenRestaurante']);
+Route::post('cliente/proceso/enviar/orden', [ApiProcesarController::class, 'enviarOrdenRestaurante']);
 
 
 
 // LISTADO DE ORDENES ACTIVAS DEL CLIENTE
-Route::post('cliente/ordenes/listado/activas', [OrdenesController::class, 'verListadoOrdenesActivasCliente']);
+Route::post('cliente/ordenes/listado/activas', [ApiOrdenesController::class, 'verListadoOrdenesActivasCliente']);
 
 // VER ESTADO DE ORDEN INDIVIDUAL
 
-Route::post('cliente/orden/informacion/estado',  [OrdenesController::class, 'informacionOrdenIndividual']);
+Route::post('cliente/orden/informacion/estado',  [ApiOrdenesController::class, 'informacionOrdenIndividual']);
 
 
 // ver motorista de la orden
-Route::post('cliente/orden/ver/motorista',  [OrdenesController::class, 'verMotoristaOrden']);
+Route::post('cliente/orden/ver/motorista',  [ApiOrdenesController::class, 'verMotoristaOrden']);
 
 
 // calificar orden y completarla
-Route::post('cliente/orden/completar/calificacion',  [OrdenesController::class, 'calificarLaOrden']);
+Route::post('cliente/orden/completar/calificacion',  [ApiOrdenesController::class, 'calificarLaOrden']);
+
+
+// listado de productos de una orden
+Route::post('cliente/listado/productos/ordenes',  [ApiOrdenesController::class, 'listadoProductosOrdenes']);
+
+// informacion de producto individual de una orden que se pidio
+Route::post('cliente/listado/productos/ordenes-individual',  [ApiOrdenesController::class, 'infoProductoOrdenadoIndividual']);
+
+
 
 
 

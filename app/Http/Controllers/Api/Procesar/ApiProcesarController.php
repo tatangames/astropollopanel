@@ -26,9 +26,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class ProcesarController extends Controller
+class ApiProcesarController extends Controller
 {
-
     public function enviarOrdenRestaurante(Request $request){
 
 
@@ -112,62 +111,62 @@ class ProcesarController extends Controller
                     ->where('c.id_carrito_temporal', $infoCarritoTempo->id)
                     ->get();
 
-                    // verificar cada producto
-                    foreach ($producto as $pro) {
+                // verificar cada producto
+                foreach ($producto as $pro) {
 
-                        // PRODUCTO NO ACTIVO
-                        if($pro->activo == 0){
-
-
-                            $estadoProductoActivo = true;
-                        }
-
-                        // CONOCER SI LA SUB CATEGORIA ESTA ACTIVA
-                        $infoSubCate = SubCategorias::where('id', $pro->id_subcategorias)->first();
-
-                        if($infoSubCate->activo == 0){
-
-                            $estadoProductoActivo = true;
-                        }
-
-                        // CONOCER SI LA CATEGORIA DEL PRODUCTO ESTA ACTIVA
-                        $infoCategoria = Categorias::where('id', $infoSubCate->id_categorias)->first();
-
-                        if($infoCategoria->activo == 0){
-
-                            $estadoProductoActivo = true;
-                        }
+                    // PRODUCTO NO ACTIVO
+                    if($pro->activo == 0){
 
 
-                        if($infoCategoria->usa_horario == 1){
-                            // CONOCER SI LA CATEGORIA TIENE HORARIO Y VER SI ESTA DISPONIBLE
-                            $horaCategoria = Categorias::where('id', $infoSubCate->id_categorias)
-                                ->where('activo', 1)
-                                ->where('usa_horario', 1)
-                                ->where('hora_abre', '<=', $hora)
-                                ->where('hora_cierra', '>=', $hora)
-                                ->get();
+                        $estadoProductoActivo = true;
+                    }
 
-                            if(count($horaCategoria) >= 1){
-                                // ABIERTO
-                            }else{
+                    // CONOCER SI LA SUB CATEGORIA ESTA ACTIVA
+                    $infoSubCate = SubCategorias::where('id', $pro->id_subcategorias)->first();
 
-                                $estadoProductoActivo = true;
-                            }
-                        }
+                    if($infoSubCate->activo == 0){
+
+                        $estadoProductoActivo = true;
+                    }
+
+                    // CONOCER SI LA CATEGORIA DEL PRODUCTO ESTA ACTIVA
+                    $infoCategoria = Categorias::where('id', $infoSubCate->id_categorias)->first();
+
+                    if($infoCategoria->activo == 0){
+
+                        $estadoProductoActivo = true;
                     }
 
 
-                    // REGLA: UNO O VARIOS PRODUCTOS NO ESTAN DISPONIBLES
+                    if($infoCategoria->usa_horario == 1){
+                        // CONOCER SI LA CATEGORIA TIENE HORARIO Y VER SI ESTA DISPONIBLE
+                        $horaCategoria = Categorias::where('id', $infoSubCate->id_categorias)
+                            ->where('activo', 1)
+                            ->where('usa_horario', 1)
+                            ->where('hora_abre', '<=', $hora)
+                            ->where('hora_cierra', '>=', $hora)
+                            ->get();
 
-                    if($estadoProductoActivo){
-                        $titulo = "Revisión";
-                        $mensaje = "Uno o más Productos no estan disponibles, revisar el Carrito de Compras. Gracias";
-                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                        if(count($horaCategoria) >= 1){
+                            // ABIERTO
+                        }else{
+
+                            $estadoProductoActivo = true;
+                        }
                     }
+                }
 
 
-                    // REGLA: VALIDAR HORARIO DEL RESTAURANTE
+                // REGLA: UNO O VARIOS PRODUCTOS NO ESTAN DISPONIBLES
+
+                if($estadoProductoActivo){
+                    $titulo = "Revisión";
+                    $mensaje = "Uno o más Productos no estan disponibles, revisar el Carrito de Compras. Gracias";
+                    return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                }
+
+
+                // REGLA: VALIDAR HORARIO DEL RESTAURANTE
 
 
                 $horario = DB::table('horario_servicio AS h')
@@ -439,7 +438,7 @@ class ProcesarController extends Controller
                     $orden->save();
 
 
-                    $infoDireccion = DireccionCliente::where('id', $request->clienteid)
+                    $infoDireccion = DireccionCliente::where('id_cliente', $request->clienteid)
                         ->where('seleccionado', 1)
                         ->first();
 
@@ -475,10 +474,12 @@ class ProcesarController extends Controller
 
 
 
-                    // GUARDAR PARA ENVIAR NOTIFICACIONES CON EL TIMER
-                    $notificacion = new OrdenesNotificaciones();
+                    // CREAR TAREA DE SEGUNDO PLANO PARA TIMER NOTIFICACION
+
+
+                    /*$notificacion = new OrdenesNotificaciones();
                     $notificacion->id_ordenes = $orden->id;
-                    $notificacion->save();
+                    $notificacion->save();*/
 
 
                     $infoCliente = Clientes::where('id', $request->clienteid)->first();
@@ -518,8 +519,6 @@ class ProcesarController extends Controller
         }
 
     }
-
-
 
 
 }
