@@ -148,7 +148,7 @@ Route::post('/admin/productos/informacion', [ProductosController::class,'informa
 Route::post('/admin/productos/editar', [ProductosController::class,'editarProductos']);
 Route::post('/admin/productos/ordenar', [ProductosController::class,'ordenarProductos']);
 
-// --- SLIDER de servicios ---
+// --- BANNER de restaurante ---
 Route::get('/admin/slider/listado/{id}', [SliderController::class,'index']);
 Route::get('/admin/slider/listado/tabla/{id}', [SliderController::class,'sliderTabla']);
 Route::post('/admin/slider/nuevo', [SliderController::class,'nuevaSlider']);

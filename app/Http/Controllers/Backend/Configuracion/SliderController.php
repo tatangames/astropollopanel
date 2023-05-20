@@ -51,7 +51,7 @@ class SliderController extends Controller
     public function sliderTabla($id){
         // id servicios
 
-        $slider = Slider::orderBy('posicion')->get();
+        $slider = Slider::where('id_servicios', $id)->orderBy('posicion')->get();
 
         foreach ($slider as $info){
 

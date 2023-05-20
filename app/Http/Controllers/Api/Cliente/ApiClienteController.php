@@ -311,23 +311,42 @@ class ApiClienteController extends Controller
 
         if(Clientes::where('id', $request->id)->first()){
 
-            if(DireccionCliente::where('id_cliente', $request->id)
+            if($infoDireCliente = DireccionCliente::where('id_cliente', $request->id)
                 ->where('id', $request->dirid)->first()){
 
                 DB::beginTransaction();
 
                 try {
 
-                    // setear a 0
+                    // setear a 0 todas las direcciones del cliente
                     DireccionCliente::where('id_cliente', $request->id)->update(['seleccionado' => 0]);
 
                     // setear a 1 el id de la direccion que envia el usuario
                     DireccionCliente::where('id', $request->dirid)->update(['seleccionado' => 1]);
 
-                    if($infoarritoTempo = CarritoTemporal::where('id_clientes', $request->id)->first()){
-                        CarritoExtra::where('id_carrito_temporal', $infoarritoTempo->id)->delete();
-                        CarritoTemporal::where('id_clientes', $request->id)->delete();
+
+                    $infoZonaServicio = ZonasServicio::where('id_zonas', $infoDireCliente->id_zonas)->first();
+
+
+                    // COMO SELECCIONA EN EL MAPA, PREGUNTAR SI TIENE CARRITO EL CLIENTE
+                    // SI EL SERVICIO ES EL MISMO, NO BORRAR CARRITO, PERO SI ES OTRA ZONA CON OTRO RESTAURANTE
+                    // AHI SI BORRAR CARRITO DE COMPRAS
+
+                    if($infoCarritoTempo = CarritoTemporal::where('id_clientes', $request->id)->first()){
+
+                        if($infoZonaServicio->id_servicios == $infoCarritoTempo->id_servicios){
+                            // NO BORRAR CARRITO YA QUE ES DEL MISMO SERVICIO
+                        }else{
+
+                            // SI BORRARLE CARRITO
+
+                            CarritoExtra::where('id_carrito_temporal', $infoCarritoTempo->id)->delete();
+                            CarritoTemporal::where('id_clientes', $request->id)->delete();
+                        }
                     }
+
+
+
 
                     DB::commit();
 

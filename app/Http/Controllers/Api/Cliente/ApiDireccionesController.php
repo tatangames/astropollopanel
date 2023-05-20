@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api\Cliente;
 
 use App\Http\Controllers\Controller;
+use App\Models\CarritoExtra;
+use App\Models\CarritoTemporal;
 use App\Models\Clientes;
 use App\Models\DireccionCliente;
 use App\Models\Zonas;
+use App\Models\ZonasServicio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -112,6 +115,32 @@ class ApiDireccionesController extends Controller
                         DireccionCliente::where('id_cliente', $request->id)
                             ->where('id', '!=', $di->id)
                             ->update(['seleccionado' => 0]);
+
+
+                        $infoZonaServicio = ZonasServicio::where('id_zonas', $request->id_zona)->first();
+
+
+                        // COMO SELECCIONA EN EL MAPA, PREGUNTAR SI TIENE CARRITO EL CLIENTE
+                        // SI EL SERVICIO ES EL MISMO, NO BORRAR CARRITO, PERO SI ES OTRA ZONA CON OTRO RESTAURANTE
+                        // AHI SI BORRAR CARRITO DE COMPRAS
+
+                        if($infoCarritoTempo = CarritoTemporal::where('id_clientes', $request->id)->first()){
+
+                            if($infoZonaServicio->id_servicios == $infoCarritoTempo->id_servicios){
+                                // NO BORRAR CARRITO YA QUE ES DEL MISMO SERVICIO
+                            }else{
+
+                                // SI BORRARLE CARRITO
+
+                                CarritoExtra::where('id_carrito_temporal', $infoCarritoTempo->id)->delete();
+                                CarritoTemporal::where('id_clientes', $request->id)->delete();
+                            }
+                        }
+
+
+
+
+
 
                         DB::commit();
 
