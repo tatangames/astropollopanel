@@ -432,11 +432,12 @@ class ServiciosController extends Controller
             $usuario->usuario = $request->usuario;
             $usuario->password = Hash::make($request->password);
             $usuario->token_fcm = null;
-            $usuario->activo = 0;
+            $usuario->activo = 1;
             $usuario->nombre = $request->nombre;
             $usuario->vehiculo = $request->vehiculo;
             $usuario->placa = $request->placa;
             $usuario->imagen = $nombreFoto;
+            $usuario->notificacion = 0;
 
 
             if($usuario->save()){

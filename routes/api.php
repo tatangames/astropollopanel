@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Carrito\CarritoComprasController;
 use App\Http\Controllers\Api\Procesar\ApiProcesarController;
 use App\Http\Controllers\Api\Ordenes\ApiOrdenesController;
 use App\Http\Controllers\Api\Ordenes\ApiOrdenesRestauranteController;
+use App\Http\Controllers\Api\Ordenes\ApiOrdenesMotoristaController;
 
 
 /*
@@ -178,6 +179,35 @@ Route::post('restaurante/cancelar/orden', [ApiOrdenesRestauranteController::clas
 Route::post('restaurante/preparacion/ordenes', [ApiOrdenesRestauranteController::class, 'preparacionOrdenes']);
 
 
+// FINALIZAR ORDEN -> NOTIFICACION SIGNAL A MOTORISTA QUE TIENE LA ORDEN
+                   // O ENVIA NOTIFICACION A TODOS LOS MOTORISTAS PARA AGARRARLA
+Route::post('restaurante/proceso/orden/finalizar-orden',  [ApiOrdenesRestauranteController::class, 'finalizarOrdenPorRestaurante']);
+
+
+// LISTADO DE ORDENES QUE SE HAN COMPLETADO HOY
+Route::post('restaurante/completadashoy/ordenes', [ApiOrdenesRestauranteController::class, 'completadasHoyOrdenes']);
+
+
+// LISTADO DE ORDENES QUE SE HAN CANCELADO HOY
+Route::post('restaurante/canceladashoy/ordenes', [ApiOrdenesRestauranteController::class, 'canceladasHoyOrdenes']);
+
+
+// LISTADO DE CATEGORIAS DEL RESTAURANTE
+Route::post('restaurante/listado/categorias', [ApiOrdenesRestauranteController::class, 'listadoDeCategorias']);
+
+// ACTUALIZAR ESTADO DE CATEGORIA
+Route::post('restaurante/actualizar/estado/categorias', [ApiOrdenesRestauranteController::class, 'actualizarEstadoCategoria']);
+
+
+// LISTADO DE PRODUCTOS POR CATEGORIA DEL RESTAURANTE
+Route::post('restaurante/categoria/listado/productos', [ApiOrdenesRestauranteController::class, 'listadoDeProductosPorCategoria']);
+
+
+// ACTUALIZAR ESTADO DE PRODUCTO
+Route::post('restaurante/actualizar/estado/producto', [ApiOrdenesRestauranteController::class, 'actualizarEstadoProducto']);
+
+// HISTORIAL DE ORDENES DEL RESTAURANTES
+Route::post('restaurante/historial/ordenes', [ApiOrdenesRestauranteController::class, 'historialOrdenesRestaurantes']);
 
 
 
@@ -185,7 +215,13 @@ Route::post('restaurante/preparacion/ordenes', [ApiOrdenesRestauranteController:
 
 
 
+// *********************** RUTAS PARA APLICACION DE MOTORISTAS ****************************************
 
+
+Route::post('motorista/login', [ApiClienteController::class, 'loginMotorista']);
+
+// NUEVAS ORDENES QUE EL RESTAURANTE YA INICIO PREPARACION Y NO ESTEN CANCELADAS O AGARRADAS
+Route::post('restaurante/nuevas/ordenes', [ApiOrdenesMotoristaController::class, 'nuevasOrdenesMotorista']);
 
 
 

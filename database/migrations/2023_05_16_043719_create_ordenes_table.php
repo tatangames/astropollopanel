@@ -31,7 +31,7 @@ class CreateOrdenesTable extends Migration
             $table->dateTime('fecha_orden');
 
 
-            // FECHA ESTIMADA DE ENTREGA PARA EL CLIENTE + SUMA DE ZONA
+            // FECHA ESTIMADA DE ENTREGA PARA EL CLIENTE (SE TOMA EL TIEMPO DE ZONA UNICAMENTE)
             $table->dateTime('fecha_estimada')->nullable();
 
 
