@@ -20,6 +20,9 @@ class CreateOrdenesTable extends Migration
             $table->bigInteger('id_cliente')->unsigned();
             $table->bigInteger('id_servicio')->unsigned();
 
+
+            $table->bigInteger('id_zona')->unsigned();
+
             $table->string('nota_orden', 600)->nullable();
 
             // precio sin afectar cupones
@@ -61,6 +64,7 @@ class CreateOrdenesTable extends Migration
 
 
             // DATOS DE CUPONES
+            // este guarda si cupon es de dinero o de porcentaje
             $table->bigInteger('id_cupones')->unsigned()->nullable();
 
             // lo que pagara cliente si aplico cupon dinero o porcentaje
@@ -74,7 +78,8 @@ class CreateOrdenesTable extends Migration
             $table->boolean('visible');
 
 
-
+            // ESTA ES UNA COPIA DEL CUPON PARA QUE GUARDE CUALQUIER CUPON
+            $table->bigInteger('id_cupones_copia')->unsigned()->nullable();
 
 
             $table->boolean('visible_p');
@@ -93,6 +98,10 @@ class CreateOrdenesTable extends Migration
             $table->foreign('id_cliente')->references('id')->on('clientes');
             $table->foreign('id_servicio')->references('id')->on('servicios');
             $table->foreign('id_cupones')->references('id')->on('cupones');
+            $table->foreign('id_cupones_copia')->references('id')->on('cupones');
+
+            $table->foreign('id_zona')->references('id')->on('zonas');
+
         });
     }
 

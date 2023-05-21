@@ -412,6 +412,7 @@ class ApiProcesarController extends Controller
                     $orden = new Ordenes();
                     $orden->id_cliente = $request->clienteid;
                     $orden->id_servicio = $infoCarritoTempo->id_servicios;
+                    $orden->id_zona = $infoZona->id;
                     $orden->nota_orden = $request->nota;
                     $orden->total_orden = $totalCarrito;
                     $orden->fecha_orden = $fecha;
@@ -426,6 +427,7 @@ class ApiProcesarController extends Controller
                     $orden->fecha_entregada = null;
                     $orden->nota_cancelada = null;
                     $orden->id_cupones = $idCupones;
+                    $orden->id_cupones_copia = $idCupones;
                     $orden->total_cupon = $totalCarritoCupon;
                     $orden->mensaje_cupon = $mensajeCupon;
                     $orden->visible = 1;

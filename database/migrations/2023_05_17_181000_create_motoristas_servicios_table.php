@@ -29,7 +29,8 @@ class CreateMotoristasServiciosTable extends Migration
             $table->string('vehiculo', 50);
             $table->string('placa', 50);
 
-
+            // PARA RECIBIR O NO NOTIFICACIONES
+            $table->boolean('notificacion');
 
             $table->boolean('activo');
 

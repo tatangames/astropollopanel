@@ -10,6 +10,7 @@ use App\Models\Clientes;
 use App\Models\DireccionCliente;
 use App\Models\HorarioServicio;
 use App\Models\Servicios;
+use App\Models\UsuariosServicios;
 use App\Models\ZonasServicio;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -427,6 +428,89 @@ class ApiClienteController extends Controller
             return ['success' => 3];
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+    //***********************************************************************************
+
+
+    public function loginRestaurante(Request $request){
+
+
+        $rules = array(
+            'usuario' => 'required',
+            'password' => 'required',
+        );
+
+        // idfirebase
+
+        $validator = Validator::make($request->all(), $rules );
+
+        if ( $validator->fails()){
+            return ['success' => 0];
+        }
+
+        if($info = UsuariosServicios::where('usuario', $request->usuario)->first()){
+
+
+            // EL USUARIO PUEDE ESTAR BLOQUEADO
+
+            if($info->bloqueado == 1){
+
+                $titulo = 'Nota';
+                $mensaje = "Su usuario ha sido bloqueado";
+
+                return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+            }
+
+            if (Hash::check($request->password, $info->password)) {
+
+                if($request->idfirebase != null){
+                    UsuariosServicios::where('id', $info->id)->update(['token_fcm' => $request->idfirebase]);
+                }
+
+                // inicio sesion
+                return ['success' => 2, 'id' => strval($info->id), 'mensaje' => "Inicio de sesion correctamente"];
+
+            }else{
+                // contraseña incorrecta
+
+                $titulo = 'Nota';
+                $mensaje = "Su Contraseña es incorrecta";
+
+                return ['success' => 3, 'titulo' => $titulo, 'mensaje' => $mensaje];
+            }
+
+        } else {
+
+            $titulo = 'Nota';
+            $mensaje = "Usuario no encontrado";
+
+            // usuario no encontrado
+            return ['success' => 4, 'titulo' => $titulo, 'mensaje' => $mensaje];
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

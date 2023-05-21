@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Cliente\ApiMenuController;
 use App\Http\Controllers\Api\Carrito\CarritoComprasController;
 use App\Http\Controllers\Api\Procesar\ApiProcesarController;
 use App\Http\Controllers\Api\Ordenes\ApiOrdenesController;
+use App\Http\Controllers\Api\Ordenes\ApiOrdenesRestauranteController;
 
 
 /*
@@ -142,6 +143,39 @@ Route::post('cliente/direcciones/elegir/direccion', [ApiClienteController::class
 Route::post('cliente/eliminar/direccion/seleccionada', [ApiClienteController::class, 'eliminarDireccionSeleccionadaCliente']);
 
 
+
+
+
+
+
+// *********************** RUTAS PARA APLICACION DE RESTAURANTES ****************************************
+
+
+
+Route::post('restaurante/login', [ApiClienteController::class, 'loginRestaurante']);
+
+// listado de ordenes nuevas, filtrado por restaurantes
+Route::post('restaurante/nuevas/ordenes', [ApiOrdenesRestauranteController::class, 'nuevasOrdenes']);
+
+// listado de productos de una orden
+Route::post('restaurante/listado/producto/orden', [ApiOrdenesRestauranteController::class, 'listadoProductosOrden']);
+
+// informacion de producto individual de una orden que se pidio
+Route::post('restaurante/listado/productos/ordenes-individual',  [ApiOrdenesRestauranteController::class, 'infoProductoOrdenadoIndividual']);
+
+// INICIAR ORDEN -> NOTIFICACION ONE SIGNAL A CLIENTE
+
+Route::post('restaurante/proceso/orden/iniciar-orden',  [ApiOrdenesRestauranteController::class, 'iniciarOrdenPorRestaurante']);
+
+// CANCELAR ORDEN AL CLIENTE -> NOTIFICACION ONE SIGNAL AL CLIENTE
+
+Route::post('restaurante/cancelar/orden', [ApiOrdenesRestauranteController::class, 'cancelarOrden']);
+
+
+
+// LISTADO DE ORDENES QUE YA ESTAN EN PREPARACION
+
+Route::post('restaurante/preparacion/ordenes', [ApiOrdenesRestauranteController::class, 'preparacionOrdenes']);
 
 
 
