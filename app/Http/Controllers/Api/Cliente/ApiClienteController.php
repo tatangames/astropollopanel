@@ -539,7 +539,9 @@ class ApiClienteController extends Controller
             if (Hash::check($request->password, $info->password)) {
 
                 if($request->idfirebase != null){
-                    MotoristasServicios::where('id', $info->id)->update(['token_fcm' => $request->idfirebase]);
+                    MotoristasServicios::where('id', $info->id)
+                        ->update(['token_fcm' => $request->idfirebase,
+                            'notificacion' => 1]);
                 }
 
                 // inicio sesion

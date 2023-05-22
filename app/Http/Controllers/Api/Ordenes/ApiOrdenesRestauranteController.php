@@ -46,13 +46,10 @@ class ApiOrdenesRestauranteController extends Controller
                 ->orderBy('id', 'ASC')
                 ->get();
 
-            $conteoOrdenes = Ordenes::where('estado_iniciada', 0)
-                ->where('estado_cancelada', 0)
-                ->where('id_servicio', $infoUsuario->id_servicios)
-                ->count();
-
+            $conteo = 0;
 
             foreach($arrayOrdenes as $info){
+                $conteo++;
 
                 $infoOrdenesDireccion = OrdenesDirecciones::where('id_ordenes', $info->id)->first();
 
@@ -83,7 +80,7 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->telefono = $infoOrdenesDireccion->telefono;
             }
 
-            return ['success' => 2, 'hayordenes' => $conteoOrdenes, 'ordenes' => $arrayOrdenes];
+            return ['success' => 2, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
         }else{
             return ['success' => 3];
         }
@@ -124,10 +121,7 @@ class ApiOrdenesRestauranteController extends Controller
             }
 
 
-            $minutos = 10;
-
-
-            return ['success' => 1, 'productos' => $lista, 'minutos' => $minutos];
+            return ['success' => 1, 'productos' => $lista];
         }
         else{
 
@@ -382,13 +376,10 @@ class ApiOrdenesRestauranteController extends Controller
                 ->orderBy('id', 'ASC')
                 ->get();
 
-            $conteoOrdenes = Ordenes::where('estado_iniciada', 1)
-                ->where('estado_cancelada', 0)
-                ->where('estado_preparada', 0)
-                ->where('id_servicio', $infoUsuario->id_servicios)
-                ->count();
+            $conteo = 0;
 
             foreach($arrayOrdenes as $info){
+                $conteo++;
 
                 $infoOrdenesDireccion = OrdenesDirecciones::where('id_ordenes', $info->id)->first();
 
@@ -418,11 +409,10 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->telefono = $infoOrdenesDireccion->telefono;
             }
 
-            return ['success' => 1, 'hayordenes' => $conteoOrdenes, 'ordenes' => $arrayOrdenes];
+            return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
         }else{
             return ['success' => 3];
         }
-
     }
 
 
@@ -546,14 +536,10 @@ class ApiOrdenesRestauranteController extends Controller
                 ->orderBy('id', 'ASC')
                 ->get();
 
-            $conteoOrdenes = Ordenes::where('estado_preparada', 1)
-                ->where('estado_cancelada', 0)
-                ->whereDate('fecha_preparada', $fecha)
-                ->where('id_servicio', $infoUsuario->id_servicios)
-                ->count();
-
+            $conteo = 0;
 
             foreach($arrayOrdenes as $info){
+                $conteo++;
 
                 $infoOrdenesDireccion = OrdenesDirecciones::where('id_ordenes', $info->id)->first();
 
@@ -586,7 +572,7 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->telefono = $infoOrdenesDireccion->telefono;
             }
 
-            return ['success' => 1, 'hayordenes' => $conteoOrdenes, 'ordenes' => $arrayOrdenes];
+            return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
         }else{
             return ['success' => 99];
         }
@@ -614,13 +600,10 @@ class ApiOrdenesRestauranteController extends Controller
                 ->orderBy('id', 'ASC')
                 ->get();
 
-            $conteoOrdenes = Ordenes::where('estado_cancelada', 1)
-                ->whereDate('fecha_cancelada', $fecha)
-                ->where('id_servicio', $infoUsuario->id_servicios)
-                ->count();
-
+           $conteo = 0;
 
             foreach($arrayOrdenes as $info){
+                $conteo++;
 
                 $infoOrdenesDireccion = OrdenesDirecciones::where('id_ordenes', $info->id)->first();
 
@@ -653,7 +636,7 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->telefono = $infoOrdenesDireccion->telefono;
             }
 
-            return ['success' => 1, 'hayordenes' => $conteoOrdenes, 'ordenes' => $arrayOrdenes];
+            return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
         }else{
             return ['success' => 99];
         }
@@ -818,6 +801,7 @@ class ApiOrdenesRestauranteController extends Controller
             // todas las ordenes por fecha
             $arrayOrdenes = Ordenes::whereBetween('fecha_orden', array($date1, $date2))
                 ->where('id_servicio', $infoUsuario->id_servicios)
+                ->orderBy('id', 'DESC')
                 ->get();
 
             foreach($arrayOrdenes as $info){

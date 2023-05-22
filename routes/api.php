@@ -221,10 +221,42 @@ Route::post('restaurante/historial/ordenes', [ApiOrdenesRestauranteController::c
 Route::post('motorista/login', [ApiClienteController::class, 'loginMotorista']);
 
 // NUEVAS ORDENES QUE EL RESTAURANTE YA INICIO PREPARACION Y NO ESTEN CANCELADAS O AGARRADAS
-Route::post('restaurante/nuevas/ordenes', [ApiOrdenesMotoristaController::class, 'nuevasOrdenesMotorista']);
+Route::post('motorista/nuevas/ordenes', [ApiOrdenesMotoristaController::class, 'nuevasOrdenesMotorista']);
+
+// VER LISTADO DE PRODUCTOS
+Route::post('motorista/listado/producto/orden', [ApiOrdenesMotoristaController::class, 'listadoProductosOrden']);
+
+// SELECCIONAR LA ORDEN POR EL MOTORISTA
+Route::post('motorista/seleccionar/orden', [ApiOrdenesMotoristaController::class, 'seleccionarOrden']);
+
+// LISTADO DE ORDENES QUE ESTAN SELECCIONAS Y PENDIENTES DE INICIAR LA ENTREGA
+Route::post('motorista/pendientes/entrega/orden', [ApiOrdenesMotoristaController::class, 'pendientesEntregaOrden']);
+
+// AQUI SE INICIA LA ENTREGA DE LA ORDEN
+            // NOTIFICACION ONE SIGNAL A CLIENTE
+Route::post('motorista/iniciar/entrega/orden', [ApiOrdenesMotoristaController::class, 'iniciarEntregaOrden']);
+
+// LISTADO DE ORDENES QUE EL MOTORISTA ESTA ENTREGANDO
+Route::post('motorista/entregando/entrega/orden', [ApiOrdenesMotoristaController::class, 'listadoOrdenesEstoyEntregando']);
+
+// FINALIZAR ENTREGA POR PARTE DEL MOTORISTA
+            // NOTIFICACION ONE SIGNAL AL CLIENTE
+Route::post('motorista/finalizar/entrega/orden', [ApiOrdenesMotoristaController::class, 'finalizarOrden']);
+
+// LISTADO DE ORDENES COMPLETADAS HOY POR EL MOTORISTA
+Route::post('motorista/listado/completadas/hoy/orden', [ApiOrdenesMotoristaController::class, 'listadoCompletadasHoyMotorista']);
 
 
+// LISTADO DE ORDENES CANCELADAS HOY Y YA ESTABAN SELECCIONADAS POR EL MOTORISTA
+Route::post('motorista/listado/canceladas/hoy/orden', [ApiOrdenesMotoristaController::class, 'listadoCanceladasHoyMotorista']);
 
 
+// HISTORIAL DE ORDENES PARA MOTORISTAS
+Route::post('motorista/historial/ordenes', [ApiOrdenesMotoristaController::class, 'historialOrdenesMotoristas']);
 
+// INFORMACION SI RECIBE NOTIFICACIONES
+Route::post('motorista/opcion/notificacion', [ApiOrdenesMotoristaController::class, 'informacionNotificaciones']);
+
+// EDITAR ESTADO NOTIFICACIONES MOTORISTA
+Route::post('motorista/opcion/notificacion/editar', [ApiOrdenesMotoristaController::class, 'editarNotificaciones']);
 
