@@ -279,16 +279,19 @@ Route::post('/admin/motoristas/usuario/editar', [ServiciosController::class,'act
 
 
 
-
-
 // CALL CENTER
 
 Route::get('/admin/callcenter/generar/orden', [CallCenterController::class,'indexGenerarOrden'])->name('index.callcenter.generarorden');
-Route::get('/admin/callcenter/generar/orden/direcciones', [CallCenterController::class,'listaDireccionTelefono']);
+
+// buscar numero telefonico para ver sus direcciones guardadas
+Route::post('/admin/callcenter/buscar/numero', [CallCenterController::class,'informacionClientePorNumero']);
+
+// GUARDAR DIRECCION CLIENTE, BORRAR CARRITO DE COMPRAS PORQUE ESTE ESTARA SELECCIONADO
+Route::post('/admin/callcenter/guardar/nueva/direccion', [CallCenterController::class,'nuevaDireccionCliente']);
 
 
-
-
+// DEVUELVE LISTADO DE PRODUCTOSDE UN RESTAURANTE, DIRECCION ASIGNADA, CARRITO DE COMPRAS
+Route::get('/admin/callcenter/todo/restaurante/asignado', [CallCenterController::class,'todoMenuRestauranteyCarrito']);
 
 
 

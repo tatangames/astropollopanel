@@ -16,11 +16,15 @@ class CreateDireccionesCallcenterTable extends Migration
         Schema::create('direcciones_callcenter', function (Blueprint $table) {
             $table->id();
 
-            //LLEVA ID DEL RESTAURANTE, NO DEL ID ZONA
+            // PARA PODER VISUALIZAR LOS PRODUCTOS SEGUN RESTAURANTE
+            $table->bigInteger('id_servicios')->unsigned();
 
+            $table->string('nombre', 100);
+            $table->string('direccion', 400);
+            $table->string('punto_referencia', 400)->nullable();
+            $table->string('telefono', 10);
 
-
-
+            $table->foreign('id_servicios')->references('id')->on('servicios');
         });
     }
 

@@ -11,9 +11,17 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-12">
+            <div class="col-sm-7">
                 <h1>Generar Orden</h1>
             </div>
+
+            <div class="col-md-4">
+
+                <button type="button" style="float: right" class="btn btn-lg btn-danger">
+                    <i class="fa fa-trash"> Borrar Carrito</i>
+                </button>
+            </div>
+
         </div>
     </div>
 </section>
@@ -23,13 +31,15 @@
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <form>
-                <div class="input-group">
 
-                    <input type="text" style="max-width: 350px" class="form-control form-control-lg noEnterSubmit" placeholder="Número Telefónico">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-lg btn-default">
-                            <i class="fa fa-search"></i>
-                        </button>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="text" style="max-width: 350px" id="numero-cliente" class="form-control form-control-lg noEnterSubmit" placeholder="Número Telefónico">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-lg btn-default" onclick="buscarNumero()">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -40,72 +50,80 @@
 
 <hr>
 
-<div id="tablaDatatable">
 
-</div>
-
+<!-- SIN DIRECCION ASIGNADA -->
 
 
-<!-- modal nuevo -->
-<div class="modal fade" id="modalAgregar">
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">Control</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="tablaMenuRestaurante">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+<!-- MODAL NUEVA DIRECCION -->
+<div class="modal fade" id="modalDireccionNueva">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Motorista</h4>
+                <h4 class="modal-title">Nueva Dirección</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formulario-nuevo">
+                <form id="formulario-direccionnueva">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
 
                                 <div class="form-group">
                                     <label>Restaurante:</label>
-                                    <select class="form-control" id="select-servicio">
-
+                                    <select class="form-control" id="select-servicios">
+                                        @foreach($restaurantes as $item)
+                                            <option value="{{$item->id}}">{{$item->nombre}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
 
-
                                 <div class="form-group">
-                                    <label>Usuario</label>
-                                    <input type="text" autocomplete="off" maxlength="20" class="form-control" id="usuario-nuevo">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Contraseña</label>
-                                    <input type="text" autocomplete="off" maxlength="16" class="form-control" id="password-nuevo">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Nombre del Motorista</label>
+                                    <label>Nombre</label>
                                     <input type="text" autocomplete="off" maxlength="100" class="form-control" id="nombre-nuevo">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Vehículo</label>
-                                    <input type="text" autocomplete="off" maxlength="50" class="form-control" id="vehiculo-nuevo">
+                                    <label>Dirección</label>
+                                    <input type="text" autocomplete="off" maxlength="400" class="form-control" id="direccion-nuevo">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Placa</label>
-                                    <input type="text" autocomplete="off" maxlength="50" class="form-control" id="placa-nuevo">
+                                    <label>Teléfono</label>
+                                    <input type="text" autocomplete="off" maxlength="10" class="form-control" id="telefono-nuevo">
                                 </div>
 
                                 <div class="form-group">
-                                    <div>
-                                        <label>Foto del Motorista</label>
-                                    </div>
-                                    <br>
-                                    <div class="col-md-10">
-                                        <input type="file" style="color:#191818" id="imagen-nuevo" accept="image/jpeg, image/jpg, image/png"/>
-                                    </div>
+                                    <label>Punto de Referencia</label>
+                                    <input type="text" autocomplete="off" maxlength="400" class="form-control" id="referencia-nuevo">
                                 </div>
-
-
 
                             </div>
                         </div>
@@ -114,7 +132,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="nuevo()">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="preguntaGuardarDireccion()">Guardar</button>
             </div>
         </div>
     </div>
@@ -137,16 +155,14 @@
     <script type="text/javascript">
         $(document).ready(function(){
 
-
             $('.noEnterSubmit').keypress(function(e){
                 if ( e.which == 13 ) return false;
                 //or...
                 if ( e.which == 13 ) e.preventDefault();
             });
 
-
-
-
+            var ruta = "{{ URL::to('admin/callcenter/todo/restaurante/asignado') }}";
+            $('#tablaMenuRestaurante').load(ruta);
 
         });
 
@@ -154,267 +170,185 @@
 
     <script>
 
-        function recargar(){
-            var ruta = "{{ URL::to('admin/motoristas/usuario/tabla') }}";
-            $('#tablaDatatable').load(ruta);
+        // BUSCAR SI CLIENTE TIENE REGISTRO CON SU NUMERO
+        function buscarNumero(){
+
+            var numero = document.getElementById('numero-cliente').value;
+
+            if(numero === ''){
+                toastr.error('Número Telefónico es requerido');
+                return;
+            }
+            openLoading();
+
+            let formData = new FormData();
+            formData.append('numero', numero);
+
+
+            axios.post('/admin/callcenter/buscar/numero', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if(response.data.success === 1){
+
+                        // SI HAY DIRECCIONES, CARGAR LA TABLA
+
+                        toastr.error('si haya array direcciones');
+
+                    }
+
+                    else if (response.data.success === 2) {
+                       // NO SE ENCONTRO NUMERO REGISTRADO
+
+                        document.getElementById("formulario-direccionnueva").reset();
+                        $('#telefono-nuevo').val(numero);
+
+                        $('#modalDireccionNueva').modal({backdrop: 'static', keyboard: false})
+
+                    }  else {
+                        toastr.error('Error al buscar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error del servidor');
+                    closeLoading();
+                });
         }
 
-        // modal nuevo
-        function abrirModalAgregar(){
-            document.getElementById("formulario-nuevo").reset();
-            $('#modalAgregar').modal('show');
+
+
+        function preguntaGuardarDireccion(){
+
+            Swal.fire({
+                title: 'Guardar Nueva Dirección?',
+                text: "",
+                icon: 'info',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    guardarNuevaDireccion();
+                }
+            })
         }
 
-        // agregar
-        function nuevo(){
 
-            var idservicio = document.getElementById('select-servicio').value;
-            var usuario = document.getElementById('usuario-nuevo').value;
-            var password = document.getElementById('password-nuevo').value;
+        function guardarNuevaDireccion(){
+
+            var restaurante = document.getElementById('select-servicios').value;
             var nombre = document.getElementById('nombre-nuevo').value;
-            var vehiculo = document.getElementById('vehiculo-nuevo').value;
-            var placa = document.getElementById('placa-nuevo').value;
-            var imagen = document.getElementById('imagen-nuevo');
+            var direccion = document.getElementById('direccion-nuevo').value;
+            var telefono = document.getElementById('telefono-nuevo').value;
+            var referencia = document.getElementById('referencia-nuevo').value;
 
-
-            if(idservicio === ''){
-                toastr.error('Restaurante es requerida');
-                return;
-            }
-
-            if(usuario === ''){
-                toastr.error('Usuario es requerida');
-                return;
-            }
-
-            if(password === ''){
-                toastr.error('Contraseña es requerida');
+            if(restaurante === ''){
+                toastr.error('Restaurante es requerido');
                 return;
             }
 
             if(nombre === ''){
-                toastr.error('Nombre es requerida');
+                toastr.error('Dirección es requerido');
                 return;
             }
 
-            if(vehiculo === ''){
-                toastr.error('Vehiculo es requerida');
+            if(nombre.length > 100){
+                toastr.error('100 caracteres para Nombre máximo');
                 return;
             }
 
-            if(placa === ''){
-                toastr.error('Placa es requerida');
+            if(direccion === ''){
+                toastr.error('Dirección es requerido');
                 return;
             }
 
-            if(imagen.files && imagen.files[0]){ // si trae imagen
-                if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
-                    toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
-                    return;
-                }
-            }else{
-                toastr.error('Foto es requerida');
+            if(direccion.length > 400){
+                toastr.error('400 caracteres para Dirección máximo');
                 return;
             }
 
+
+            if(telefono === ''){
+                toastr.error('Teléfono es requerido');
+                return;
+            }
+
+            if(telefono.length > 10){
+                toastr.error('10 caracteres para Teléfono máximo');
+                return;
+            }
+
+
+            if(referencia === ''){
+                toastr.error('Referencia es requerido');
+                return;
+            }
+
+            if(referencia.length > 400){
+                toastr.error('400 caracteres para Referencia máximo');
+                return;
+            }
 
             openLoading();
 
             let formData = new FormData();
-            formData.append('idservicio', idservicio);
-            formData.append('usuario', usuario);
-            formData.append('password', password);
+            formData.append('servicio', restaurante);
             formData.append('nombre', nombre);
-            formData.append('vehiculo', vehiculo);
-            formData.append('placa', placa);
-            formData.append('imagen', imagen.files[0]);
+            formData.append('telefono', telefono);
+            formData.append('direccion', direccion);
+            formData.append('referencia', referencia);
 
-
-
-            axios.post('/admin/motoristas/usuario/nuevo', formData, {
+            axios.post('/admin/callcenter/guardar/nueva/direccion', formData, {
             })
                 .then((response) => {
                     closeLoading();
 
                     if(response.data.success === 1){
 
-                        Swal.fire({
-                            title: 'Error al Guardar',
-                            text: "El usuario ya esta registrado para un Restaurante",
-                            icon: 'info',
-                            showCancelButton: false,
-                            confirmButtonColor: '#28a745',
-                            cancelButtonColor: '#d33',
-                            cancelButtonText: 'Cancelar',
-                            confirmButtonText: 'Aceptar'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
+                        // DIRECCION GUARDADA, HOY MOSTRAR LA TABLA DE PRODUCTOS
+                        toastr.success('Dirección Guardada');
+                        $('#modalDireccionNueva').modal('hide');
 
-                            }
-                        })
-                    }
-
-                    else if (response.data.success === 2) {
-                        $('#modalAgregar').modal('hide');
-                        toastr.success('Motorista registrado');
-                        recargar();
-                    }  else {
-                        toastr.error('Error al guardar');
-                    }
-
-                })
-                .catch((error) => {
-                    toastr.error('Error del servidor');
-                    closeLoading();
-                });
-        }
-
-
-        function informacion(id){
-
-            openLoading();
-
-            axios.post('/admin/motoristas/usuario/informacion', {
-                'id': id
-            })
-                .then((response) => {
-                    closeLoading()
-
-                    if (response.data.success === 1) {
-
-                        $('#id-editar').val(id);
-
-
-                        $('#nombre-editar').val(response.data.info.nombre);
-                        $('#usuario-editar').val(response.data.info.usuario);
-                        $('#vehiculo-editar').val(response.data.info.vehiculo);
-                        $('#placa-editar').val(response.data.info.placa);
-
-
-                        if(response.data.info.activo === 0){
-                            $("#toggle-activo").prop("checked", false);
-                        }else{
-                            $("#toggle-activo").prop("checked", true);
-                        }
-
-
-                        $('#modalEditar').modal('show');
+                        cargarTablaProductos();
                     }
 
                     else {
                         toastr.error('Error al guardar');
                     }
+
                 })
                 .catch((error) => {
-                    closeLoading();
                     toastr.error('Error del servidor');
+                    closeLoading();
                 });
         }
 
 
 
-        function editar() {
-            var id = document.getElementById('id-editar').value;
-            var password = document.getElementById('password-editar').value;
-
-            var usuario = document.getElementById('usuario-editar').value;
-            var nombre = document.getElementById('nombre-editar').value;
-            var vehiculo = document.getElementById('vehiculo-editar').value;
-            var placa = document.getElementById('placa-editar').value;
-
-            var cbActivo = document.getElementById('toggle-activo').checked;
-            var toggleActivo = cbActivo ? 1 : 0;
-
-            var imagen = document.getElementById('imagen-editar');
+        function cargarTablaProductos(){
 
 
 
-            if (usuario === '') {
-                toastr.error("Usuario es requerido");
-                return;
-            }
-
-
-            if (nombre === '') {
-                toastr.error("Nombre es requerido");
-                return;
-            }
-
-            if (vehiculo === '') {
-                toastr.error("Vehiculo es requerido");
-                return;
-            }
-
-            if (placa === '') {
-                toastr.error("Placa es requerido");
-                return;
-            }
-
-            if (password.length > 16) {
-                toastr.error("Contraseña máximo 16 caracteres");
-                return;
-            }
-
-            if(imagen.files && imagen.files[0]){ // si trae imagen
-                if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
-                    toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
-                    return;
-                }
-            }
-
-
-            let formData = new FormData();
-            formData.append('id', id);
-            formData.append('password', password);
-            formData.append('usuario', usuario);
-            formData.append('nombre', nombre);
-            formData.append('vehiculo', vehiculo);
-            formData.append('placa', placa);
-            formData.append('activo', toggleActivo);
-            formData.append('imagen', imagen.files[0]);
-
-
-            openLoading();
-
-            axios.post('/admin/motoristas/usuario/editar', formData, {
-            })
-                .then((response) => {
-                    closeLoading()
-
-                    if(response.data.success === 1){
-
-                        Swal.fire({
-                            title: 'No Guardado',
-                            text: "El Usuario ya se encuentra registrado",
-                            icon: 'info',
-                            showCancelButton: false,
-                            confirmButtonColor: '#28a745',
-                            cancelButtonColor: '#d33',
-                            cancelButtonText: 'Cancelar',
-                            confirmButtonText: 'Aceptar'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-
-                            }
-                        })
-                    }
-
-                    else if (response.data.success === 2) {
-                        toastr.success('Registro actualizado');
-                        $('#modalEditar').modal('hide');
-
-                        recargar();
-                    }
-
-                    else {
-                        toastr.error('Error al guardar');
-                    }
-                })
-                .catch((error) => {
-                    closeLoading();
-                    toastr.error('Error del servidor');
-                });
         }
+
+
+
+        function verModalAgregar(id){
+
+
+
+        }
+
+
+
+
+
+
 
 
 

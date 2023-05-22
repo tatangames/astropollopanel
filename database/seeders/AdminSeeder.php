@@ -35,6 +35,7 @@ class AdminSeeder extends Seeder
             'token_fecha' => null
         ])->assignRole('Editor');
 
+
         Administrador::create([
             'nombre' => 'Colaborador',
             'usuario' => 'colaborador',
