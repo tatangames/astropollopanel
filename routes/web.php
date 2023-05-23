@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\Clientes\ClientesController;
 use App\Http\Controllers\Backend\Ordenes\OrdenesController;
 use App\Http\Controllers\Backend\CallCenter\CallCenterController;
 use App\Http\Controllers\Backend\CallCenter\CallCenterDireccionesController;
+use App\Http\Controllers\Backend\CallCenter\CallCenterOrdenesController;
 
 
 
@@ -337,6 +338,17 @@ Route::post('/admin/callcenter/info/direccion/editar', [CallCenterDireccionesCon
 
 // EDITAR LA DIRECCION
 Route::post('/admin/callcenter/editar/direccion', [CallCenterDireccionesController::class,'editarDireccionCallCenter']);
+
+
+// VER MIS ORDENES HOY PARA PODER CANCELAR, VER ESTADOS, VER PRODUCTOS
+Route::get('/admin/callcenter/ordenes/hoy', [CallCenterOrdenesController::class,'indexListadoOrdenesHoy'])->name('index.callcenter.listado.ordenes.hoy');
+Route::get('/admin/callcenter/ordenes/hoy/tabla', [CallCenterOrdenesController::class,'tablaListadoOrdenesHoy']);
+
+
+// TODAS LAS ORDENES REALIZADAS POR CALL CENTER
+Route::get('/admin/callcenter/ordenes/todas', [CallCenterOrdenesController::class,'indexListadoOrdenesTodas'])->name('index.callcenter.listado.ordenes.todas');
+Route::get('/admin/callcenter/ordenes/todas/tabla', [CallCenterOrdenesController::class,'tablaListadoOrdenesTodas']);
+
 
 
 

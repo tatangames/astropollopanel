@@ -205,6 +205,20 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a href="{{ route('index.callcenter.listado.ordenes.hoy') }}" target="frameprincipal" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Ordenes Hoy</p>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="{{ route('index.callcenter.listado.ordenes.todas') }}" target="frameprincipal" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Ordenes Todas</p>
+                        </a>
+                    </li>
 
 
 
