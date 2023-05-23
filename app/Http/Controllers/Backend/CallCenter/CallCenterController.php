@@ -340,7 +340,6 @@ class CallCenterController extends Controller
 
     public function recargarTablaCarrito(){
 
-
         $idSession = Auth::id();
 
         if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()) {
@@ -365,6 +364,22 @@ class CallCenterController extends Controller
         }else{
             return "No se encontro Carrito de Compras. Recargar la Página";
         }
+    }
+
+
+
+
+    public function borrarYDeseleccionarTodo(){
+
+
+        $idSession = Auth::id();
+
+        if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()){
+            CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->delete();
+            CarritoCallCenterTemporal::where('id_callcenter', $idSession)->delete();
+        }
+
+        return ['success' => 1];
     }
 
 

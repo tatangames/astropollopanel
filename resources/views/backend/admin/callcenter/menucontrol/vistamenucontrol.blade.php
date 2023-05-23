@@ -1,6 +1,3 @@
-
-
-
 <div class="card">
     <div style="float: left">
         <div class="card-header d-flex p-0" style="float: left !important;">
@@ -55,7 +52,7 @@
                                     <ul class="nav nav-pills flex-column">
 
                                         <li class="nav-item">
-                                            <p style="font-weight: bold; margin: 16px; color: black !important;">Restaurante: </p> <p style="margin: 16px">{{ $infoDireccion->restaurante }}</p>
+                                            <p style="font-weight: bold; margin: 16px; color: black !important;">Restaurante: </p> <p style="margin: 16px">{{ $nombreRestaurante }}</p>
 
                                             <p style="font-weight: bold; margin: 16px; color: black !important;">Cliente: </p> <p style="margin: 16px">{{ $infoDireccion->nombre }}</p>
 

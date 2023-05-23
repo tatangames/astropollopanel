@@ -18,7 +18,7 @@
 
             <div class="col-md-4">
 
-                <button type="button" style="float: right" class="btn btn-lg btn-danger">
+                <button type="button" style="float: right; margin-top: 50px" onclick="borrarTodoEstadoCarrito()" class="btn btn-lg btn-danger">
                     <i class="fa fa-trash"> Borrar Carrito</i>
                 </button>
             </div>
@@ -776,6 +776,7 @@
 
                         $('#modalAgregarCarrito').modal('hide');
 
+                        recargarTablaCarritoCompras();
 
                     }
                     else if(response.data.success === 2){
@@ -879,6 +880,75 @@
 
 
 
+        }
+
+
+
+        // ESTO ELIMINA CARRITO DE COMPRAS Y QUITA DIRECCION SELECCIONADA
+        function borrarTodoEstadoCarrito(){
+
+            Swal.fire({
+                title: 'Borrar Carrito',
+                text: "Esto deselecciona la Dirección del cliente",
+                icon: 'info',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    eliminarCarritoTodo();
+                }
+            })
+
+        }
+
+
+        function eliminarCarritoTodo(){
+
+            openLoading();
+
+            axios.post('/admin/callcenter/borrar/todoel/carrito',{
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if(response.data.success === 1){
+
+                        // GUARDADO
+                        alertaCarritoBorrado();
+                    }
+
+                    else {
+                        toastr.error('Error al buscar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error del servidor');
+                    closeLoading();
+                });
+        }
+
+
+        function alertaCarritoBorrado(){
+            Swal.fire({
+                title: 'Carrito Borrado',
+                text: "Se debe Recargar la Página",
+                icon: 'info',
+                showCancelButton: false,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Recargar',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload()
+                }
+            })
         }
 
 

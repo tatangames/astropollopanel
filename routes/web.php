@@ -308,9 +308,12 @@ Route::post('/admin/callcenter/guardar/producto/carrito', [CallCenterController:
 // BORRAR FILA DE PRODUCTO DEL CARRITO DE COMPRAS
 Route::post('/admin/callcenter/borrar/producto/carrito', [CallCenterController::class,'borrarFilaProducto']);
 
+// RECARGA TABLA DE CARRITO DE COMPRAS
 Route::get('/admin/callcenter/recargar/tabla/carrito', [CallCenterController::class,'recargarTablaCarrito']);
 
 
+// BORRAR PRODUCTOS Y CARRITO DE COMPRA Y DESELECCIONA DIRECCION
+Route::post('/admin/callcenter/borrar/todoel/carrito', [CallCenterController::class,'borrarYDeseleccionarTodo']);
 
 
 
