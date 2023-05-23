@@ -18,6 +18,7 @@ class CreateDireccionesCallcenterTable extends Migration
 
             // PARA PODER VISUALIZAR LOS PRODUCTOS SEGUN RESTAURANTE
             $table->bigInteger('id_servicios')->unsigned();
+            $table->bigInteger('id_zonas')->unsigned()->nullable();
 
             $table->string('nombre', 100);
             $table->string('direccion', 400);
@@ -25,6 +26,7 @@ class CreateDireccionesCallcenterTable extends Migration
             $table->string('telefono', 10);
 
             $table->foreign('id_servicios')->references('id')->on('servicios');
+            $table->foreign('id_zonas')->references('id')->on('zonas');
         });
     }
 

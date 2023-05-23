@@ -321,6 +321,10 @@ Route::post('/admin/callcenter/informacion/producto/carrito', [CallCenterControl
 // ACTUALIZAR FILA DE CARRITO DE COMPRAS
 Route::post('/admin/callcenter/actualizar/fila/carrito', [CallCenterController::class,'actualizarFilaCarritoCompras']);
 
+// ENVIAR ORDEN FINAL POR CALL CENTER
+Route::post('/admin/callcenter/enviar/orden', [CallCenterController::class,'enviarOrdenFinal']);
+
+
 
 
 

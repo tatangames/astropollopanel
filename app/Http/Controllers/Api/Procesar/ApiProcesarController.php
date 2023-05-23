@@ -217,11 +217,6 @@ class ApiProcesarController extends Controller
                 $totalCarritoCupon = null;
 
 
-
-
-
-
-
                 /// ************** VALIDAR CUPONES PARA DESPUES VALIDAR MINIMO DE COMPRA POR ZONA **********
 
                 // Esto solo me sirve para evitar verificar minimo de compra con el total del cupon, cuando

@@ -16,12 +16,7 @@
                 <h1>Generar Orden</h1>
             </div>
 
-            <div class="col-md-4">
 
-                <button type="button" style="float: right; margin-top: 50px" onclick="borrarTodoEstadoCarrito()" class="btn btn-lg btn-danger">
-                    <i class="fa fa-trash"> Borrar Carrito</i>
-                </button>
-            </div>
 
         </div>
     </div>
@@ -974,12 +969,6 @@
         }
 
 
-        function enviarOrdenFinal(){
-
-
-
-        }
-
 
 
         // ESTO ELIMINA CARRITO DE COMPRAS Y QUITA DIRECCION SELECCIONADA
@@ -1174,6 +1163,54 @@
                         $('#modalEditarCarrito').modal('hide');
 
                         recargarTablaCarritoCompras();
+
+                    }
+                    else {
+                        toastr.error('Error al guardar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error del servidor');
+                    closeLoading();
+                });
+        }
+
+
+
+
+        function enviarOrdenFinal(){
+
+            Swal.fire({
+                title: 'Enviar Orden',
+                text: "",
+                icon: 'info',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    peticionEnviarOrden();
+                }
+            })
+        }
+
+
+        function peticionEnviarOrden(){
+
+            openLoading();
+
+            axios.post('/admin/callcenter/enviar/orden', {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if(response.data.success === 1){
+
+                        // ORDEN ENVIADA COR
 
                     }
                     else {

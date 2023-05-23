@@ -7,9 +7,12 @@ use App\Models\CarritoCallCenterExtra;
 use App\Models\CarritoCallCenterTemporal;
 use App\Models\Categorias;
 use App\Models\DireccionesCallCenter;
+use App\Models\HorarioServicio;
 use App\Models\Productos;
 use App\Models\Servicios;
 use App\Models\SubCategorias;
+use App\Models\Zonas;
+use App\Models\ZonasServicio;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -170,12 +173,14 @@ class CallCenterController extends Controller
 
             $arrayProductos = DB::table('sub_categorias AS sc')
                 ->join('productos AS p', 'p.id_subcategorias', '=', 'sc.id')
-                ->select('p.id', 'sc.posicion', 'sc.nombre AS nombresubcate', 'p.descripcion', 'p.imagen', 'p.utiliza_imagen', 'p.precio', 'p.nombre')
+                ->select('p.id', 'sc.posicion', 'sc.nombre AS nombresubcate', 'p.activo', 'p.descripcion', 'p.imagen', 'p.utiliza_imagen', 'p.precio', 'p.nombre')
                 ->where('sc.id_categorias', $idPrimeraCategoria)
                 ->where('sc.activo', 1)
                 ->where('p.activo', 1)
                 ->orderBy('sc.posicion', 'ASC')
                 ->get();
+
+            $totalCarrito = 0;
 
             $arrayCarrito = CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->get();
 
@@ -187,14 +192,139 @@ class CallCenterController extends Controller
 
                 $multi = $infoProducto->precio * $info->cantidad;
 
+                $totalCarrito = $totalCarrito + $multi;
+
                 $info->multiplicado = '$' . number_format((float)$multi, 2, '.', ',');
                 $info->precio = '$' . number_format((float)$infoProducto->precio, 2, '.', ',');
+
+                $estadoProductoActivo = 1;
+
+                // PRODUCTO NO ACTIVO
+                if($infoProducto->activo == 0){
+                    $estadoProductoActivo = 0;
+                }
+
+                // CONOCER SI LA SUB CATEGORIA ESTA ACTIVA
+                $infoSubCate = SubCategorias::where('id', $infoProducto->id_subcategorias)->first();
+
+                if($infoSubCate->activo == 0){
+
+                    $estadoProductoActivo = 0;
+                }
+
+                // CONOCER SI LA CATEGORIA DEL PRODUCTO ESTA ACTIVA
+                $infoCategoria = Categorias::where('id', $infoSubCate->id_categorias)->first();
+
+                if($infoCategoria->activo == 0){
+
+                    $estadoProductoActivo = 0;
+                }
+
+
+                if($infoCategoria->usa_horario == 1){
+                    // CONOCER SI LA CATEGORIA TIENE HORARIO Y VER SI ESTA DISPONIBLE
+                    $horaCategoria = Categorias::where('id', $infoSubCate->id_categorias)
+                        ->where('activo', 1)
+                        ->where('usa_horario', 1)
+                        ->where('hora_abre', '<=', $hora)
+                        ->where('hora_cierra', '>=', $hora)
+                        ->get();
+
+                    if(count($horaCategoria) >= 1){
+                        // ABIERTO
+                    }else{
+
+                        $estadoProductoActivo = 0;
+                    }
+                }
+
+                $info->estadoProductoActivo = $estadoProductoActivo;
+            }
+
+            $totalCarrito = '$' . number_format((float)$totalCarrito, 2, '.', ',');
+
+
+            //*************************************************************************
+
+            $estadoRestaurante = 1; // abierto
+            $mensajeRestaurante = "Abierto";
+
+            // VERIFICAR ESTADOS DE ABRE / CIERRE RESTAURANTE
+
+            $numSemana = [
+                    0 => 1, // domingo
+                    1 => 2, // lunes
+                    2 => 3, // martes
+                    3 => 4, // miercoles
+                    4 => 5, // jueves
+                    5 => 6, // viernes
+                    6 => 7, // sabado
+                ];
+
+                $getDiaHora = $getValores->dayOfWeek;
+                $diaSemana = $numSemana[$getDiaHora];
+
+                // REGLA: VALIDAR HORARIO DEL RESTAURANTE
+                $horario = DB::table('horario_servicio AS h')
+                    ->join('servicios AS s', 's.id', '=', 'h.id_servicios')
+                    ->where('h.id_servicios', $infoServicios->id)
+                    ->where('h.dia', $diaSemana)
+                    ->where('h.hora1', '<=', $hora)
+                    ->where('h.hora2', '>=', $hora)
+                    ->get();
+
+                if(count($horario) >= 1){
+
+                }else{
+                    // cerrado
+
+                    $estadoRestaurante = 0;
+                    $mensajeRestaurante = "Horario de Entrega Cerrado";
+                }
+
+                // REGLA: VALIDAR DIA CERRADO DEL RESTAURANTE
+
+                $cerradoHoy = HorarioServicio::where('id_servicios', $infoServicios->id)
+                    ->where('dia', $diaSemana)
+                    ->first();
+
+                if($cerradoHoy->cerrado == 1){
+                    $estadoRestaurante = 0;
+                    $mensajeRestaurante = "Hoy esta Cerrado";
+                }
+
+
+
+                // SI ESTA DIRECCION YA TIENE ASIGNADA UNA ZONA SE DEBE VERIFICAR
+
+            if($infoDireccion->id_zonas != null){
+
+                $infoZona = Zonas::where('id', $infoDireccion->id_zonas)->first();
+
+                // REGLA: EL RESTAURANTE TIENE CERRADO ESTA ZONA
+                if($infoZona->saturacion == 1){
+                    $estadoRestaurante = 0;
+                    $mensajeRestaurante = "La zona de entrega esta cerrada por el momento";
+                }
+
+                $horaZona = Zonas::where('id', $infoZona->id)
+                    ->where('hora_abierto_delivery', '<=', $hora)
+                    ->where('hora_cerrado_delivery', '>=', $hora)
+                    ->get();
+
+                if(count($horaZona) >= 1){
+                    // ABIERTO
+                }else{
+                    $estadoRestaurante = 0;
+                    $mensajeRestaurante = "El Horario a domicilio para  su Dirección esta cerrado";
+                }
             }
 
 
 
             return view('backend.admin.callcenter.menucontrol.vistamenucontrol', compact('arrayCategorias',
-                'infoDireccion', 'nombreRestaurante', 'arrayProductos', 'idPrimeraCategoria', 'arrayCarrito'));
+                'infoDireccion', 'nombreRestaurante', 'arrayProductos', 'idPrimeraCategoria', 'arrayCarrito',
+            'totalCarrito', 'estadoRestaurante', 'mensajeRestaurante'));
         }
         else{
             return view('backend.admin.callcenter.menucontrol.vistanohaycarrito');
@@ -344,6 +474,8 @@ class CallCenterController extends Controller
 
         if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()) {
 
+            $totalCarrito = 0;
+
             $arrayCarrito = CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->get();
 
             foreach ($arrayCarrito as $info) {
@@ -354,12 +486,59 @@ class CallCenterController extends Controller
 
                 $multi = $infoProducto->precio * $info->cantidad;
 
+                $totalCarrito = $totalCarrito + $multi;
+
                 $info->multiplicado = '$' . number_format((float)$multi, 2, '.', ',');
                 $info->precio = '$' . number_format((float)$infoProducto->precio, 2, '.', ',');
+
+
+                $estadoProductoActivo = 1;
+
+                // PRODUCTO NO ACTIVO
+                if($infoProducto->activo == 0){
+                    $estadoProductoActivo = 0;
+                }
+
+                // CONOCER SI LA SUB CATEGORIA ESTA ACTIVA
+                $infoSubCate = SubCategorias::where('id', $infoProducto->id_subcategorias)->first();
+
+                if($infoSubCate->activo == 0){
+
+                    $estadoProductoActivo = 0;
+                }
+
+                // CONOCER SI LA CATEGORIA DEL PRODUCTO ESTA ACTIVA
+                $infoCategoria = Categorias::where('id', $infoSubCate->id_categorias)->first();
+
+                if($infoCategoria->activo == 0){
+
+                    $estadoProductoActivo = 0;
+                }
+
+
+                if($infoCategoria->usa_horario == 1){
+                    // CONOCER SI LA CATEGORIA TIENE HORARIO Y VER SI ESTA DISPONIBLE
+                    $horaCategoria = Categorias::where('id', $infoSubCate->id_categorias)
+                        ->where('activo', 1)
+                        ->where('usa_horario', 1)
+                        ->where('hora_abre', '<=', $hora)
+                        ->where('hora_cierra', '>=', $hora)
+                        ->get();
+
+                    if(count($horaCategoria) >= 1){
+                        // ABIERTO
+                    }else{
+
+                        $estadoProductoActivo = 0;
+                    }
+                }
+
+                $info->estadoProductoActivo = $estadoProductoActivo;
             }
 
+            $totalCarrito = '$' . number_format((float)$totalCarrito, 2, '.', ',');
 
-            return view('backend.admin.callcenter.generarorden.tablagenerarorden', compact('arrayCarrito'));
+            return view('backend.admin.callcenter.generarorden.tablagenerarorden', compact('arrayCarrito', 'totalCarrito'));
 
         }else{
             return "No se encontro Carrito de Compras. Recargar la Página";
@@ -432,6 +611,31 @@ class CallCenterController extends Controller
             return ['success' => 1];
         }else{
             return ['success' => 2];
+        }
+    }
+
+
+
+
+    public function enviarOrdenFinal(Request $request){
+
+        $idSession = Auth::id();
+
+        if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()){
+
+            $conteo = CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->count();
+
+            if($conteo <= 0){
+                $mensaje = "Carrito de compras esta vacío";
+                return ['success' => 1, 'mensaje' => $mensaje];
+            }
+
+
+
+        }
+        else{
+            $mensaje = "No se encontro carrito de compras";
+            return ['success' => 1, 'mensaje' => $mensaje];
         }
     }
 

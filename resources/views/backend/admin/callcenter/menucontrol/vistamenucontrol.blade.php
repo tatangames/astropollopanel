@@ -1,10 +1,15 @@
 <div class="card">
-    <div style="float: left">
+    <div >
         <div class="card-header d-flex p-0" style="float: left !important;">
             <ul class="nav nav-pills ml-auto p-2">
                 <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Menu</a></li>
                 <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Carrito de Compras</a></li>
             </ul>
+        </div>
+        <div style="float: right !important;">
+            <button type="button" style="float: right;" onclick="borrarTodoEstadoCarrito()" class="btn btn-sm btn-danger">
+                <i class="fa fa-trash"> Borrar Carrito</i>
+            </button>
         </div>
     </div>
 
@@ -53,6 +58,14 @@
 
                                         <li class="nav-item">
                                             <p style="font-weight: bold; margin: 16px; color: black !important;">Restaurante: </p> <p style="margin: 16px">{{ $nombreRestaurante }}</p>
+
+                                            @if($estadoRestaurante == 1)
+                                                <p style="font-weight: bold; margin: 16px; color: black !important;">Estado: </p> <p style="margin: 16px"><span class="badge bg-success">{{ $mensajeRestaurante }}</span> </p>
+
+                                            @else
+                                                <p style="font-weight: bold; margin: 20px; color: black !important;">Estado: </p> <p style="margin: 20px; color: red; font-weight: bold">{{ $mensajeRestaurante }}</p>
+                                            @endif
+
 
                                             <p style="font-weight: bold; margin: 16px; color: black !important;">Cliente: </p> <p style="margin: 16px">{{ $infoDireccion->nombre }}</p>
 
@@ -150,7 +163,12 @@
 
                                                                 @foreach($arrayCarrito as $dato)
 
-                                                                    <tr>
+                                                                    @if($dato->estadoProductoActivo == 1)
+                                                                        <tr>
+                                                                    @else
+                                                                        <tr style="background-color: #ff9688">
+                                                                    @endif
+
                                                                         <td>{{ $dato->nombre }}</td>
                                                                         <td>{{ $dato->nota_producto }}</td>
                                                                         <td>{{ $dato->precio }}</td>
@@ -182,13 +200,13 @@
                                         </div>
                                     </section>
 
+                                    <p style="font-weight: bold; margin-left: 20px; font-size: 18px">Total: {{ $totalCarrito }}</p>
 
                                 </div>
 
 
-
                                 <center>  <button type="button" class="btn btn-success btn-lg" onclick="enviarOrdenFinal()">
-                                        <i class="fa fa-location-arrow" title="Enviar Orden"></i>&nbsp; EnviarOrden
+                                        <i class="fa fa-location-arrow" title="Enviar Orden"></i>&nbsp; Enviar Orden
                                     </button>
                                 </center>
 

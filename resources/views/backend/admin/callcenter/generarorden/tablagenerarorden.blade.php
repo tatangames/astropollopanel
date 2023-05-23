@@ -52,3 +52,6 @@
         </div>
     </div>
 </section>
+
+
+<p style="font-weight: bold; margin-left: 20px; font-size: 18px">Total: {{ $totalCarrito }}</p>
