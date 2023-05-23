@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Backend\CallCenter;
 
 use App\Http\Controllers\Controller;
+use App\Models\CallCenterCliente;
 use App\Models\CarritoCallCenterExtra;
 use App\Models\CarritoCallCenterTemporal;
 use App\Models\Categorias;
 use App\Models\DireccionesCallCenter;
 use App\Models\HorarioServicio;
+use App\Models\Ordenes;
+use App\Models\OrdenesDescripcion;
+use App\Models\OrdenesDirecciones;
 use App\Models\Productos;
 use App\Models\Servicios;
 use App\Models\SubCategorias;
@@ -22,6 +26,12 @@ use Illuminate\Support\Facades\Validator;
 
 class CallCenterController extends Controller
 {
+
+
+
+    public function __construct(){
+        $this->middleware('auth');
+    }
 
 
     public function indexGenerarOrden(){
@@ -297,9 +307,13 @@ class CallCenterController extends Controller
 
                 // SI ESTA DIRECCION YA TIENE ASIGNADA UNA ZONA SE DEBE VERIFICAR
 
+            $textoMinimoCompra = "$0.00";
+
             if($infoDireccion->id_zonas != null){
 
                 $infoZona = Zonas::where('id', $infoDireccion->id_zonas)->first();
+                $textoMinimoCompra = '$' . number_format((float)$infoZona->minimo, 2, '.', ',');
+
 
                 // REGLA: EL RESTAURANTE TIENE CERRADO ESTA ZONA
                 if($infoZona->saturacion == 1){
@@ -321,11 +335,9 @@ class CallCenterController extends Controller
             }
 
 
-
-
             return view('backend.admin.callcenter.menucontrol.vistamenucontrol', compact('arrayCategorias',
                 'infoDireccion', 'nombreRestaurante', 'arrayProductos', 'idPrimeraCategoria', 'arrayCarrito',
-            'totalCarrito', 'estadoRestaurante', 'mensajeRestaurante'));
+            'totalCarrito', 'estadoRestaurante', 'mensajeRestaurante', 'textoMinimoCompra'));
         }
         else{
             return view('backend.admin.callcenter.menucontrol.vistanohaycarrito');
@@ -797,11 +809,16 @@ class CallCenterController extends Controller
                         return ['success' => 1, 'mensaje' => $mensaje];
                     }
 
+                    $tengoIdZona = null;
+
 
                     // REGLA: MINIMO DE COMPRA A LA ZONA
                     if ($infoDireccion->id_zonas != null) {
 
                         $infoZonaD = Zonas::where('id', $infoDireccion->id_zonas)->first();
+
+                        $tengoIdZona = $infoZonaD->id;
+
                         if($totalCarrito < $infoZonaD->minimo){
 
                             $minimo = '$' . number_format((float)$infoZonaD->minimo, 2, '.', ',');
@@ -812,7 +829,87 @@ class CallCenterController extends Controller
                     }
 
 
-                    // DB::commit();
+
+                    // VALIDACION COMPLETA
+                    $idSession = Auth::id();
+
+                    $infoMicliente = CallCenterCliente::where('id_administrador', $idSession)->first();
+
+                    // GUARDAR LA ORDEN
+
+                    $fechaHoy = Carbon::now('America/El_Salvador');
+
+                    $orden = new Ordenes();
+                    $orden->id_cliente = $infoMicliente->id_cliente;
+                    $orden->id_servicio = $infoServicio->id;
+                    $orden->id_zona = $tengoIdZona;
+                    $orden->nota_orden = $request->notaorden;
+                    $orden->total_orden = $totalCarrito;
+                    $orden->fecha_orden = $fechaHoy;
+                    $orden->fecha_estimada = null;
+                    $orden->estado_iniciada = 0;
+                    $orden->fecha_iniciada = null;
+                    $orden->estado_preparada = 0;
+                    $orden->fecha_preparada = null;
+                    $orden->estado_camino = 0;
+                    $orden->fecha_camino = null;
+                    $orden->estado_entregada = 0;
+                    $orden->fecha_entregada = null;
+                    $orden->nota_cancelada = null;
+                    $orden->id_cupones = null;
+                    $orden->id_cupones_copia = null;
+                    $orden->total_cupon = null;
+                    $orden->mensaje_cupon = null;
+                    $orden->visible = 1;
+                    $orden->cancelado_por = 0;
+
+                    $orden->save();
+
+
+                    // GUARDAR LA DIRECCION DEL CLIENTE
+
+                    $dirCliente = new OrdenesDirecciones();
+                    $dirCliente->id_ordenes = $orden->id;
+
+                    $dirCliente->nombre = $infoDireccion->nombre;
+                    $dirCliente->direccion = $infoDireccion->direccion;
+                    $dirCliente->telefono = $infoDireccion->telefono;
+                    $dirCliente->referencia = $infoDireccion->punto_referencia;
+                    $dirCliente->latitud = null;
+                    $dirCliente->longitud = null;
+                    $dirCliente->latitudreal = null;
+                    $dirCliente->longitudreal = null;
+                    $dirCliente->appversion = "Generada de Call Center";
+
+                    $dirCliente->save();
+
+
+
+                    // guadar todos los productos de esa orden
+                    foreach($producto as $p){
+
+                        $data = array('id_ordenes' => $orden->id,
+                            'id_producto' => $p->productoID,
+                            'cantidad' => $p->cantidad,
+                            'nota' => $p->nota_producto,
+                            'precio' => $p->precio);
+                        OrdenesDescripcion::insert($data);
+                    }
+
+                    // LA NOTIFICACION SE ENVIARA DESPUES DE CONFIRMAR ENTREGA
+
+
+
+
+
+
+
+
+                    // BORRAR CARRITO DE COMPRAS
+                    CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->delete();
+                    CarritoCallCenterTemporal::where('id_callcenter', $idSession)->delete();
+
+                     DB::commit();
                 $mensaje = "Orden enviada";
                 return ['success' => 2, 'mensaje' => $mensaje];
 

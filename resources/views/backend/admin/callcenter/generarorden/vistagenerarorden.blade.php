@@ -1203,7 +1203,17 @@
 
             openLoading();
 
-            axios.post('/admin/callcenter/enviar/orden', {
+            var nota = document.getElementById('notaparaorden').value;
+
+            if(nota.length > 600){
+                toastr.error('Nota de Orden maximo 600 caracteres');
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append('notaorden', nota);
+
+            axios.post('/admin/callcenter/enviar/orden',formData, {
             })
                 .then((response) => {
                     closeLoading();

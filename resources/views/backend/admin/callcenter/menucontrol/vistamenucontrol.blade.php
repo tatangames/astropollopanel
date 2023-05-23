@@ -59,6 +59,9 @@
                                         <li class="nav-item">
                                             <p style="font-weight: bold; margin: 16px; color: black !important;">Restaurante: </p> <p style="margin: 16px">{{ $nombreRestaurante }}</p>
 
+                                            <p style="font-weight: bold; margin: 20px; color: black !important;">Mínimo de Compra: </p> <p style="margin: 20px; color: black; font-weight: normal">{{ $textoMinimoCompra }}</p>
+
+
                                             @if($estadoRestaurante == 1)
                                                 <p style="font-weight: bold; margin: 16px; color: black !important;">Estado: </p> <p style="margin: 16px"><span class="badge bg-success">{{ $mensajeRestaurante }}</span> </p>
 
@@ -205,7 +208,12 @@
                                 </div>
 
 
-                                <center>  <button type="button" class="btn btn-success btn-lg" onclick="enviarOrdenFinal()">
+                                <div class="form-group" style="margin-left: 25px; margin-right: 25px">
+                                    <input type="text" id="notaparaorden" placeholder="Nota para la Orden (Opcional)" autocomplete="off" maxlength="600" class="form-control">
+                                </div>
+
+
+                                <center style="margin-top: 25px">  <button type="button" class="btn btn-success btn-lg" onclick="enviarOrdenFinal()">
                                         <i class="fa fa-location-arrow" title="Enviar Orden"></i>&nbsp; Enviar Orden
                                     </button>
                                 </center>

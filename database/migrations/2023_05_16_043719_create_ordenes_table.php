@@ -20,8 +20,7 @@ class CreateOrdenesTable extends Migration
             $table->bigInteger('id_cliente')->unsigned();
             $table->bigInteger('id_servicio')->unsigned();
 
-
-            $table->bigInteger('id_zona')->unsigned();
+            $table->bigInteger('id_zona')->unsigned()->nullable();
 
             $table->string('nota_orden', 600)->nullable();
 
@@ -82,14 +81,9 @@ class CreateOrdenesTable extends Migration
             $table->bigInteger('id_cupones_copia')->unsigned()->nullable();
 
 
-            $table->boolean('visible_p');
-            $table->boolean('visible_p2');
-            $table->boolean('visible_p3');
-
             // 0: CANCELADA POR CLIENTE    1: CANCELADA POR RESTAURANTE
             $table->boolean('cancelado_por');
 
-            $table->boolean('visible_m');
 
 
 

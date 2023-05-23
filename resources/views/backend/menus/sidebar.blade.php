@@ -140,48 +140,48 @@
 
 
 
-                    @can('sidebar.usuarios')
-                        <li class="nav-item">
+                @can('sidebar.usuarios')
+                    <li class="nav-item">
 
-                            <a href="#" class="nav-link nav-">
-                                <i class="far fa-edit"></i>
-                                <p>
-                                    Usuarios
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
+                        <a href="#" class="nav-link nav-">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Usuarios
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
 
-                            <ul class="nav nav-treeview">
-
-
-                                <li class="nav-item">
-                                    <a href="{{ route('index.usuarios.restaurantes') }}" target="frameprincipal" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Usuario Restaurante</p>
-                                    </a>
-                                </li>
+                        <ul class="nav nav-treeview">
 
 
-
-                                <li class="nav-item">
-                                    <a href="{{ route('index.motoristas.restaurantes') }}" target="frameprincipal" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Motorista Restaurante</p>
-                                    </a>
-                                </li>
+                            <li class="nav-item">
+                                <a href="{{ route('index.usuarios.restaurantes') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Usuario Restaurante</p>
+                                </a>
+                            </li>
 
 
 
-                                <li class="nav-item">
-                                    <a href="{{ route('index.clientes.listado') }}" target="frameprincipal" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Clientes Registrados</p>
-                                    </a>
-                                </li>
+                            <li class="nav-item">
+                                <a href="{{ route('index.motoristas.restaurantes') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Motorista Restaurante</p>
+                                </a>
+                            </li>
 
-                            </ul>
-                        </li>
-                    @endcan
+
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.clientes.listado') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Clientes Registrados</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                @endcan
 
 
 
@@ -198,7 +198,12 @@
                     </li>
 
 
-
+                    <li class="nav-item">
+                        <a href="{{ route('index.callcenter.listado.direcciones') }}" target="frameprincipal" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Direcciones</p>
+                        </a>
+                    </li>
 
 
 

@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\Configuracion\CuponesController;
 use App\Http\Controllers\Backend\Clientes\ClientesController;
 use App\Http\Controllers\Backend\Ordenes\OrdenesController;
 use App\Http\Controllers\Backend\CallCenter\CallCenterController;
+use App\Http\Controllers\Backend\CallCenter\CallCenterDireccionesController;
 
 
 
@@ -327,6 +328,15 @@ Route::post('/admin/callcenter/enviar/orden', [CallCenterController::class,'envi
 
 
 
+
+
+// VISTA DIRECCIONES DEL CLIENTE PARA PODER EDITARLAS
+Route::get('/admin/callcenter/listado/direcciones', [CallCenterDireccionesController::class,'indexListadoDirecciones'])->name('index.callcenter.listado.direcciones');
+Route::get('/admin/callcenter/listado/direcciones/tabla', [CallCenterDireccionesController::class,'tablaListadoDirecciones']);
+Route::post('/admin/callcenter/info/direccion/editar', [CallCenterDireccionesController::class,'informacionDireccionCallCenter']);
+
+// EDITAR LA DIRECCION
+Route::post('/admin/callcenter/editar/direccion', [CallCenterDireccionesController::class,'editarDireccionCallCenter']);
 
 
 
