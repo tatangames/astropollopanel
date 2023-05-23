@@ -111,6 +111,9 @@ class ApiProcesarController extends Controller
                     ->where('c.id_carrito_temporal', $infoCarritoTempo->id)
                     ->get();
 
+
+                $totalCarrito = 0;
+
                 // verificar cada producto
                 foreach ($producto as $pro) {
 
@@ -154,6 +157,11 @@ class ApiProcesarController extends Controller
                             $estadoProductoActivo = true;
                         }
                     }
+
+
+                    // MULTIPLICAR PARA SACAR TOTAL
+                    $multi = $pro->precio * $pro->cantidad;
+                    $totalCarrito = $totalCarrito + $multi;
                 }
 
 
@@ -202,16 +210,6 @@ class ApiProcesarController extends Controller
                     return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
                 }
 
-                //*** OBTENER EL TOTAL DE DINERO DE LOS PRODUCTOS
-
-
-                $arrayProductos = DB::table('productos AS p')
-                    ->join('carrito_extra AS c', 'c.id_producto', '=', 'p.id')
-                    ->select('p.precio')
-                    ->where('c.id_carrito_temporal', $infoCarritoTempo->id)
-                    ->get();
-
-                $totalCarrito = collect($arrayProductos)->sum('precio');
 
                 // esto sera el resultado final si se aplica cupon
                 $totalCarritoCupon = null;

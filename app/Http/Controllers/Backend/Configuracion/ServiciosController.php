@@ -157,10 +157,6 @@ class ServiciosController extends Controller
                     'utiliza_cupon' => $request->togglecupon,
                 ]);
 
-                DB::commit();
-
-                return ['success' => 1];
-
             } catch (\Throwable $e) {
 
                 DB::rollback();

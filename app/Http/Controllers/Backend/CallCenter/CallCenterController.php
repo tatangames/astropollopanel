@@ -322,6 +322,7 @@ class CallCenterController extends Controller
 
 
 
+
             return view('backend.admin.callcenter.menucontrol.vistamenucontrol', compact('arrayCategorias',
                 'infoDireccion', 'nombreRestaurante', 'arrayProductos', 'idPrimeraCategoria', 'arrayCarrito',
             'totalCarrito', 'estadoRestaurante', 'mensajeRestaurante'));
@@ -478,6 +479,9 @@ class CallCenterController extends Controller
 
             $arrayCarrito = CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->get();
 
+            $getValores = Carbon::now('America/El_Salvador');
+            $hora = $getValores->format('H:i:s');
+
             foreach ($arrayCarrito as $info) {
 
                 $infoProducto = Productos::where('id', $info->id_producto)->first();
@@ -528,7 +532,6 @@ class CallCenterController extends Controller
                     if(count($horaCategoria) >= 1){
                         // ABIERTO
                     }else{
-
                         $estadoProductoActivo = 0;
                     }
                 }
@@ -621,22 +624,210 @@ class CallCenterController extends Controller
 
         $idSession = Auth::id();
 
-        if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()){
 
-            $conteo = CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->count();
 
-            if($conteo <= 0){
-                $mensaje = "Carrito de compras esta vacío";
+            DB::beginTransaction();
+
+            try {
+
+
+
+                if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()) {
+
+                    $conteo = CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->count();
+
+                    if ($conteo <= 0) {
+                        $mensaje = "Carrito de compras esta vacío";
+                        return ['success' => 1, 'mensaje' => $mensaje];
+                    }
+
+                    $infoDireccion = DireccionesCallCenter::where('id', $infoCarrito->id_direccion)->first();
+
+                    $infoServicio = Servicios::where('id', $infoDireccion->id_servicios)->first();
+
+                    $numSemana = [
+                        0 => 1, // domingo
+                        1 => 2, // lunes
+                        2 => 3, // martes
+                        3 => 4, // miercoles
+                        4 => 5, // jueves
+                        5 => 6, // viernes
+                        6 => 7, // sabado
+                    ];
+
+                    $getValores = Carbon::now('America/El_Salvador');
+                    $getDiaHora = $getValores->dayOfWeek;
+                    $diaSemana = $numSemana[$getDiaHora];
+                    $hora = $getValores->format('H:i:s');
+
+
+                    // VERIFICAR ZONA SI TIENE YA ASIGNADA
+                    if ($infoDireccion->id_zonas != null) {
+
+                        $infoZona = Zonas::where('id', $infoDireccion->id_zonas)->first();
+
+                        // REGLA: EL RESTAURANTE TIENE CERRADO ESTA ZONA
+                        if ($infoZona->saturacion == 1) {
+                            $mensaje = "La zona asignada a esta direccion esta cerrada por el momento. No hay entregas a domicilio";
+                            return ['success' => 1, 'mensaje' => $mensaje];
+                        }
+
+                        // REGLA: VERIFICAR HORARIO DE LA ZONA
+                        $horaZona = Zonas::where('id', $infoZona->id)
+                            ->where('hora_abierto_delivery', '<=', $hora)
+                            ->where('hora_cerrado_delivery', '>=', $hora)
+                            ->get();
+
+                        if (count($horaZona) >= 1) {
+                            // ABIERTO
+                        } else {
+
+                            $abre = date("h:i A", strtotime($infoZona->hora_abierto_delivery));
+                            $cierra = date("h:i A", strtotime($infoZona->hora_cerrado_delivery));
+
+                            $mensaje = "El Horario de zona para su Dirección esta cerrado. No hay entregas a domicilio. Horario es: " . $abre . " / " . $cierra;
+                            return ['success' => 1, 'mensaje' => $mensaje];
+                        }
+                    }
+
+
+                    // REGLA DE PRODUCTOS DISPONIBLE
+                    // CATEGORIAS ACTIVAS (CON HORARIO Y SIN HORARAIO)
+                    // SUB CATEGORIAS ACTIVAS
+                    // PRODUCTO ACTIVO
+
+
+                    $producto = DB::table('productos AS p')
+                        ->join('carrito_callcenter_extra AS c', 'c.id_producto', '=', 'p.id')
+                        ->select('p.id AS productoID', 'p.nombre', 'c.cantidad',
+                            'p.imagen', 'p.precio', 'p.activo', 'c.nota_producto', 'c.id AS carritoid', 'p.utiliza_imagen', 'p.id_subcategorias')
+                        ->where('c.id_carrito_call_tempo', $infoCarrito->id)
+                        ->get();
+
+
+                    $totalCarrito = 0;
+
+                    // verificar cada producto
+                    foreach ($producto as $pro) {
+
+                        // PRODUCTO NO ACTIVO
+                        if ($pro->activo == 0) {
+
+                            $mensaje = "El Producto: " . $pro->nombre . " No esta disponible";
+                            return ['success' => 1, 'mensaje' => $mensaje];
+                        }
+
+                        // CONOCER SI LA SUB CATEGORIA ESTA ACTIVA
+                        $infoSubCate = SubCategorias::where('id', $pro->id_subcategorias)->first();
+
+                        if ($infoSubCate->activo == 0) {
+                            $mensaje = "El Producto: " . $pro->nombre . " La sub categoría esta desactivada";
+                            return ['success' => 1, 'mensaje' => $mensaje];
+
+                        }
+
+                        // CONOCER SI LA CATEGORIA DEL PRODUCTO ESTA ACTIVA
+                        $infoCategoria = Categorias::where('id', $infoSubCate->id_categorias)->first();
+
+                        if ($infoCategoria->activo == 0) {
+
+                            $mensaje = "El Producto: " . $pro->nombre . " La categoría esta desactivada";
+                            return ['success' => 1, 'mensaje' => $mensaje];
+                        }
+
+
+                        if ($infoCategoria->usa_horario == 1) {
+                            // CONOCER SI LA CATEGORIA TIENE HORARIO Y VER SI ESTA DISPONIBLE
+                            $horaCategoria = Categorias::where('id', $infoSubCate->id_categorias)
+                                ->where('activo', 1)
+                                ->where('usa_horario', 1)
+                                ->where('hora_abre', '<=', $hora)
+                                ->where('hora_cierra', '>=', $hora)
+                                ->get();
+
+                            if (count($horaCategoria) >= 1) {
+                                // ABIERTO
+                            } else {
+
+                                $abre = date("h:i A", strtotime($infoCategoria->hora_abre));
+                                $cierra = date("h:i A", strtotime($infoCategoria->hora_cierra));
+
+                                $mensaje = "El Producto: " . $pro->nombre . " El Horario de categoría esta terminada. Horario es: " . $abre . " / " . $cierra;
+                                return ['success' => 1, 'mensaje' => $mensaje];
+                            }
+                        }
+
+
+                        $multi = $pro->precio * $pro->cantidad;
+                        $totalCarrito = $totalCarrito + $multi;
+                    }
+
+
+                    // REGLA: VALIDAR HORARIO DEL RESTAURANTE
+
+
+                    $horario = DB::table('horario_servicio AS h')
+                        ->join('servicios AS s', 's.id', '=', 'h.id_servicios')
+                        ->where('h.id_servicios', $infoServicio->id)
+                        ->where('h.dia', $diaSemana)
+                        ->where('h.hora1', '<=', $hora)
+                        ->where('h.hora2', '>=', $hora)
+                        ->get();
+
+                    if (count($horario) >= 1) {
+
+                    } else {
+                        // cerrado
+
+                        $titulo = "Nota";
+                        $mensaje = "El Restaurante esta cerrado";
+                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                    }
+
+
+                    // REGLA: VALIDAD DIA CERRADO DEL RESTAURANTE
+
+                    $cerradoHoy = HorarioServicio::where('id_servicios', $infoServicio->id)
+                        ->where('dia', $diaSemana)
+                        ->first();
+
+
+                    if ($cerradoHoy->cerrado == 1) {
+                        $mensaje = "El Restaurante esta cerrado este Día";
+                        return ['success' => 1, 'mensaje' => $mensaje];
+                    }
+
+
+                    // REGLA: MINIMO DE COMPRA A LA ZONA
+                    if ($infoDireccion->id_zonas != null) {
+
+                        $infoZonaD = Zonas::where('id', $infoDireccion->id_zonas)->first();
+                        if($totalCarrito < $infoZonaD->minimo){
+
+                            $minimo = '$' . number_format((float)$infoZonaD->minimo, 2, '.', ',');
+
+                            $mensaje = "El mínimo de compra para su dirección actual es . " . $minimo;
+                            return ['success' => 1, 'mensaje' => $mensaje];
+                        }
+                    }
+
+
+                    // DB::commit();
+                $mensaje = "Orden enviada";
+                return ['success' => 2, 'mensaje' => $mensaje];
+
+            }else{
+                $mensaje = "No se encontro carrito de compras";
                 return ['success' => 1, 'mensaje' => $mensaje];
             }
 
 
 
-        }
-        else{
-            $mensaje = "No se encontro carrito de compras";
-            return ['success' => 1, 'mensaje' => $mensaje];
-        }
+            } catch (\Throwable $e) {
+                Log::info('eer ' . $e);
+                DB::rollback();
+                return ['success' => 99];
+            }
     }
 
 

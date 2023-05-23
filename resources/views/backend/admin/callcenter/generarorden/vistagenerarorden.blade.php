@@ -1209,12 +1209,14 @@
                     closeLoading();
 
                     if(response.data.success === 1){
-
-                        // ORDEN ENVIADA COR
-
+                        // ALERTAS
+                        alertasOrdenError(response.data.mensaje);
+                    }
+                    else if(response.data.success === 2){
+                        alertaOrdenEnviada(response.data.mensaje);
                     }
                     else {
-                        toastr.error('Error al guardar');
+                        toastr.error('Error del servidor');
                     }
 
                 })
@@ -1225,7 +1227,44 @@
         }
 
 
+        function alertasOrdenError(mensaje){
 
+            Swal.fire({
+                title: 'Error de Orden',
+                text: mensaje,
+                icon: 'info',
+                showCancelButton: false,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Recargar',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload()
+                }
+            })
+
+        }
+
+        function alertaOrdenEnviada(mensaje){
+
+            Swal.fire({
+                title: 'Orden Enviada',
+                text: mensaje,
+                icon: 'success',
+                showCancelButton: false,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Recargar',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload()
+                }
+            })
+        }
 
 
     </script>
