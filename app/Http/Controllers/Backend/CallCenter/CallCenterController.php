@@ -371,7 +371,6 @@ class CallCenterController extends Controller
 
     public function borrarYDeseleccionarTodo(){
 
-
         $idSession = Auth::id();
 
         if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()){
@@ -380,6 +379,60 @@ class CallCenterController extends Controller
         }
 
         return ['success' => 1];
+    }
+
+
+
+    public function informacionProductoFilaCarrito(Request $request){
+
+        $regla = array(
+            'idfila' => 'required', // id fila
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+        if($info = CarritoCallCenterExtra::where('id', $request->idfila)->first()){
+
+            $infoProducto = Productos::where('id', $info->id_producto)->first();
+
+            $multi = $infoProducto->precio * $info->cantidad;
+
+            $multiplicado = '$' . number_format((float)$multi, 2, '.', ',');
+
+            return ['success' => 1, 'info' => $info,
+                'producto' => $infoProducto,
+                'multiplicado' => $multiplicado];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+
+
+    public function actualizarFilaCarritoCompras(Request $request){
+
+        $regla = array(
+            'idfila' => 'required',
+            'cantidad' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+        if($infoCarrito = CarritoCallCenterExtra::where('id', $request->idfila)->first()){
+
+            CarritoCallCenterExtra::where('id', $infoCarrito->id)->update([
+                'nota_producto' => $request->nota,
+                'cantidad' => $request->cantidad,
+            ]);
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
     }
 
 

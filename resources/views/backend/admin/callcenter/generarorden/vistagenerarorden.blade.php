@@ -250,8 +250,6 @@
 
                                 <hr>
 
-
-
                                 <div class="form-group" id="contenedorUtilizaNota">
                                     <label style="color: red">Nota es Requerida</label>
                                 </div>
@@ -269,6 +267,79 @@
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary" onclick="preguntaGuardarCarrito()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="modalEditarCarrito">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Editar Cantidad</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formulario-carrito-editar">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+
+                                <div class="form-group" id="contenedorTieneDescripcion-editar">
+                                    <label>Descripción</label>
+                                    <textarea type="text" id="textoDescripcion-editar" disabled cols="40" rows="5" autocomplete="off" class="form-control"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Precio</label>
+                                    <input type="hidden" id="idProParaCarrito-editar">
+                                    <input type="text" id="textoPrecio-editar" disabled class="form-control">
+                                </div>
+
+                                <div class="row mb 2">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Cantidad</label>
+                                            <input type="number" id="textoCantidad-editar" min="1" max="100" class="form-control" onchange="multiplicarFilaModalEditar()">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4" style="margin-left: 25px">
+                                        <div class="form-group">
+                                            <label style="font-size: 18px; color: black">Total</label>
+                                            <p style="color: black; font-size: 20px; font-weight: bold" id="textoTotal-editar"></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <hr>
+
+                                <div class="form-group" id="contenedorUtilizaNota-editar">
+                                    <label style="color: red">Nota es Requerida</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Nota de Producto</label>
+                                    <input type="text" autocomplete="off" maxlength="400" class="form-control" id="textoNotaProducto-editar">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="preguntaGuardarCarritoEditar()">Actualizar</button>
             </div>
         </div>
     </div>
@@ -706,6 +777,33 @@
         }
 
 
+        function multiplicarFilaModalEditar(){
+            var reglaNumeroEntero = /^[0-9]\d*$/;
+
+            var textoPrecioFijo = document.getElementById('textoPrecio-editar').value;
+            var textoCantidad = document.getElementById('textoCantidad-editar').value;
+
+            if(!textoCantidad.match(reglaNumeroEntero)) {
+                toastr.error('Cantidad debe ser Entero');
+                return;
+            }
+
+            if(textoCantidad <= 0){
+                toastr.error('Cantidad no debe ser negativo');
+                return;
+            }
+
+            if(textoCantidad > 100){
+                toastr.error('Cantidad no debe ser mayor a 100');
+                return;
+            }
+
+            var multi = textoPrecioFijo * textoCantidad;
+            var formateado = '$' + Number(multi).toFixed(2);
+            document.getElementById("textoTotal-editar").innerHTML = formateado;
+        }
+
+
         function preguntaGuardarCarrito(){
 
             Swal.fire({
@@ -950,6 +1048,147 @@
                 }
             })
         }
+
+
+
+
+        function editarProductoFilaCarrito(id){
+
+
+            openLoading();
+            document.getElementById("formulario-carrito-editar").reset();
+            let formData = new FormData();
+            formData.append('idfila', id);
+
+            axios.post('/admin/callcenter/informacion/producto/carrito', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if(response.data.success === 1){
+
+                        // MODAL EDITAR PRODUCTO FILA DEL CARRITO
+
+                        $('#idProParaCarrito-editar').val(id);
+                        $('#textoPrecio-editar').val(response.data.producto.precio);
+                        $('#textoDescripcion-editar').val(response.data.producto.descripcion);
+
+                        if(response.data.producto.descripcion){
+                            document.getElementById("contenedorTieneDescripcion-editar").style.display = "block";
+                        }else{
+                            document.getElementById("contenedorTieneDescripcion-editar").style.display = "none";
+                        }
+
+                        if(response.data.producto.utiliza_nota === 1){
+                            document.getElementById("contenedorUtilizaNota-editar").style.display = "block";
+                        }else{
+                            document.getElementById("contenedorUtilizaNota-editar").style.display = "none";
+                        }
+
+                        $('#textoCantidad-editar').val(response.data.info.cantidad);
+
+                        document.getElementById("textoTotal-editar").innerHTML = response.data.multiplicado;
+
+                        $('#modalEditarCarrito').modal({backdrop: 'static', keyboard: false})
+                    }
+
+                    else {
+                        toastr.error('Error al buscar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error del servidor');
+                    closeLoading();
+                });
+        }
+
+
+
+        function preguntaGuardarCarritoEditar(){
+
+            Swal.fire({
+                title: 'Actualizar Carrito',
+                text: "",
+                icon: 'info',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    actualizarDatosCarritoFila();
+                }
+            })
+        }
+
+
+        function actualizarDatosCarritoFila(){
+
+            var idfila = document.getElementById('idProParaCarrito-editar').value;
+            var textoCantidad = document.getElementById('textoCantidad-editar').value;
+            var textoNotaProducto = document.getElementById('textoNotaProducto-editar').value;
+
+            var reglaNumeroEntero = /^[0-9]\d*$/;
+
+            if(!textoCantidad.match(reglaNumeroEntero)) {
+                toastr.error('Cantidad debe ser Entero');
+                return;
+            }
+
+            if(textoCantidad <= 0){
+                toastr.error('Cantidad no debe ser negativo');
+                return;
+            }
+
+            if(textoCantidad > 100){
+                toastr.error('Cantidad no debe ser mayor a 100');
+                return;
+            }
+
+            if(textoNotaProducto.length > 400){
+                toastr.error('Para Nota no debe superar 400 caracteres');
+                return;
+            }
+
+
+            openLoading();
+
+            let formData = new FormData();
+            formData.append('idfila', idfila);
+            formData.append('cantidad', textoCantidad);
+            formData.append('nota', textoNotaProducto);
+
+            axios.post('/admin/callcenter/actualizar/fila/carrito', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if(response.data.success === 1){
+
+                        // GUARDADO
+                        toastr.success('Actualizado');
+
+                        $('#modalEditarCarrito').modal('hide');
+
+                        recargarTablaCarritoCompras();
+
+                    }
+                    else {
+                        toastr.error('Error al guardar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error del servidor');
+                    closeLoading();
+                });
+        }
+
+
+
 
 
     </script>

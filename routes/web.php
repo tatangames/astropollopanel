@@ -315,6 +315,11 @@ Route::get('/admin/callcenter/recargar/tabla/carrito', [CallCenterController::cl
 // BORRAR PRODUCTOS Y CARRITO DE COMPRA Y DESELECCIONA DIRECCION
 Route::post('/admin/callcenter/borrar/todoel/carrito', [CallCenterController::class,'borrarYDeseleccionarTodo']);
 
+// INFORMACION DE UNA FILA DEL CARRITO DE COMPRAS
+Route::post('/admin/callcenter/informacion/producto/carrito', [CallCenterController::class,'informacionProductoFilaCarrito']);
+
+// ACTUALIZAR FILA DE CARRITO DE COMPRAS
+Route::post('/admin/callcenter/actualizar/fila/carrito', [CallCenterController::class,'actualizarFilaCarritoCompras']);
 
 
 
