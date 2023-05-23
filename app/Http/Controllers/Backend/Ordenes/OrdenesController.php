@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Backend\Ordenes;
 use App\Http\Controllers\Controller;
 use App\Models\Clientes;
 use App\Models\DireccionCliente;
+use App\Models\MotoristasServicios;
 use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
+use App\Models\OrdenesMotoristas;
 use App\Models\Productos;
 use App\Models\Servicios;
 use App\Models\Zonas;
@@ -44,7 +46,7 @@ class OrdenesController extends Controller
             $info->direccion = $clienteDireccion->direccion;
 
             $info->fecha_orden = date("h:i A d-m-Y", strtotime($info->fecha_orden));
-            $info->total_orden = number_format((float)$info->total_orden, 2, '.', ',');
+            $info->total_orden = '$' . number_format((float)$info->total_orden, 2, '.', ',');
 
             $infoServicio = Servicios::where('id', $info->id_servicio)->first();
             $info->restaurante = $infoServicio->nombre;
@@ -318,6 +320,98 @@ class OrdenesController extends Controller
 
         return view('backend.admin.ordenes.productos.tablaproductosordenes', compact('lista'));
     }
+
+
+
+    public function indexListaCalificacionesOrden(){
+
+
+        return view('backend.admin.ordenes.calificaciones.vistacalificaciones');
+    }
+
+
+
+    public function tablaListaCalificacionesOrden(){
+
+
+        $listado = OrdenesMotoristas::where('experiencia', '!=', null)
+            ->orderBy('id_ordenes', 'DESC')
+            ->get();
+
+        foreach ($listado as $info) {
+
+            $infoMotorista = MotoristasServicios::where('id', $info->id_motorista)->first();
+            $info->nombremoto = $infoMotorista->nombre;
+
+            $infoOrden = Ordenes::where('id', $info->id_ordenes)->first();
+            $infoServicio = Servicios::where('id', $infoOrden->id_servicio)->first();
+
+            $info->nombreservicio = $infoServicio->nombre;
+
+            $info->fecha = date("h:i A d-m-Y", strtotime($info->fecha));
+        }
+
+        return view('backend.admin.ordenes.calificaciones.tablacalificaciones', compact('listado'));
+    }
+
+
+
+    public function indexTodasLasOrdenes(){
+
+        return view('backend.admin.ordenes.todas.vistatodaslasordenes');
+    }
+
+
+
+    public function tablaTodasLasOrdenes(){
+
+        $ordenes = Ordenes::orderBy('id', 'DESC')->get();
+
+        foreach ($ordenes as $info){
+
+            $clienteDireccion = OrdenesDirecciones::where('id_ordenes', $info->id)->first();
+            $info->cliente = $clienteDireccion->nombre;
+            $info->direccion = $clienteDireccion->direccion;
+
+            $info->fecha_orden = date("h:i A d-m-Y", strtotime($info->fecha_orden));
+            $info->total_orden = '$' . number_format((float)$info->total_orden, 2, '.', ',');
+
+            $infoServicio = Servicios::where('id', $info->id_servicio)->first();
+            $info->restaurante = $infoServicio->nombre;
+
+            if($info->id_cupones != null){
+                // SI UTILIZA CUPON
+                $info->sicupon = 1;
+            }else{
+                $info->sicupon = 0;
+            }
+
+
+
+            // FECHA DE ORDEN INICIADA
+            $info->fecha_iniciada = date("h:i A d-m-Y", strtotime($info->fecha_iniciada));
+
+
+            // FECHA DE ENTREGA ESTIMADA + EL TIEMPO EXTRA DE LA ZONA
+
+
+            if($info->estado_iniciada == 1){
+
+                $fechaInicioPreparar = Carbon::parse($info->fecha_iniciada);
+
+                $horaEstimada = $fechaInicioPreparar->addMinute($info->tiempo_estimada)->format('h:i A d-m-Y');
+                $info->horaEstimadaEntrega = $horaEstimada;
+            }else{
+                $info->horaEstimadaEntrega = "Pendiente";
+            }
+
+
+        }
+
+        return view('backend.admin.ordenes.todas.tablatodaslasordenes', compact('ordenes'));
+    }
+
+
 
 
 }

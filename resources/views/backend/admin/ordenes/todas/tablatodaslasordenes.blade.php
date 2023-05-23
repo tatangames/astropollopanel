@@ -36,7 +36,6 @@
                                         @endif
                                     </td>
 
-
                                     <td>
 
                                         <button type="button" class="btn btn-success btn-xs" onclick="verCliente({{ $dato->id }})">

@@ -133,6 +133,24 @@
                                 </a>
                             </li>
 
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.ordenes.calificadas') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Ordenes Calificadas</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.todas.las.ordenes') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Todas las Ordenes</p>
+                                </a>
+                            </li>
+
+
+
+
                         </ul>
                     </li>
                 @endcan
@@ -190,35 +208,45 @@
 
 
 
-                    <li class="nav-item">
-                        <a href="{{ route('index.callcenter.generarorden') }}" target="frameprincipal" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Crear Orden</p>
-                        </a>
-                    </li>
+                    @can('sidebar.callcenter')
 
 
-                    <li class="nav-item">
-                        <a href="{{ route('index.callcenter.listado.direcciones') }}" target="frameprincipal" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Direcciones</p>
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('index.callcenter.listado.ordenes.hoy') }}" target="frameprincipal" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Ordenes Hoy</p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('index.callcenter.generarorden') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Crear Orden</p>
+                            </a>
+                        </li>
 
 
-                    <li class="nav-item">
-                        <a href="{{ route('index.callcenter.listado.ordenes.todas') }}" target="frameprincipal" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Ordenes Todas</p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('index.callcenter.listado.direcciones') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Direcciones</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.callcenter.listado.ordenes.hoy') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ordenes Hoy</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.callcenter.listado.ordenes.todas') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ordenes Todas</p>
+                            </a>
+                        </li>
+
+
+
+
+                    @endcan
+
 
 
 

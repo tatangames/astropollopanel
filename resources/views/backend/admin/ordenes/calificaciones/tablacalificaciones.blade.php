@@ -7,53 +7,25 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 8%"># de Orden</th>
-                                <th style="width: 10%">Fecha de Orden</th>
-                                <th style="width: 10%">Total</th>
+                                <th style="width: 7%"># Orden</th>
                                 <th style="width: 10%">Restaurante</th>
-                                <th style="width: 10%">Cliente</th>
-                                <th style="width: 10%">Dirección</th>
-                                <th style="width: 10%">Cupón</th>
-                                <th style="width: 8%">Opciones</th>
+                                <th style="width: 10%">Motorista</th>
+                                <th style="width: 6%">Fecha Calificada</th>
+                                <th style="width: 6%">Estrellas (5 Máximo)</th>
+                                <th style="width: 8%">Mensaje</th>
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($ordenes as $dato)
+                            @foreach($listado as $dato)
 
                                 <tr>
-                                    <td>{{ $dato->id }}</td>
-                                    <td>{{ $dato->fecha_orden }}</td>
-                                    <td>{{ $dato->total_orden }}</td>
-                                    <td>{{ $dato->restaurante }}</td>
-                                    <td>{{ $dato->cliente }}</td>
-                                    <td>{{ $dato->direccion }}</td>
-                                    <td>
-                                        @if($dato->sicupon == 0)
-                                            <span>No</span>
-                                        @else
-                                            <span class="badge bg-success">Si</span>
-                                        @endif
-                                    </td>
-
-
-                                    <td>
-
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verCliente({{ $dato->id }})">
-                                            <i class="fa fa-location-arrow" title="Cliente"></i>&nbsp; Cliente
-                                        </button>
-
-                                        <br><br>
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verProceso({{ $dato->id }})">
-                                            <i class="fa fa-location-arrow" title="Proceso"></i>&nbsp; Proceso
-                                        </button>
-
-                                        <br><br>
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verProductos({{ $dato->id }})">
-                                            <i class="fa fa-location-arrow" title="Productos"></i>&nbsp; Productos
-                                        </button>
-
-                                    </td>
+                                    <td>{{ $dato->id_ordenes }}</td>
+                                    <td>{{ $dato->nombreservicio }}</td>
+                                    <td>{{ $dato->nombremoto }}</td>
+                                    <td>{{ $dato->fecha }}</td>
+                                    <td>{{ $dato->experiencia }}</td>
+                                    <td>{{ $dato->mensaje }}</td>
                                 </tr>
 
                             @endforeach

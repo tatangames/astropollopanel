@@ -37,6 +37,7 @@ class RolesSeeder extends Seeder
         Permission::create(['name' => 'sidebar.usuarios', 'description' => 'Vista para ver usuarios de todos'])->syncRoles($roleEditor);
 
 
+        Permission::create(['name' => 'sidebar.callcenter', 'description' => 'Vista para todo callcenter'])->syncRoles($roleColaborador);
 
 
 

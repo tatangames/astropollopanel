@@ -2,7 +2,7 @@
 
 
 @section('content-admin-css')
-    <link href="{{ asset('css/backend/adminlte.min.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('css/adminlte.min.css') }}" type="text/css" rel="stylesheet" />
 
 @stop
 

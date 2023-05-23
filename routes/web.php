@@ -251,11 +251,15 @@ Route::get('/admin/ordenes/productos/listado/{id}', [OrdenesController::class,'i
 Route::get('/admin/ordenes/productos/listado/tabla/{id}', [OrdenesController::class,'tablaProductosOrdenes']);
 
 
-// --- TODAS LAS ORDENES JUNTAS ---
+// --- TODAS LAS ORDENES ---
+Route::get('/admin/ordenes/todas/listado', [OrdenesController::class,'indexTodasLasOrdenes'])->name('index.todas.las.ordenes');
+Route::get('/admin/ordenes/todas/listado/tabla', [OrdenesController::class,'tablaTodasLasOrdenes']);
 
 
 
-
+// --- CALIFICACIONES DE ORDENES ---
+Route::get('/admin/ordenes/califificaciones/listado', [OrdenesController::class,'indexListaCalificacionesOrden'])->name('index.ordenes.calificadas');
+Route::get('/admin/ordenes/califificaciones/tabla', [OrdenesController::class,'tablaListaCalificacionesOrden']);
 
 
 
@@ -281,7 +285,28 @@ Route::post('/admin/motoristas/usuario/editar', [ServiciosController::class,'act
 
 
 
-// CALL CENTER
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ******************************     CALL CENTER **********************************
+
+
+
 
 Route::get('/admin/callcenter/generar/orden', [CallCenterController::class,'indexGenerarOrden'])->name('index.callcenter.generarorden');
 
