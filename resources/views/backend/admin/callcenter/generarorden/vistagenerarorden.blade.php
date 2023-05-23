@@ -8,6 +8,7 @@
 
 @stop
 
+
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -59,7 +60,7 @@
     <div class="container-fluid">
         <div class="card card-info">
             <div class="card-header">
-                <h3 class="card-title">Control</h3>
+                <h3 class="card-title"></h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -140,6 +141,141 @@
 
 
 
+<!-- LISTADO DE DIRECCIONES -->
+
+<div class="modal fade" id="modalListaDirecciones" >
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Lista de Direcciones</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="formulario-repuesto">
+                    <div class="card-body">
+
+                        <div class="form-group">
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success" onclick="abrirModalNuevaDireccion()">Nueva Dirección</button>
+                            </div>
+
+
+                            <table class="table" id="matriz" data-toggle="table" style="margin-right: 15px; margin-left: 15px;">
+                                <thead>
+                                <tr>
+                                    <th style="width: 10%">Cliente</th>
+                                    <th style="width: 10%">Dirección</th>
+                                    <th style="width: 10%">Referencia</th>
+                                    <th style="width: 8%">Restaurante</th>
+                                    <th style="width: 5%">Opciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+
+
+
+
+
+                                </tbody>
+                            </table>
+
+
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="agregarFila()">Agregar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalAgregarCarrito">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar a Carrito</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formulario-carrito">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+
+                                <div class="form-group" id="contenedorTieneDescripcion">
+                                    <label>Descripción</label>
+                                    <textarea type="text" id="textoDescripcion" disabled cols="40" rows="5" autocomplete="off" class="form-control"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Precio</label>
+                                    <input type="hidden" id="idProParaCarrito">
+                                    <input type="text" id="textoPrecio" disabled class="form-control">
+                                </div>
+
+                                <div class="row mb 2">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Cantidad</label>
+                                            <input type="number" id="textoCantidad" min="1" max="100" class="form-control" onchange="multiplicarFilaModal()">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4" style="margin-left: 25px">
+                                        <div class="form-group">
+                                            <label style="font-size: 18px; color: black">Total</label>
+                                            <p style="color: black; font-size: 20px; font-weight: bold" id="textoTotal"></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <hr>
+
+
+
+                                <div class="form-group" id="contenedorUtilizaNota">
+                                    <label style="color: red">Nota es Requerida</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Nota de Producto</label>
+                                    <input type="text" autocomplete="off" maxlength="400" class="form-control" id="textoNotaProducto">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="preguntaGuardarCarrito()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 @extends('backend.menus.footerjs')
 @section('archivos-js')
@@ -161,24 +297,61 @@
                 if ( e.which == 13 ) e.preventDefault();
             });
 
-            var ruta = "{{ URL::to('admin/callcenter/todo/restaurante/asignado') }}";
-            $('#tablaMenuRestaurante').load(ruta);
 
+            cargarTablaMenu();
         });
 
     </script>
 
     <script>
 
+        function abrirModalNuevaDireccion(){
+            $('#modalListaDirecciones').modal('hide');
+            var numero = document.getElementById('numero-cliente').value;
+
+            document.getElementById("formulario-direccionnueva").reset();
+            $('#telefono-nuevo').val(numero);
+
+            $('#modalDireccionNueva').modal({backdrop: 'static', keyboard: false})
+        }
+
+        function cargarTablaMenu(){
+            var ruta = "{{ URL::to('admin/callcenter/todo/restaurante/asignado') }}";
+            $('#tablaMenuRestaurante').load(ruta);
+        }
+
+
         // BUSCAR SI CLIENTE TIENE REGISTRO CON SU NUMERO
         function buscarNumero(){
 
             var numero = document.getElementById('numero-cliente').value;
 
+            var reglaNumeroEntero = /^[0-9]\d*$/;
+
             if(numero === ''){
                 toastr.error('Número Telefónico es requerido');
                 return;
             }
+
+            if(numero.length > 10){
+                toastr.error('Número máximo 10 caracteres');
+                return;
+            }
+
+
+            if(!numero.match(reglaNumeroEntero)) {
+                toastr.error('Se debe ingresar numeros enteros');
+                return;
+            }
+
+            if(numero <= 0){
+                toastr.error('Número no debe ser negativo o cero');
+                return;
+            }
+
+
+            limpiarTablaDirecciones();
+
             openLoading();
 
             let formData = new FormData();
@@ -194,7 +367,7 @@
 
                         // SI HAY DIRECCIONES, CARGAR LA TABLA
 
-                        toastr.error('si haya array direcciones');
+                        abrirModalListadoDirecciones(response);
 
                     }
 
@@ -208,6 +381,104 @@
 
                     }  else {
                         toastr.error('Error al buscar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error del servidor');
+                    closeLoading();
+                });
+        }
+
+
+        function abrirModalListadoDirecciones(response){
+
+
+            $.each(response.data.direcciones, function( key, val ){
+
+                var markup = "<tr>" +
+
+
+                    "<td>" +
+                    "<textarea  disabled cols='40' rows='3'  class='form-control' type='text'>" + val.nombre + "</textarea>" +
+                    "</td>" +
+
+                    "<td>" +
+                    "<textarea  disabled cols='40' rows='5'  class='form-control' type='text'>" + val.direccion + "</textarea>" +
+                    "</td>" +
+
+
+                    "<td>" +
+                    "<textarea  disabled cols='40' rows='5' class='form-control' type='text'>" + val.punto_referencia + "</textarea>" +
+                    "</td>" +
+
+                    "<td>" +
+                    "<textarea  disabled cols='40' rows='3' class='form-control' type='text'>" + val.restaurante + "</textarea>" +
+                    "</td>" +
+
+                    "<td>" +
+                    "<button type='button' class='btn btn-block btn-success' onclick='preguntarUsarEstaDire("+ val.id + ")'>Seleccionar</button>" +
+                    "</td>" +
+
+                    "</tr>";
+
+                $("#matriz tbody").append(markup);
+
+
+            });
+
+
+            $('#modalListaDirecciones').modal({backdrop: 'static', keyboard: false})
+        }
+
+
+        function limpiarTablaDirecciones(){
+
+            $("#matriz tbody tr").remove();
+        }
+
+
+        function preguntarUsarEstaDire(id){
+
+            Swal.fire({
+                title: 'Seleccionar Dirección?',
+                text: "",
+                icon: 'info',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    crearCarritoConDireccion(id);
+                }
+            })
+        }
+
+        // CREAR CARRITO PARA VER PRODUCTOS DE LA DIRECCION SELECCIONADA
+        function crearCarritoConDireccion(id){
+
+            openLoading();
+
+            let formData = new FormData();
+            formData.append('id', id);
+
+            axios.post('/admin/callcenter/seleccionar/direccion', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if(response.data.success === 1){
+
+                        // DIRECCION SELECCIONADA, CARGAR TABLA
+
+                        $('#modalListaDirecciones').modal('hide');
+                        cargarTablaMenu();
+                    }
+                    else {
+                        toastr.error('Error al guardar');
                     }
 
                 })
@@ -311,10 +582,10 @@
                     if(response.data.success === 1){
 
                         // DIRECCION GUARDADA, HOY MOSTRAR LA TABLA DE PRODUCTOS
-                        toastr.success('Dirección Guardada');
                         $('#modalDireccionNueva').modal('hide');
 
-                        cargarTablaProductos();
+                        // recargar pagina
+                        mensajeDirecGuardada();
                     }
 
                     else {
@@ -329,31 +600,291 @@
         }
 
 
+        function mensajeDirecGuardada(){
+            Swal.fire({
+                title: 'Dirección Guardada',
+                text: "Recargar para visualizar los productos del Restaurante",
+                icon: 'success',
+                showCancelButton: false,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Recargar',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload()
+                }
+            })
+        }
 
-        function cargarTablaProductos(){
 
+        function cargarTablaProductos(id){
 
+            var ruta = "{{ URL::to('admin/callcenter/categoria/productos') }}/" + id;
+            $('#divTablaCategoriaProducto').load(ruta);
 
         }
 
 
 
-        function verModalAgregar(id){
+        function verModalAgregarCarrito(id){
+            // viene id producto
 
+            document.getElementById("formulario-carrito").reset();
+            openLoading();
+
+            let formData = new FormData();
+            formData.append('idproducto', id);
+
+            axios.post('/admin/callcenter/informacion/producto', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if(response.data.success === 1){
+
+                        $('#idProParaCarrito').val(id);
+                        $('#textoPrecio').val(response.data.producto.precio);
+                        $('#textoDescripcion').val(response.data.producto.descripcion);
+
+                        if(response.data.producto.descripcion){
+                            document.getElementById("contenedorTieneDescripcion").style.display = "block";
+                        }else{
+                            document.getElementById("contenedorTieneDescripcion").style.display = "none";
+                        }
+
+                        if(response.data.producto.utiliza_nota === 1){
+                            document.getElementById("contenedorUtilizaNota").style.display = "block";
+                        }else{
+                            document.getElementById("contenedorUtilizaNota").style.display = "none";
+                        }
+
+                        $('#textoCantidad').val("1");
+
+                        document.getElementById("textoTotal").innerHTML = "$" + response.data.producto.precio;
+
+                        $('#modalAgregarCarrito').modal({backdrop: 'static', keyboard: false})
+                    }
+
+                    else {
+                        toastr.error('Error al buscar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error del servidor');
+                    closeLoading();
+                });
+        }
+
+
+        function multiplicarFilaModal(){
+            var reglaNumeroEntero = /^[0-9]\d*$/;
+
+            var textoPrecioFijo = document.getElementById('textoPrecio').value;
+            var textoCantidad = document.getElementById('textoCantidad').value;
+
+            if(!textoCantidad.match(reglaNumeroEntero)) {
+                toastr.error('Cantidad debe ser Entero');
+                return;
+            }
+
+            if(textoCantidad <= 0){
+                toastr.error('Cantidad no debe ser negativo');
+                return;
+            }
+
+            if(textoCantidad > 100){
+                toastr.error('Cantidad no debe ser mayor a 100');
+                return;
+            }
+
+            var multi = textoPrecioFijo * textoCantidad;
+            var formateado = '$' + Number(multi).toFixed(2);
+            document.getElementById("textoTotal").innerHTML = formateado;
+        }
+
+
+        function preguntaGuardarCarrito(){
+
+            Swal.fire({
+                title: 'Guardar Producto?',
+                text: "",
+                icon: 'info',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    guardarProductoEnCarrito();
+                }
+            })
+        }
+
+
+        function guardarProductoEnCarrito(){
+
+            var idproducto = document.getElementById('idProParaCarrito').value;
+            var textoCantidad = document.getElementById('textoCantidad').value;
+            var textoNotaProducto = document.getElementById('textoNotaProducto').value;
+
+            var reglaNumeroEntero = /^[0-9]\d*$/;
+
+            if(!textoCantidad.match(reglaNumeroEntero)) {
+                toastr.error('Cantidad debe ser Entero');
+                return;
+            }
+
+            if(textoCantidad <= 0){
+                toastr.error('Cantidad no debe ser negativo');
+                return;
+            }
+
+            if(textoCantidad > 100){
+                toastr.error('Cantidad no debe ser mayor a 100');
+                return;
+            }
+
+            if(textoNotaProducto.length > 400){
+                toastr.error('Para Nota no debe superar 400 caracteres');
+                return;
+            }
+
+
+            openLoading();
+
+            let formData = new FormData();
+            formData.append('idproducto', idproducto);
+            formData.append('cantidad', textoCantidad);
+            formData.append('nota', textoNotaProducto);
+
+            axios.post('/admin/callcenter/guardar/producto/carrito', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    console.log(response);
+
+                    if(response.data.success === 1){
+
+                        // GUARDADO
+                        toastr.success('Producto Agregado');
+
+                        $('#modalAgregarCarrito').modal('hide');
+
+
+                    }
+                    else if(response.data.success === 2){
+                        // NO HAY CARRITO CREADO
+                        alertaCarritoNoEncontrado();
+
+                    }
+                    else {
+                        toastr.error('Error al buscar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error del servidor');
+                    closeLoading();
+                });
+        }
+
+
+        function alertaCarritoNoEncontrado(){
+
+            Swal.fire({
+                title: 'Error al Guardar',
+                text: "No se encontro el carrito de compras",
+                icon: 'info',
+                showCancelButton: false,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Recargar',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload()
+                }
+            })
+        }
+
+        function borrarProductoFilaCarrito(id){
+
+            Swal.fire({
+                title: 'Borrar Producto',
+                text: "",
+                icon: 'info',
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si',
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    borrarFilaProducto(id);
+                }
+            })
+        }
+
+        function borrarFilaProducto(id){
+
+            openLoading();
+
+            let formData = new FormData();
+            formData.append('idfila', id);
+
+            axios.post('/admin/callcenter/borrar/producto/carrito', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if(response.data.success === 1){
+
+                        // GUARDADO
+                        toastr.success('Producto Borrado');
+
+                        recargarTablaCarritoCompras();
+
+                    }
+
+                    else {
+                        toastr.error('Error al buscar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error del servidor');
+                    closeLoading();
+                });
 
 
         }
 
 
+        function recargarTablaCarritoCompras(){
+
+            var ruta = "{{ URL::to('admin/callcenter/recargar/tabla/carrito') }}";
+            $('#divTablaProductoCarritoCompras').load(ruta);
+        }
+
+
+        function enviarOrdenFinal(){
 
 
 
-
-
-
-
+        }
 
 
     </script>
+
+
+
 
 @endsection

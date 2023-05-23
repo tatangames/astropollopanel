@@ -7,6 +7,7 @@ use App\Models\CarritoCallCenterExtra;
 use App\Models\CarritoCallCenterTemporal;
 use App\Models\Categorias;
 use App\Models\DireccionesCallCenter;
+use App\Models\Productos;
 use App\Models\Servicios;
 use App\Models\SubCategorias;
 use Carbon\Carbon;
@@ -24,17 +25,7 @@ class CallCenterController extends Controller
 
         $restaurantes = Servicios::orderBy('nombre')->get();
 
-        // para ocultar o mostar los contenedores, se debe verificar si tenemos direccion asignada,
-        // que es lo mismo a tener carrito de compras
-
-        $idSession = Auth::id();
-        $tengocarrito = 0;
-        if(CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()){
-            $tengocarrito = 1;
-        }
-
-        return view('backend.admin.callcenter.generarorden.vistagenerarorden', compact('restaurantes',
-        'tengocarrito'));
+        return view('backend.admin.callcenter.generarorden.vistagenerarorden', compact('restaurantes'));
     }
 
 
@@ -55,6 +46,11 @@ class CallCenterController extends Controller
             $arrayDirecciones = DireccionesCallCenter::where('telefono', $request->numero)
                 ->orderBy('id', 'ASC')
                 ->get();
+
+            foreach ($arrayDirecciones as $info){
+                $infoServicio = Servicios::where('id', $info->id_servicios)->first();
+                $info->restaurante = $infoServicio->nombre;
+            }
 
             return ['success' => 1, 'direcciones' => $arrayDirecciones];
         }else{
@@ -181,8 +177,24 @@ class CallCenterController extends Controller
                 ->orderBy('sc.posicion', 'ASC')
                 ->get();
 
+            $arrayCarrito = CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->get();
+
+            foreach ($arrayCarrito as $info){
+
+                $infoProducto = Productos::where('id', $info->id_producto)->first();
+
+                $info->nombre = $infoProducto->nombre;
+
+                $multi = $infoProducto->precio * $info->cantidad;
+
+                $info->multiplicado = '$' . number_format((float)$multi, 2, '.', ',');
+                $info->precio = '$' . number_format((float)$infoProducto->precio, 2, '.', ',');
+            }
+
+
+
             return view('backend.admin.callcenter.menucontrol.vistamenucontrol', compact('arrayCategorias',
-                'infoDireccion', 'nombreRestaurante', 'arrayProductos'));
+                'infoDireccion', 'nombreRestaurante', 'arrayProductos', 'idPrimeraCategoria', 'arrayCarrito'));
         }
         else{
             return view('backend.admin.callcenter.menucontrol.vistanohaycarrito');
@@ -190,6 +202,170 @@ class CallCenterController extends Controller
     }
 
 
+
+    public function seleccionarDireccionCliente(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+
+        DB::beginTransaction();
+
+        try {
+
+            // BORRAR CARRITO TEMPORAL SI EXISTIA
+
+            $idSession = Auth::id();
+
+            if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()){
+                CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->delete();
+                CarritoCallCenterTemporal::where('id_callcenter', $idSession)->delete();
+            }
+
+            // CREARLE UN CARRITO SIN PRODUCTOS
+
+            $carrito = new CarritoCallCenterTemporal();
+            $carrito->id_callcenter = $idSession;
+            $carrito->id_direccion = $request->id;
+            $carrito->save();
+
+            DB::commit();
+
+            return ['success' => 1];
+
+        } catch(\Throwable $e){
+            DB::rollback();
+            return ['success' => 99];
+        }
+
+    }
+
+
+    public function listadoProductosPorCategoria($idcate){
+
+        $arraySubCategorias = SubCategorias::where('id_categorias', $idcate)->get();
+
+        $pilaIdSubCate = array();
+
+        foreach ($arraySubCategorias as $info){
+            array_push($pilaIdSubCate, $info->id);
+        }
+
+        $arrayProductos = Productos::where('id_subcategorias', $pilaIdSubCate)->get();
+
+        foreach ($arrayProductos as $info){
+            $info->precio = '$' . number_format((float)$info->precio, 2, '.', ',');
+        }
+
+        return view('backend.admin.callcenter.menucontrol.vistasolotablaproductos', compact('arrayProductos'));
+    }
+
+
+    public function informacionProducto(Request $request){
+
+        $regla = array(
+            'idproducto' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+        if($info = Productos::where('id', $request->idproducto)->first()){
+
+            return ['success' => 1, 'producto' => $info];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+
+
+    public function guardarProductoEnCarrito(Request $request){
+
+        $regla = array(
+            'idproducto' => 'required',
+            'cantidad' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+
+        $idSession = Auth::id();
+
+        // SI TENGO CARRITO
+        if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()){
+
+            $registro = new CarritoCallCenterExtra();
+            $registro->id_carrito_call_tempo = $infoCarrito->id;
+            $registro->id_producto = $request->idproducto;
+            $registro->nota_producto = $request->nota;
+            $registro->cantidad = $request->cantidad;
+            $registro->save();
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+
+
+    function borrarFilaProducto(Request $request){
+
+        $regla = array(
+            'idfila' => 'required', // id fila
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+        if($info = CarritoCallCenterExtra::where('id', $request->idfila)->first()){
+            CarritoCallCenterExtra::where('id', $info->id)->delete();
+        }
+
+        return ['success' => 1];
+    }
+
+
+
+
+    public function recargarTablaCarrito(){
+
+
+        $idSession = Auth::id();
+
+        if($infoCarrito = CarritoCallCenterTemporal::where('id_callcenter', $idSession)->first()) {
+
+            $arrayCarrito = CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->get();
+
+            foreach ($arrayCarrito as $info) {
+
+                $infoProducto = Productos::where('id', $info->id_producto)->first();
+
+                $info->nombre = $infoProducto->nombre;
+
+                $multi = $infoProducto->precio * $info->cantidad;
+
+                $info->multiplicado = '$' . number_format((float)$multi, 2, '.', ',');
+                $info->precio = '$' . number_format((float)$infoProducto->precio, 2, '.', ',');
+            }
+
+
+            return view('backend.admin.callcenter.generarorden.tablagenerarorden', compact('arrayCarrito'));
+
+        }else{
+            return "No se encontro Carrito de Compras. Recargar la Página";
+        }
+    }
 
 
 

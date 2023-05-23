@@ -290,13 +290,25 @@ Route::post('/admin/callcenter/buscar/numero', [CallCenterController::class,'inf
 Route::post('/admin/callcenter/guardar/nueva/direccion', [CallCenterController::class,'nuevaDireccionCliente']);
 
 
-// DEVUELVE LISTADO DE PRODUCTOSDE UN RESTAURANTE, DIRECCION ASIGNADA, CARRITO DE COMPRAS
+// DEVUELVE LISTADO DE PRODUCTOS DE UN RESTAURANTE, DIRECCION ASIGNADA, CARRITO DE COMPRAS
 Route::get('/admin/callcenter/todo/restaurante/asignado', [CallCenterController::class,'todoMenuRestauranteyCarrito']);
 
+// CREAR CARRITO DE COMPRAS CON LA DIRECCION SELECCIONADA Y BORRAR CARRITO SI HABIA
+Route::post('/admin/callcenter/seleccionar/direccion', [CallCenterController::class,'seleccionarDireccionCliente']);
 
+// DEVOLVER TODOS LOS PRODUCTOS POR ID CATEGORIA
+Route::get('/admin/callcenter/categoria/productos/{idcate}', [CallCenterController::class,'listadoProductosPorCategoria']);
 
+// INFORMACION PRODUCTO PARA AGREGAR AL CARRITO DE COMPRAS
+Route::post('/admin/callcenter/informacion/producto', [CallCenterController::class,'informacionProducto']);
 
+// GUARDAR PRODUCTO EN CARRITO DE COMPRAS
+Route::post('/admin/callcenter/guardar/producto/carrito', [CallCenterController::class,'guardarProductoEnCarrito']);
 
+// BORRAR FILA DE PRODUCTO DEL CARRITO DE COMPRAS
+Route::post('/admin/callcenter/borrar/producto/carrito', [CallCenterController::class,'borrarFilaProducto']);
+
+Route::get('/admin/callcenter/recargar/tabla/carrito', [CallCenterController::class,'recargarTablaCarrito']);
 
 
 

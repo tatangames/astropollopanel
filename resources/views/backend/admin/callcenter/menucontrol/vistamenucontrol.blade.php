@@ -1,192 +1,236 @@
 
-<section class="content">
-    <div class="row">
-        <div class="col-md-3">
-            <a href="" onclick="return false;" class="btn btn-primary btn-block mb-3">Categorias</a>
-
-            <div class="card">
-
-                <div class="card-body p-0">
-                    <ul class="nav nav-pills flex-column">
-
-                        @foreach($arrayCategorias as $info)
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link" style="color: black; font-weight: bold" onclick="cambiarTablaProductos({{ $info->id }});return false;">
-                                    <img alt="Imagenes" src="{{ url('storage/imagenes/'.$info->imagen) }}" width="35px" height="35px" />
-                                    </i> {{ $info->nombre }}
-                                </a>
-                            </li>
-
-                        @endforeach
 
 
+<div class="card">
+    <div style="float: left">
+        <div class="card-header d-flex p-0" style="float: left !important;">
+            <ul class="nav nav-pills ml-auto p-2">
+                <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Menu</a></li>
+                <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Carrito de Compras</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
 
 
-                    </ul>
-                </div>
+                <section class="content">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="" onclick="return false;" class="btn btn-primary btn-block mb-3">Categorias</a>
 
-            </div>
+                            <div class="card">
 
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Dirección del Cliente</h3>
-                    <div class="card-tools">
+                                <div class="card-body p-0">
+                                    <ul class="nav nav-pills flex-column">
+
+                                        @foreach($arrayCategorias as $info)
+
+                                            <li class="nav-item">
+                                                <a href="#" class="nav-link" style="color: black; font-weight: bold" onclick="cargarTablaProductos({{ $info->id }});return false;">
+                                                    <img alt="Imagenes" src="{{ url('storage/imagenes/'.$info->imagen) }}" width="35px" height="35px" />
+                                                    </i> {{ $info->nombre }}
+                                                </a>
+                                            </li>
+
+                                        @endforeach
+
+
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Dirección del Cliente</h3>
+                                    <div class="card-tools">
+
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-0">
+                                    <ul class="nav nav-pills flex-column">
+
+                                        <li class="nav-item">
+                                            <p style="font-weight: bold; margin: 16px; color: black !important;">Restaurante: </p> <p style="margin: 16px">{{ $infoDireccion->restaurante }}</p>
+
+                                            <p style="font-weight: bold; margin: 16px; color: black !important;">Cliente: </p> <p style="margin: 16px">{{ $infoDireccion->nombre }}</p>
+
+                                            <p style="font-weight: bold; margin: 16px; color: black !important;">Dirección: </p> <p style="margin: 16px">{{ $infoDireccion->direccion }}</p>
+
+                                            <p style="font-weight: bold; margin: 16px; color: black !important;">Referencia: </p> <p style="margin: 16px">{{ $infoDireccion->punto_referencia }}</p>
+
+                                            <p style="font-weight: bold; margin: 16px; color: black !important;">Teléfono: </p> <p style="margin: 16px">{{ $infoDireccion->telefono }}</p>
+
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- TABLAS CON DIRECCION YA ESTABLECIDA -->
+
+                        <div class="col-md-9">
+                            <div class="card card-primary card-outline">
+                                <div class="card-body p-0">
+                                    <div class="card">
+
+                                        <div id="divTablaCategoriaProducto">
+
+
+
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
 
                     </div>
-                </div>
 
-                <div class="card-body p-0">
-                    <ul class="nav nav-pills flex-column">
-
-                        <li class="nav-item">
-                            <p style="font-weight: bold; margin: 16px; color: black !important;">Restaurante: </p> <p style="margin: 16px">{{ $infoDireccion->nombre }}</p>
-
-                            <p style="font-weight: bold; margin: 16px; color: black !important;">Cliente: </p> <p style="margin: 16px">{{ $infoDireccion->direccion }}</p>
-
-                            <p style="font-weight: bold; margin: 16px; color: black !important;">Dirección: </p> <p style="margin: 16px">{{ $infoDireccion->telefono }}</p>
-
-                            <p style="font-weight: bold; margin: 16px; color: black !important;">Referencia: </p> <p style="margin: 16px">{{ $infoDireccion->punto_referencia }}</p>
-
-                        </li>
+                </section>
 
 
 
 
 
-                    </ul>
-                </div>
+
 
             </div>
 
-        </div>
+            <!-- LISTA DE CARRITO DE COMPRAS - TABS 2 -->
+            <div class="tab-pane" id="tab_2">
 
 
 
-        <!-- TABLAS CON DIRECCION YA ESTABLECIDA -->
 
-        <div class="col-md-9">
-            <div class="card card-primary card-outline">
-                    <div class="card-body p-0">
-                        <div class="card">
+                <div class="col-md-9">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body p-0">
+                            <div class="card">
 
-                            <div id="tablaCategoriaProducto">
+                                <div id="divTablaProductoCarritoCompras">
 
 
-                                <section class="content">
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <table id="tabla" class="table table-bordered table-striped">
-                                                            <thead>
-                                                            <tr>
-                                                                <th style="width: 10%">Producto</th>
-                                                                <th style="width: 10%">Descripción</th>
-                                                                <th style="width: 10%">Precio</th>
-                                                                <th style="width: 10%">Imagen</th>
-                                                                <th style="width: 10%">Opciones</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
 
-                                                            @foreach($arrayProductos as $dato)
-
+                                    <section class="content">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <table id="tabla" class="table table-bordered table-striped">
+                                                                <thead>
                                                                 <tr>
 
-                                                                    <td>{{ $dato->nombre }}</td>
-                                                                    <td>{{ $dato->descripcion }}</td>
-                                                                    <td>{{ $dato->precio }}</td>
-                                                                    <td>
-                                                                        @if($dato->utiliza_imagen == 1)
-                                                                            <center><img alt="Imagenes" src="{{ url('storage/imagenes/'.$dato->imagen) }}" width="75px" height="75px" /></center>
-                                                                        @endif
-                                                                    </td>
+                                                                    <th style="width: 10%">Nombre</th>
+                                                                    <th style="width: 10%">Nota</th>
+                                                                    <th style="width: 10%">Precio</th>
+                                                                    <th style="width: 10%">Cantidad</th>
+                                                                    <th style="width: 10%">Total</th>
 
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-success btn-xs" onclick="verModalAgregar({{ $dato->id }})">
-                                                                            <i class="fa fa-plus" title="Agregar"></i>&nbsp; Agregar
-                                                                        </button>
-                                                                    </td>
-
+                                                                    <th style="width: 15%">Opciones</th>
                                                                 </tr>
+                                                                </thead>
+                                                                <tbody>
 
-                                                            @endforeach
+                                                                @foreach($arrayCarrito as $dato)
+
+                                                                    <tr>
+                                                                        <td>{{ $dato->nombre }}</td>
+                                                                        <td>{{ $dato->nota_producto }}</td>
+                                                                        <td>{{ $dato->precio }}</td>
+                                                                        <td>{{ $dato->cantidad }}</td>
+                                                                        <td>{{ $dato->multiplicado }}</td>
+
+                                                                        <td>
+
+                                                                            <button type="button" class="btn btn-success btn-xs" onclick="editarProductoFilaCarrito({{ $dato->id }})">
+                                                                                <i class="fa fa-edit" title="Editar"></i>&nbsp; Editar
+                                                                            </button>
+
+                                                                            <button type="button" style="margin-left: 8px" class="btn btn-danger btn-xs" onclick="borrarProductoFilaCarrito({{ $dato->id }})">
+                                                                                <i class="fa fa-trash" title="Borrar"></i>&nbsp; Borrar
+                                                                            </button>
+
+                                                                        </td>
+                                                                    </tr>
+
+                                                                @endforeach
 
 
-                                                            </tbody>
-                                                        </table>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </section>
+                                    </section>
 
 
+                                </div>
+
+
+
+                                <center>  <button type="button" class="btn btn-success btn-lg" onclick="enviarOrdenFinal()">
+                                        <i class="fa fa-location-arrow" title="Enviar Orden"></i>&nbsp; EnviarOrden
+                                    </button>
+                                </center>
 
 
 
                             </div>
                         </div>
                     </div>
+                </div>
+
+
+
+
+
+
+
             </div>
+
+
+
+
+
+            <!-- fin - Tabs -->
         </div>
-
-
-
-
-
-
     </div>
+</div>
 
-</section>
 
 
-<script>
-    $(function () {
-        $("#tabla").DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "pagingType": "full_numbers",
-            "lengthMenu": [[150, -1], [150, "Todo"]],
-            "language": {
+<script type="text/javascript">
+    $(document).ready(function(){
 
-                "sProcessing": "Procesando...",
-                "sLengthMenu": "Mostrar _MENU_ registros",
-                "sZeroRecords": "No se encontraron resultados",
-                "sEmptyTable": "Ningún dato disponible en esta tabla",
-                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix": "",
-                "sSearch": "Buscar:",
-                "sUrl": "",
-                "sInfoThousands": ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                    "sFirst": "Primero",
-                    "sLast": "Último",
-                    "sNext": "Siguiente",
-                    "sPrevious": "Anterior"
-                },
-                "oAria": {
-                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
+        var id = {{ $idPrimeraCategoria }};
 
-            },
-            "responsive": true, "lengthChange": true, "autoWidth": false,
-        });
+        cargarTablaProductos(id);
     });
 
-
 </script>
+
 
 
 
