@@ -22,8 +22,10 @@ class CreateOrdenesDireccionesTable extends Migration
             $table->string('direccion', 400);
             $table->string('telefono', 10);
             $table->string('referencia', 400)->nullable();
-            $table->string('latitud', 50);
-            $table->string('longitud', 50);
+
+            // ES NULL PORQUE CALL CENTER ENVIARA NULL
+            $table->string('latitud', 50)->nullable();
+            $table->string('longitud', 50)->nullable();
 
 
             $table->string('latitudreal', 50)->nullable();
