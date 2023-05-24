@@ -202,12 +202,14 @@ class ApiOrdenesRestauranteController extends Controller
                 $fecha = Carbon::now('America/El_Salvador');
 
                 // TIEMPO DE ZONA + DEL RESTAURANTE
-                $infoZona = Zonas::where('id', $infoOrden->id_zona)->first();
+                if($infoZona = Zonas::where('id', $infoOrden->id_zona)->first()){
 
-                $fechaInicioPreparar = Carbon::parse($fecha);
-                $horaEstimada = $fechaInicioPreparar->addMinute($infoZona->tiempo_extra);
+                    $fechaInicioPreparar = Carbon::parse($fecha);
+                    $horaEstimada = $fechaInicioPreparar->addMinute($infoZona->tiempo_extra);
+                }else{
 
-
+                    $horaEstimada = Carbon::now('America/El_Salvador');
+                }
 
                 //****************
                 $fechaHoy = Carbon::now('America/El_Salvador');
