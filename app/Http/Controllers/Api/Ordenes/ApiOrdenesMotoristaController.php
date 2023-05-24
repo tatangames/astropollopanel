@@ -839,7 +839,7 @@ class ApiOrdenesMotoristaController extends Controller
     public function enviarCorreoTest(Request $request){
 
 
-        return "ta lenga";
+
 
         // $idAppCliente = "f86a2ee4-a10b-4a86-a063-151be6845bce";
         $idAppRestaurante = "5c22da89-09a8-4b89-ad94-84172cdd14e8";
