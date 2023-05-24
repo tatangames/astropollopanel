@@ -90,7 +90,7 @@ class ApiClienteController extends Controller
 
             // codigo aleaotorio
             $codigo = '';
-            for($i = 0; $i < 6; $i++) {
+            for($i = 0; $i < 4; $i++) {
                 $codigo .= mt_rand(0, 9);
             }
 
