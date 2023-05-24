@@ -869,7 +869,7 @@ class ApiOrdenesMotoristaController extends Controller
         );
 
 
-        return "pasa aqui";
+
 
 
         OneSignal::sendNotificationCustom($params);
