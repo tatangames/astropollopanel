@@ -377,7 +377,7 @@
             document.getElementById("formulario-direccionnueva").reset();
             $('#telefono-nuevo').val(numero);
 
-            $('#modalDireccionNueva').modal({backdrop: 'static', keyboard: false})
+            $('#modalDireccionNueva').modal('show');
         }
 
         function cargarTablaMenu(){
