@@ -189,7 +189,7 @@ class LoginController extends Controller
 
         //$userId = "251a4965-fe66-42b0-bd5c-094838668d20";
 
-        $userRestaurante = "d586192d-d94a-4c82-855b-304c45ddef2c";
+        $userRestaurante = "07252430-b70c-429d-b630-332654b321b0";
 
 
         $contents = array(
@@ -199,7 +199,7 @@ class LoginController extends Controller
         $params = array(
             'app_id' => $idAppRestaurante,
             'contents' => $contents,
-            'android_channel_id' => "ddeed491-0e02-42a6-8fdd-95736c067eee",
+            'android_channel_id' => "9d335720-f085-483f-a73f-18e5a3cd777b",
             'include_player_ids' => is_array($userRestaurante) ? $userRestaurante : array($userRestaurante)
         );
 

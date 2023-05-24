@@ -273,8 +273,7 @@ Route::post('motorista/opcion/notificacion/editar', [ApiOrdenesMotoristaControll
 
 
 
-
-//Route::post('cliente/prueba/notificaciones', [\App\Http\Controllers\Frontend\Login\LoginController::class, 'enviarCorreoTest']);
+Route::post('cliente/prueba/notificaciones', [\App\Http\Controllers\Frontend\Login\LoginController::class, 'enviarCorreoTest']);
 
 
 
