@@ -468,11 +468,15 @@ class ApiProcesarController extends Controller
 
                     $infoCliente = Clientes::where('id', $request->clienteid)->first();
 
-                    // BORRAR CARRITO TEMPORAL DEL USUARIO
-                    if($infoCliente->borrar_carrito == 1){
-                        CarritoExtra::where('id_carrito_temporal', $infoCarritoTempo->id)->delete();
-                        CarritoTemporal::where('id_clientes', $request->clienteid)->delete();
-                    }
+
+
+
+
+                    // BORRAR CARRITO DE COMPRAS SIEMPRE
+
+                    CarritoExtra::where('id_carrito_temporal', $infoCarritoTempo->id)->delete();
+                    CarritoTemporal::where('id_clientes', $request->clienteid)->delete();
+
 
 
 
