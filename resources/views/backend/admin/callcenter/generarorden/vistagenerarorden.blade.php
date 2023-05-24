@@ -356,12 +356,21 @@
     <script type="text/javascript">
         $(document).ready(function(){
 
+            // Get the input field
+            var input = document.getElementById("numero-cliente");
 
-            $("#numero-cliente").on('keyup', function (e) {
-                if (e.key === 'Enter' || e.keyCode === 13) {
+        // Execute a function when the user presses a key on the keyboard
+            input.addEventListener("keypress", function(event) {
+                // If the user presses the "Enter" key on the keyboard
+                if (event.key === "Enter") {
+                    // Cancel the default action, if needed
+                    event.preventDefault();
+
                     buscarNumero();
                 }
             });
+
+
 
             cargarTablaMenu();
         });
