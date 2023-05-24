@@ -52,7 +52,6 @@ class ApiRegistroController extends Controller
         $usuario->fecha = $fecha;
         $usuario->activo = 1;
         $usuario->token_fcm = $request->token_fcm;
-        $usuario->borrar_carrito = 0;
         $usuario->appregistro = $request->version;
 
         if($usuario->save()){

@@ -29,9 +29,6 @@ class CreateClientesTable extends Migration
             // token para enviar notificaciones por one signal
             $table->string('token_fcm', 100)->nullable();
 
-            // el cliente decide si borra carrito de compras al realizar una orden
-            $table->boolean('borrar_carrito');
-
 
             // para saber de que app se registro
             $table->string('appregistro', 50);
