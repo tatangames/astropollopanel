@@ -30,7 +30,7 @@
                                         </button>
                                         <br><br>
 
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="borrarRegistro({{ $dato->id }})">
+                                        <button type="button" class="btn btn-danger btn-xs" onclick="borrarRegistro({{ $dato->id }})">
                                             <i class="fas fa-trash" title="Bloquear"></i>&nbsp; Bloquear
                                         </button>
 

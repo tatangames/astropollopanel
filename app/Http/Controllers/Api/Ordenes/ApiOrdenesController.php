@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api\Ordenes;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clientes;
+use App\Models\Cupones;
 use App\Models\MotoristasServicios;
 use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesMotoristas;
 use App\Models\Productos;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -249,12 +251,40 @@ class ApiOrdenesController extends Controller
                 ->update(['visible' => 0]);
 
 
+            $titulo = "Orden Calificada";
+            $mensaje = "Muchas Gracias";
+            return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+        }else{
+            return ['success' => 99];
+        }
+    }
+
+
+    public function ocultameOrdenCliente(Request $request){
+
+        $reglaDatos = array(
+            'ordenid' => 'required',
+        );
+
+        /// mensaje
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if($infoOrden = Ordenes::where('id', $request->ordenid)->first()){
+
+
+            // OCULTA ORDEN A CLIENTE
+            Ordenes::where('id', $infoOrden->id)
+                ->update(['visible' => 0]);
+
             return ['success' => 1];
         }else{
-
-            // no se podra calificar
-            return ['success' => 2];
+            return ['success' => 99];
         }
+
+
     }
 
 
@@ -330,10 +360,169 @@ class ApiOrdenesController extends Controller
         }else{
             return ['success' => 2];
         }
+    }
+
+    public function cancelarOrdenPorCliente(Request $request){
+
+        $reglaDatos = array(
+            'idorden' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if($infoOrden = Ordenes::where('id', $request->idorden)->first()){
+
+            if($infoOrden->estado_iniciada == 1){
+                $titulo = "Orden Fue Iniciada";
+                $mensaje = "La orden ya fue iniciada por el Restaurante";
+                return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+            }
+
+            if($infoOrden->estado_cancelada == 0){
+
+                DB::beginTransaction();
+
+                try {
+
+                    $fecha = Carbon::now('America/El_Salvador');
+
+                    Ordenes::where('id', $infoOrden->id)->update(['estado_cancelada' => 1,
+                        'cancelado_por' => 1,
+                        'visible' => 0,
+                        'fecha_cancelada' => $fecha]);
+
+
+
+                    // SUBIR CONTADOR DE CUPON SI FUE UITILIZADO
+
+                    // UTILIZO ESTE COPIA PORQUE SIEMPRE SE REGISTRA CUALQUIER CUPON INGRESADO
+                    if($infoOrden->id_cupones_copia != null){
+
+                        $infoCupon = Cupones::where('id', $infoOrden->id_cupones_copia)->first();
+                        $contador = $infoCupon->contador - 1;
+
+
+                        Cupones::where('id', $infoCupon->id)
+                            ->update(['contador' => $contador]);
+                    }
+
+
+                    DB::commit();
+
+                    $titulo = "Orden Fue Cancelada";
+                    $mensaje = "";
+                    return ['success' => 2, 'titulo' => $titulo, 'mensaje' => $mensaje];
+
+                } catch(\Throwable $e){
+
+                    DB::rollback();
+                    return ['success' => 99];
+                }
+
+            }else{
+                $titulo = "Orden Fue Cancelada";
+                $mensaje = "";
+                return ['success' => 2, 'titulo' => $titulo, 'mensaje' => $mensaje];
+            }
+        }else{
+            return ['success' => 99]; // no encontrada
+        }
+    }
+
+
+
+    public function historialOrdenesCliente(Request $request){
+
+        // validaciones para los datos
+        $reglaDatos = array(
+            'id' => 'required',
+            'fecha1' => 'required',
+            'fecha2' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if ($validarDatos->fails()) {
+            return ['success' => 0];
+        }
+
+        $date1 = Carbon::parse($request->fecha1)->startOfDay();
+        $date2 = Carbon::parse($request->fecha2)->endOfDay();
+
+        if ($infoCliente = Clientes::where('id', $request->id)->first()) {
+
+            // todas las ordenes por fecha
+            $arrayOrdenes = Ordenes::whereBetween('fecha_orden', array($date1, $date2))
+                ->where('id_cliente', $infoCliente->id)
+                ->orderBy('id', 'DESC')
+                ->get();
+
+            $conteo = 0;
+
+            foreach ($arrayOrdenes as $info) {
+
+                $conteo++;
+
+                $info->fecha_orden = date("h:i A d-m-Y", strtotime($info->fecha_orden));
+
+                $infoDireccion = OrdenesDirecciones::where('id_ordenes', $info->id)->first();
+
+                $info->direccion = $infoDireccion->direccion;
+
+                // CUPONES
+                $haycupon = 0;
+                $totalAPagar = $info->total_orden;
+
+                if ($info->id_cupones != null) {
+                    $haycupon = 1;
+
+                    // SI ESTO NO ESTA NULL, SIGNIFICA QUE SE APLICO CUPON DINERO O PORCENTAJE
+
+                    if ($info->total_cupon != null) {
+
+                        $totalAPagar = $info->total_cupon;
+
+                    }
+                }
+
+                $info->totalformat = '$' . number_format((float)$totalAPagar, 2, '.', ',');
+
+                $estado = "Orden Pendiente";
+
+                // LOS ESTADOS VAN POR PRIORIDAD
+
+                if ($info->estado_iniciada == 1) {
+                    $estado = "Orden Iniciada";
+                }
+
+                if ($info->estado_camino == 1) {
+                    $estado = "Orden en Camino";
+                }
+
+                if ($info->estado_entregada == 1) {
+                    $estado = "Orden Entregada";
+                }
+
+                // Si fue cancelada
+
+                if ($info->estado_cancelada == 1) {
+                    $estado = "Orden Cancelada";
+                }
+
+
+                $info->haycupon = $haycupon;
+                $info->estado = $estado;
+            }
+
+            return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
+        } else {
+            return ['success' => 2];
+        }
 
 
     }
-
 
 
 

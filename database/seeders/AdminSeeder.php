@@ -17,8 +17,8 @@ class AdminSeeder extends Seeder
 
         Administrador::create([
             'nombre' => 'Administrador',
-            'usuario' => 'admin',
-            'password' => bcrypt('1234'),
+            'usuario' => 'tatan',
+            'password' => bcrypt('administrador'),
             'activo' => '1',
             'correo' => 'tatangamess@gmail.com',
             'token_correo' => null,
@@ -27,7 +27,7 @@ class AdminSeeder extends Seeder
 
         Administrador::create([
             'nombre' => 'Editor',
-            'usuario' => 'editor',
+            'usuario' => 'administrador',
             'password' => bcrypt('1234'),
             'activo' => '1',
             'correo' => 'tatangamess@gmail.com',
@@ -37,8 +37,8 @@ class AdminSeeder extends Seeder
 
 
         Administrador::create([
-            'nombre' => 'Colaborador',
-            'usuario' => 'colaborador',
+            'nombre' => 'Call Center 1',
+            'usuario' => 'callcenter1',
             'password' => bcrypt('1234'),
             'activo' => '1',
             'correo' => '',
@@ -46,7 +46,15 @@ class AdminSeeder extends Seeder
             'token_fecha' => null
         ])->assignRole('Colaborador');
 
-
+        Administrador::create([
+            'nombre' => 'Call Center 2',
+            'usuario' => 'callcenter2',
+            'password' => bcrypt('1234'),
+            'activo' => '1',
+            'correo' => '',
+            'token_correo' => null,
+            'token_fecha' => null
+        ])->assignRole('Colaborador');
 
 
 

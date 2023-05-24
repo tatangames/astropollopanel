@@ -781,7 +781,8 @@ class ApiOrdenesRestauranteController extends Controller
 
 
 
-    public function historialOrdenesRestaurantes(Request $request){
+    public function historialOrdenesRestaurantes(Request $request)
+    {
 
         $reglaDatos = array(
             'id' => 'required',
@@ -791,9 +792,11 @@ class ApiOrdenesRestauranteController extends Controller
 
         $validarDatos = Validator::make($request->all(), $reglaDatos);
 
-        if($validarDatos->fails()){return ['success' => 0]; }
+        if ($validarDatos->fails()) {
+            return ['success' => 0];
+        }
 
-        if($infoUsuario = UsuariosServicios::where('id', $request->id)->first()){
+        if ($infoUsuario = UsuariosServicios::where('id', $request->id)->first()) {
 
             $date1 = Carbon::parse($request->fecha1)->startOfDay();
             $date2 = Carbon::parse($request->fecha2)->endOfDay();
@@ -804,7 +807,7 @@ class ApiOrdenesRestauranteController extends Controller
                 ->orderBy('id', 'DESC')
                 ->get();
 
-            foreach($arrayOrdenes as $info){
+            foreach ($arrayOrdenes as $info) {
 
                 $info->fecha_orden = date("d-m-Y h:i A", strtotime($info->fecha_orden));
 
@@ -812,19 +815,19 @@ class ApiOrdenesRestauranteController extends Controller
 
                 // POR PRIORIDAD
 
-                if($info->estado_iniciada == 1){
+                if ($info->estado_iniciada == 1) {
                     $estado = "Orden Preparandose";
                 }
 
-                if($info->estado_preparada == 1){
+                if ($info->estado_preparada == 1) {
                     $estado = "Orden Finalizada";
                 }
 
-                if($info->estado_entrega == 1){
+                if ($info->estado_entrega == 1) {
                     $estado = "Orden Entregada al Cliente";
                 }
 
-                if($info->estado_cancelada == 1){
+                if ($info->estado_cancelada == 1) {
                     $estado = "Orden Cancelada";
                 }
 
@@ -861,10 +864,9 @@ class ApiOrdenesRestauranteController extends Controller
 
 
             return ['success' => 1, 'ordenes' => $arrayOrdenes];
-        }else{
+        } else {
             return ['success' => 2];
         }
-
 
     }
 

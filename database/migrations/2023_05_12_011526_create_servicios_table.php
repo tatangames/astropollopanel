@@ -21,9 +21,6 @@ class CreateServiciosTable extends Migration
             // si utiliza cupon
             $table->boolean('utiliza_cupon');
 
-            // Tiempo que da cocina predeterminadamente
-
-            $table->integer('tiempo_cocina');
 
         });
     }

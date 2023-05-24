@@ -22,9 +22,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class CarritoComprasController extends Controller
+class ApiCarritoComprasController extends Controller
 {
-
     public function agregarProductoCarritoTemporal(Request $request){
 
         $reglaDatos = array(
@@ -145,7 +144,140 @@ class CarritoComprasController extends Controller
     }
 
 
+    public function verCarritoDecompras(Request $request){
 
+        $reglaDatos = array(
+            'clienteid' => 'required',
+        );
+
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if(Clientes::where('id', $request->clienteid)->first()){
+
+            try {
+
+                // PARA NO PASAR A PROCESAR ORDEN
+                $estadoProductoActivo = 1;
+
+
+                $getValores = Carbon::now('America/El_Salvador');
+                $hora = $getValores->format('H:i:s');
+
+
+
+                // preguntar si usuario ya tiene un carrito de compras
+                if($cart = CarritoTemporal::where('id_clientes', $request->clienteid)->first()){
+                    $producto = DB::table('productos AS p')
+                        ->join('carrito_extra AS c', 'c.id_producto', '=', 'p.id')
+                        ->select('p.id AS productoID', 'p.nombre', 'c.cantidad',
+                            'p.imagen', 'p.precio', 'p.activo','c.id AS carritoid', 'p.utiliza_imagen', 'p.id_subcategorias')
+                        ->where('c.id_carrito_temporal', $cart->id)
+                        ->get();
+
+                    // verificar cada producto
+                    foreach ($producto as $pro) {
+
+                        $estadoLocal = 0;
+                        $titulo = "";
+                        $mensaje = "";
+
+                        // PRODUCTO NO ACTIVO
+                        if($pro->activo == 0){
+                            $estadoLocal = 1;
+                            $estadoProductoActivo = 0;
+                            $titulo = "Producto no disponible";
+                            $mensaje = "Por favor eliminarlo de su carrito de compras deslizando hacia los lados. Gracias.";
+                        }
+
+                        // CONOCER SI LA SUB CATEGORIA ESTA ACTIVA
+                        $infoSubCate = SubCategorias::where('id', $pro->id_subcategorias)->first();
+
+                        if($infoSubCate->activo == 0){
+                            $estadoLocal = 1;
+                            $estadoProductoActivo = 0;
+                            $titulo = "Producto no disponible";
+                            $mensaje = "Por favor eliminarlo de su carrito de compras deslizando hacia los lados. Gracias.";
+                        }
+
+                        // CONOCER SI LA CATEGORIA DEL PRODUCTO ESTA ACTIVA
+                        $infoCategoria = Categorias::where('id', $infoSubCate->id_categorias)->first();
+
+                        if($infoCategoria->activo == 0){
+                            $estadoLocal = 1;
+                            $estadoProductoActivo = 0;
+                            $titulo = "Producto no disponible";
+                            $mensaje = "Por favor eliminarlo de su carrito de compras deslizando hacia los lados. Gracias.";
+                        }
+
+
+                        if($infoCategoria->usa_horario == 1){
+                            // CONOCER SI LA CATEGORIA TIENE HORARIO Y VER SI ESTA DISPONIBLE
+                            $horaCategoria = Categorias::where('id', $infoSubCate->id_categorias)
+                                ->where('activo', 1)
+                                ->where('usa_horario', 1)
+                                ->where('hora_abre', '<=', $hora)
+                                ->where('hora_cierra', '>=', $hora)
+                                ->get();
+
+                            if(count($horaCategoria) >= 1){
+                                // ABIERTO
+                            }else{
+
+                                // enviar formateados horario por si se utilizando
+                                $hora_abre = date("h:i A", strtotime($infoCategoria->hora_abre));
+                                $hora_cierra = date("h:i A", strtotime($infoCategoria->hora_cierra));
+
+                                $estadoLocal = 1;
+                                $estadoProductoActivo = 0;
+                                $titulo = "Producto no disponible";
+                                $mensaje = "Este Producto esta disponible de " . $hora_abre . " A " . $hora_cierra;
+                            }
+                        }
+
+
+                        // multiplicar cantidad por el precio de cada producto
+                        $precio = $pro->cantidad * $pro->precio;
+
+
+                        // estado de productos segun reglas
+                        $pro->estadoLocal = $estadoLocal;
+
+
+                        $pro->titulo = $titulo;
+                        $pro->mensaje = $mensaje;
+
+                        // convertir
+                        $pro->precioformat = '$' . number_format((float)$precio, 2, '.', ',');
+                    }
+
+                    // sub total de la orden
+                    $subTotal = collect($producto)->sum('precio'); // sumar todos el precio
+
+                    return [
+                        'success' => 1,
+                        'subtotal' => number_format((float)$subTotal, 2, '.', ','), // subtotal
+                        'estadoProductoGlobal' => $estadoProductoActivo,
+                        'producto' => $producto,
+                    ];
+
+                }else{
+                    return [
+                        'success' => 2  // no tiene carrito de compras
+                    ];
+                }
+            }catch(\Error $e){
+                return [
+                    'success' => 3, // error
+                ];
+            }
+        }
+        else{
+            return ['success' => 4]; // usuario no encontrado
+        }
+    }
 
 
 
@@ -374,165 +506,165 @@ class CarritoComprasController extends Controller
 
 
 
-            // RETORNOS
+        // RETORNOS
 
-            // 1: carrito de compras no encontrado
-            // 1: cupon no valido
-            // 2: cupon producto gratis
-            // 3: cupon descuento de dinero
-            // 4: cupon descuento de porcentaje
-
-
-            // verificar si usuario tiene carrito de compras
-            if($cart = CarritoTemporal::where('id_clientes', $request->clienteid)->first()){
-
-                // EL USUARIO SIEMPRE TENDRA UNA DIRECCION AQUI
-
-                // verificar que tipo de cupon es y si aun es valido
-                if($infoCupon = Cupones::where('texto_cupon', $request->cupon)->first()){
-
-                    // CUPON ACTIVO
-                    if($infoCupon->activo == 0){
-                        $titulo = "Nota";
-                        $mensaje = "Cupón no válido";
-                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
-                    }
+        // 1: carrito de compras no encontrado
+        // 1: cupon no valido
+        // 2: cupon producto gratis
+        // 3: cupon descuento de dinero
+        // 4: cupon descuento de porcentaje
 
 
-                    // CUPON LIMITE ALCANZADO
-                    if($infoCupon->contador >= $infoCupon->uso_limite){
-                        $titulo = "Nota";
-                        $mensaje = "Cupón no válido";
-                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
-                    }
+        // verificar si usuario tiene carrito de compras
+        if($cart = CarritoTemporal::where('id_clientes', $request->clienteid)->first()){
 
+            // EL USUARIO SIEMPRE TENDRA UNA DIRECCION AQUI
 
-                    // listado de productos del carrito
-                    $producto = DB::table('productos AS p')
-                        ->join('carrito_extra AS c', 'c.id_producto', '=', 'p.id')
-                        ->select('p.precio', 'c.cantidad')
-                        ->where('c.id_carrito_temporal', $cart->id)
-                        ->get();
+            // verificar que tipo de cupon es y si aun es valido
+            if($infoCupon = Cupones::where('texto_cupon', $request->cupon)->first()){
 
-                    $subtotal = 0;
-                    // multiplicar precio x cantidad
-                    foreach($producto as $p){
-
-                        $cantidad = $p->cantidad;
-                        $precio = $p->precio;
-                        $multi = $cantidad * $precio;
-                        $subtotal = $subtotal + $multi;
-                    }
-
-                    // CONOCER QUE SERVICIO USA EL CUPON
-
-                    // * PRODUCTO GRATIS
-
-                    if($infoCupon->id_tipo_cupon == 1){
-
-                        // VERIFICAR QUE EL SERVICIO DONDE ESTOY COMPRANDO ACEPTA ESTE CUPON
-                        if($infoCuponProGratis = CuponProductoGratis::where('id_cupones', $infoCupon->id)
-                            ->where('id_servicios', $cart->id_servicios)
-                            ->first()){
-
-                            // * cupon valido para producto gratis, solo se retorna texto
-                            $titulo = "Nota";
-                            $mensaje = "Cupón aplica para: " . $infoCuponProGratis->nombre;
-                            return ['success' => 2, 'titulo' => $titulo, 'mensaje' => $mensaje];
-
-                        }else{
-                            $titulo = "Nota";
-                            $mensaje = "Cupón no válido";
-                            return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
-                        }
-                    }
-
-                    // DESCUENTO DE DINERO
-                    else if($infoCupon->id_tipo_cupon == 2) {
-
-                        // VERIFICAR QUE EL SERVICIO DONDE ESTOY COMPRANDO ACEPTA ESTE CUPON
-                        if($infoCuponDescuentoDin = CuponDescuentoDinero::where('id_cupones', $infoCupon->id)
-                            ->where('id_servicios', $cart->id_servicios)
-                            ->first()){
-
-                            $resta = $subtotal - $infoCuponDescuentoDin->dinero;
-                            if($resta <= 0){
-                                $resta = 0;
-                            }
-
-                            $resta = '$' . number_format((float)$resta, 2, '.', '');
-
-                            $aplico = '$' . number_format((float)$infoCuponDescuentoDin->dinero, 2, '.', '');
-
-                            // * cupon valido para descuento de dinero
-                            $titulo = "Nota";
-                            $mensaje = "Cupón aplica descuento de " . $aplico . " \n Total a Cancelar " . $resta;
-                            return ['success' => 3, 'titulo' => $titulo, 'mensaje' => $mensaje, 'aplico' => $aplico, 'resta' => $resta];
-
-                        }else{
-                            $titulo = "Nota";
-                            $mensaje = "Cupón no válido";
-                            return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
-                        }
-
-                    }
-
-                    // DESCUENTO DE PORCENTAJE
-                    else if($infoCupon->id_tipo_cupon == 3) {
-
-                        // VERIFICAR QUE EL SERVICIO DONDE ESTOY COMPRANDO ACEPTA ESTE CUPON
-                        if($infoCuponDescuentoPor = CuponDescuentoPorcentaje::where('id_cupones', $infoCupon->id)
-                            ->where('id_servicios', $cart->id_servicios)
-                            ->first()){
-
-                            $aplico = '%' . $infoCuponDescuentoPor->porcentaje;
-
-                            $resta = $subtotal * ($infoCuponDescuentoPor->porcentaje / 100);
-                            $final = $subtotal - $resta;
-
-                            if($final <= 0){
-                                $final = 0;
-                            }
-
-                            $final = '$' . number_format((float)$final, 2, '.', '');
-
-
-                            // * cupon valido para descuento de porcentaje
-                            $titulo = "Nota";
-                            $mensaje = "Cupón aplica descuento de " . $aplico;
-                            return ['success' => 4, 'titulo' => $titulo, 'mensaje' => $mensaje, 'aplico' => $aplico,
-                                'resta' => $final];
-
-                        }else{
-                            $titulo = "Nota";
-                            $mensaje = "Cupón no válido";
-                            return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
-                        }
-
-                    }
-
-                    // Cupon no encontrado
-                    else{
-
-                        $titulo = "Nota";
-                        $mensaje = "Cupón no válido";
-                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
-
-                    }
-
-
-                }else{
-
+                // CUPON ACTIVO
+                if($infoCupon->activo == 0){
                     $titulo = "Nota";
-                    $mensaje = "Cupón no encontrado";
+                    $mensaje = "Cupón no válido";
                     return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
                 }
+
+
+                // CUPON LIMITE ALCANZADO
+                if($infoCupon->contador >= $infoCupon->uso_limite){
+                    $titulo = "Nota";
+                    $mensaje = "Cupón no válido";
+                    return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                }
+
+
+                // listado de productos del carrito
+                $producto = DB::table('productos AS p')
+                    ->join('carrito_extra AS c', 'c.id_producto', '=', 'p.id')
+                    ->select('p.precio', 'c.cantidad')
+                    ->where('c.id_carrito_temporal', $cart->id)
+                    ->get();
+
+                $subtotal = 0;
+                // multiplicar precio x cantidad
+                foreach($producto as $p){
+
+                    $cantidad = $p->cantidad;
+                    $precio = $p->precio;
+                    $multi = $cantidad * $precio;
+                    $subtotal = $subtotal + $multi;
+                }
+
+                // CONOCER QUE SERVICIO USA EL CUPON
+
+                // * PRODUCTO GRATIS
+
+                if($infoCupon->id_tipo_cupon == 1){
+
+                    // VERIFICAR QUE EL SERVICIO DONDE ESTOY COMPRANDO ACEPTA ESTE CUPON
+                    if($infoCuponProGratis = CuponProductoGratis::where('id_cupones', $infoCupon->id)
+                        ->where('id_servicios', $cart->id_servicios)
+                        ->first()){
+
+                        // * cupon valido para producto gratis, solo se retorna texto
+                        $titulo = "Nota";
+                        $mensaje = "Cupón aplica para: " . $infoCuponProGratis->nombre;
+                        return ['success' => 2, 'titulo' => $titulo, 'mensaje' => $mensaje];
+
+                    }else{
+                        $titulo = "Nota";
+                        $mensaje = "Cupón no válido";
+                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                    }
+                }
+
+                // DESCUENTO DE DINERO
+                else if($infoCupon->id_tipo_cupon == 2) {
+
+                    // VERIFICAR QUE EL SERVICIO DONDE ESTOY COMPRANDO ACEPTA ESTE CUPON
+                    if($infoCuponDescuentoDin = CuponDescuentoDinero::where('id_cupones', $infoCupon->id)
+                        ->where('id_servicios', $cart->id_servicios)
+                        ->first()){
+
+                        $resta = $subtotal - $infoCuponDescuentoDin->dinero;
+                        if($resta <= 0){
+                            $resta = 0;
+                        }
+
+                        $resta = '$' . number_format((float)$resta, 2, '.', '');
+
+                        $aplico = '$' . number_format((float)$infoCuponDescuentoDin->dinero, 2, '.', '');
+
+                        // * cupon valido para descuento de dinero
+                        $titulo = "Nota";
+                        $mensaje = "Cupón aplica descuento de " . $aplico . " \n Total a Cancelar " . $resta;
+                        return ['success' => 3, 'titulo' => $titulo, 'mensaje' => $mensaje, 'aplico' => $aplico, 'resta' => $resta];
+
+                    }else{
+                        $titulo = "Nota";
+                        $mensaje = "Cupón no válido";
+                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                    }
+
+                }
+
+                // DESCUENTO DE PORCENTAJE
+                else if($infoCupon->id_tipo_cupon == 3) {
+
+                    // VERIFICAR QUE EL SERVICIO DONDE ESTOY COMPRANDO ACEPTA ESTE CUPON
+                    if($infoCuponDescuentoPor = CuponDescuentoPorcentaje::where('id_cupones', $infoCupon->id)
+                        ->where('id_servicios', $cart->id_servicios)
+                        ->first()){
+
+                        $aplico = '%' . $infoCuponDescuentoPor->porcentaje;
+
+                        $resta = $subtotal * ($infoCuponDescuentoPor->porcentaje / 100);
+                        $final = $subtotal - $resta;
+
+                        if($final <= 0){
+                            $final = 0;
+                        }
+
+                        $final = '$' . number_format((float)$final, 2, '.', '');
+
+
+                        // * cupon valido para descuento de porcentaje
+                        $titulo = "Nota";
+                        $mensaje = "Cupón aplica descuento de " . $aplico;
+                        return ['success' => 4, 'titulo' => $titulo, 'mensaje' => $mensaje, 'aplico' => $aplico,
+                            'resta' => $final];
+
+                    }else{
+                        $titulo = "Nota";
+                        $mensaje = "Cupón no válido";
+                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                    }
+
+                }
+
+                // Cupon no encontrado
+                else{
+
+                    $titulo = "Nota";
+                    $mensaje = "Cupón no válido";
+                    return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+
+                }
+
+
             }else{
 
                 $titulo = "Nota";
                 $mensaje = "Cupón no encontrado";
                 return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
             }
+        }else{
+
+            $titulo = "Nota";
+            $mensaje = "Cupón no encontrado";
+            return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+        }
     }
 
 

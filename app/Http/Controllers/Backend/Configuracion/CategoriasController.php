@@ -419,6 +419,24 @@ class CategoriasController extends Controller
     }
 
 
+    public function ordenarCategoriaPrincipal(Request $request){
+
+        $tasks = CategoriasPrincipales::all();
+
+        foreach ($tasks as $task) {
+            $id = $task->id;
+
+            foreach ($request->order as $order) {
+                if ($order['id'] == $id) {
+                    $task->update(['posicion' => $order['posicion']]);
+                }
+            }
+        }
+        return ['success' => 1];
+    }
+
+
+
 
     // ******************** PRODUCTOS PRINCIPALES DEL SERVICIO /////
 
@@ -525,6 +543,24 @@ class CategoriasController extends Controller
         return ['success'=> 1];
 
     }
+
+
+    public function ordenarProductosPopulares(Request $request){
+
+        $tasks = Populares::all();
+
+        foreach ($tasks as $task) {
+            $id = $task->id;
+
+            foreach ($request->order as $order) {
+                if ($order['id'] == $id) {
+                    $task->update(['posicion' => $order['posicion']]);
+                }
+            }
+        }
+        return ['success' => 1];
+    }
+
 
 
 }

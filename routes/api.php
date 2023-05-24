@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\Registro\ApiRegistroController;
 use App\Http\Controllers\Api\Cliente\ApiClienteController;
 use App\Http\Controllers\Api\Cliente\ApiDireccionesController;
 use App\Http\Controllers\Api\Cliente\ApiMenuController;
-use App\Http\Controllers\Api\Carrito\CarritoComprasController;
+use App\Http\Controllers\Api\Carrito\ApiCarritoComprasController;
 use App\Http\Controllers\Api\Procesar\ApiProcesarController;
 use App\Http\Controllers\Api\Ordenes\ApiOrdenesController;
 use App\Http\Controllers\Api\Ordenes\ApiOrdenesRestauranteController;
@@ -55,29 +55,29 @@ Route::post('cliente/listado/productos/servicios', [ApiMenuController::class, 'l
 Route::post('cliente/informacion/producto/individual', [ApiMenuController::class, 'informacionProductoIndividual']);
 
 // agregar el producto al carrito de compras del cliente
-Route::post('cliente/carrito/producto/agregar', [CarritoComprasController::class, 'agregarProductoCarritoTemporal']);
+Route::post('cliente/carrito/producto/agregar', [ApiCarritoComprasController::class, 'agregarProductoCarritoTemporal']);
 
 // ver carrito de compras
-Route::post('cliente/carrito/ver/orden', [CarritoComprasController::class, 'verCarritoDeCompras']);
+Route::post('cliente/carrito/ver/orden', [ApiCarritoComprasController::class, 'verCarritoDeCompras']);
 
 // borrar carrito de compras
-Route::post('cliente/carrito/borrar/orden', [CarritoComprasController::class, 'borrarCarritoDeCompras']);
+Route::post('cliente/carrito/borrar/orden', [ApiCarritoComprasController::class, 'borrarCarritoDeCompras']);
 
 // eliminar una fila del carrito de compras
-Route::post('cliente/carrito/eliminar/producto', [CarritoComprasController::class, 'borrarProductoDelCarrito']);
+Route::post('cliente/carrito/eliminar/producto', [ApiCarritoComprasController::class, 'borrarProductoDelCarrito']);
 
 // ver producto individual en pantalla de editar la cantidad
 
-Route::post('cliente/carrito/ver/producto', [CarritoComprasController::class, 'verProductoCarritoEditar']);
+Route::post('cliente/carrito/ver/producto', [ApiCarritoComprasController::class, 'verProductoCarritoEditar']);
 
 // cambiar la cantidad de producto a editar en carrito de compras
-Route::post('cliente/carrito/cambiar/cantidad', [CarritoComprasController::class, 'editarCantidadProducto']);
+Route::post('cliente/carrito/cambiar/cantidad', [ApiCarritoComprasController::class, 'editarCantidadProducto']);
 
 // informacion final para procesar la orden
-Route::post('cliente/carrito/ver/proceso-orden', [CarritoComprasController::class, 'verOrdenAProcesarCliente']);
+Route::post('cliente/carrito/ver/proceso-orden', [ApiCarritoComprasController::class, 'verOrdenAProcesarCliente']);
 
 // ** verificacion de cupones **
-Route::post('cliente/verificar/cupon', [CarritoComprasController::class, 'verificarCupon']);
+Route::post('cliente/verificar/cupon', [ApiCarritoComprasController::class, 'verificarCupon']);
 
 
 
@@ -110,10 +110,17 @@ Route::post('cliente/listado/productos/ordenes',  [ApiOrdenesController::class, 
 Route::post('cliente/listado/productos/ordenes-individual',  [ApiOrdenesController::class, 'infoProductoOrdenadoIndividual']);
 
 
+// CANCELAR ORDEN POR EL CLIENTE
+Route::post('cliente/proceso/cancelar/orden', [ApiOrdenesController::class, 'cancelarOrdenPorCliente']);
 
 
 
+// HISTORIAL DE ORDENES POR EL CLIENTE
+Route::post('cliente/historial/listado/ordenes', [ApiOrdenesController::class, 'historialOrdenesCliente']);
 
+
+//  OCULTARME MI ORDEN PORQUE FUE CANCELADA
+Route::post('cliente/ocultar/mi/orden', [ApiOrdenesController::class, 'ocultameOrdenCliente']);
 
 
 

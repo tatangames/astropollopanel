@@ -193,6 +193,7 @@ Route::get('/admin/categorias/servicio/principales/{id}', [CategoriasController:
 Route::get('/admin/categorias/servicio/principales/tabla/{id}', [CategoriasController::class,'tablaServiciosCuponDescuentoDinero']);
 Route::post('/admin/categorias/servicio/principales/nuevo', [CategoriasController::class,'nuevoCategoriaPrincipal']);
 Route::post('/admin/categorias/servicio/principales/borrar', [CategoriasController::class,'borrarCategoriaPrincipal']);
+Route::post('/admin/categorias/servicio/principales/ordenar', [CategoriasController::class,'ordenarCategoriaPrincipal']);
 
 
 
@@ -201,6 +202,10 @@ Route::get('/admin/productos/servicio/principales/{id}', [CategoriasController::
 Route::get('/admin/productos/servicio/principales/tabla/{id}', [CategoriasController::class,'tablaServiciosProductosPrincipales']);
 Route::post('/admin/productos/servicio/principales/nuevo', [CategoriasController::class,'nuevoProductosPrincipales']);
 Route::post('/admin/productos/servicio/principales/borrar', [CategoriasController::class,'borrarProductosPrincipales']);
+Route::post('/admin/productos/servicio/principales/ordenar', [CategoriasController::class,'ordenarProductosPopulares']);
+
+
+
 
 
 // --- LISTA DE CLIENTES REGISTRADOS ----

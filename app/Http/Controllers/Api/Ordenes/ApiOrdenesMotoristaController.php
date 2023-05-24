@@ -50,7 +50,7 @@ class ApiOrdenesMotoristaController extends Controller
 
             $arrayOrdenes = Ordenes::where('estado_iniciada', 1)
                 ->where('estado_cancelada', 0)
-                ->where('id', $infoUsuario->id_servicios)
+                ->where('id_servicio', $infoUsuario->id_servicios)
                 ->whereNotIn('id', $pilaIdOrdenes)
                 ->get();
 
@@ -269,6 +269,15 @@ class ApiOrdenesMotoristaController extends Controller
                 $info->totalformat = '$' . number_format((float)$totalAPagar, 2, '.', ',');
 
 
+
+                $estado = "Pendiente";
+
+                if($info->estado_preparada == 1){
+                    $estado = "Orden Lista para Entrega";
+                }
+
+                $info->estado = $estado;
+
                 $info->haycupon = $haycupon;
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
@@ -398,6 +407,9 @@ class ApiOrdenesMotoristaController extends Controller
 
                 $info->totalformat = '$' . number_format((float)$totalAPagar, 2, '.', ',');
 
+                $estado = "Orden en Entrega";
+
+                $info->estado = $estado;
 
                 $info->haycupon = $haycupon;
                 $info->cliente = $infoOrdenesDireccion->nombre;
@@ -637,7 +649,7 @@ class ApiOrdenesMotoristaController extends Controller
 
         if($validarDatos->fails()){return ['success' => 0]; }
 
-        if($infoUsuario = UsuariosServicios::where('id', $request->id)->first()){
+        if($infoUsuario = MotoristasServicios::where('id', $request->id)->first()){
 
             $date1 = Carbon::parse($request->fecha1)->startOfDay();
             $date2 = Carbon::parse($request->fecha2)->endOfDay();

@@ -62,7 +62,7 @@
 
             openLoading();
 
-            axios.post('/admin/categorias/servicio/principales/borrar',  {
+            axios.post('/admin/categorias/servicio/principales/ordenar',  {
                 'order': order
             })
                 .then((response) => {

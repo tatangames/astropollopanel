@@ -61,7 +61,6 @@ class ServiciosController extends Controller
 
             $tipo->nombre = $request->nombre;
             $tipo->utiliza_cupon = $request->togglecupon;
-            $tipo->tiempo_cocina = 10; // tiempo que da cocina para preparar orden por defecto
             $tipo->save();
 
             // guardar Horarios
@@ -149,19 +148,15 @@ class ServiciosController extends Controller
 
         if(Servicios::where('id', $request->id)->first()) {
 
-            DB::beginTransaction();
-            try {
 
-                Servicios::where('id', $request->id)->update([
-                    'nombre' => $request->nombre,
-                    'utiliza_cupon' => $request->togglecupon,
-                ]);
+            Servicios::where('id', $request->id)->update([
+                'nombre' => $request->nombre,
+                'utiliza_cupon' => $request->togglecupon,
+            ]);
 
-            } catch (\Throwable $e) {
+            DB::commit();
+            return ['success' => 1];
 
-                DB::rollback();
-                return ['success' => 99];
-            }
         }else{
             return ['success' => 99];
         }

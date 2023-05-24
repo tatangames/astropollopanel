@@ -424,11 +424,7 @@ class ApiProcesarController extends Controller
                     $orden->total_cupon = $totalCarritoCupon;
                     $orden->mensaje_cupon = $mensajeCupon;
                     $orden->visible = 1;
-                    $orden->visible_p = 0;
-                    $orden->visible_p2 = 0;
-                    $orden->visible_p3 = 0;
                     $orden->cancelado_por = 0;
-                    $orden->visible_m = 0;
 
                     $orden->save();
 
