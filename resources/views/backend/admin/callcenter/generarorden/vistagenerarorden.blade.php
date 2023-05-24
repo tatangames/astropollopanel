@@ -30,7 +30,7 @@
 
                 <div class="col-md-8">
                     <div class="input-group">
-                        <input type="text" style="max-width: 350px" id="numero-cliente" class="form-control form-control-lg noEnterSubmit" placeholder="Número Telefónico">
+                        <input type="text" style="max-width: 350px" id="numero-cliente" autocomplete="off" class="form-control form-control-lg" placeholder="Número Telefónico">
                         <div class="input-group-append">
                             <button type="button" class="btn btn-lg btn-default" onclick="buscarNumero()">
                                 <i class="fa fa-search"></i>
@@ -356,12 +356,12 @@
     <script type="text/javascript">
         $(document).ready(function(){
 
-            $('.noEnterSubmit').keypress(function(e){
-                if ( e.which == 13 ) return false;
-                //or...
-                if ( e.which == 13 ) e.preventDefault();
-            });
 
+            $("#numero-cliente").on('keyup', function (e) {
+                if (e.key === 'Enter' || e.keyCode === 13) {
+                    buscarNumero();
+                }
+            });
 
             cargarTablaMenu();
         });
