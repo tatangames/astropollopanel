@@ -16,7 +16,6 @@ use App\Models\HorarioServicio;
 use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
-use App\Models\OrdenesNotificaciones;
 use App\Models\Servicios;
 use App\Models\SubCategorias;
 use App\Models\UsuariosServicios;
@@ -477,10 +476,6 @@ class ApiProcesarController extends Controller
 
 
 
-                    // GUARDAR REGISTRO NOTIFICACION PARA RESTAURANTE
-                    $notificacion = new OrdenesNotificaciones();
-                    $notificacion->id_ordenes = $orden->id;
-                    $notificacion->save();
 
 
                     if($request->idfirebase != null){

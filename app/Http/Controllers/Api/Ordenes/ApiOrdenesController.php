@@ -10,7 +10,6 @@ use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesMotoristas;
-use App\Models\OrdenesNotificaciones;
 use App\Models\Productos;
 use App\Models\UsuariosServicios;
 use Carbon\Carbon;
@@ -396,7 +395,6 @@ class ApiOrdenesController extends Controller
                         'fecha_cancelada' => $fecha]);
 
 
-                    OrdenesNotificaciones::where('id_ordenes', $infoOrden->id)->delete();
 
 
                     // SUBIR CONTADOR DE CUPON SI FUE UITILIZADO

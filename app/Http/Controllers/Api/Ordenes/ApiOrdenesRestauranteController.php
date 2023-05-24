@@ -11,7 +11,6 @@ use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesMotoristas;
-use App\Models\OrdenesNotificaciones;
 use App\Models\Productos;
 use App\Models\SubCategorias;
 use App\Models\UsuariosServicios;
@@ -218,9 +217,6 @@ class ApiOrdenesRestauranteController extends Controller
                               'fecha_iniciada' => $fechaHoy,
                               'fecha_estimada' => $horaEstimada]);
 
-                // BORRAR TABLA NOTIFICACIONES PARA QUE YA NO SIGAN LLEGANDO
-
-                OrdenesNotificaciones::where('id_ordenes', $infoOrden->id)->delete();
 
 
                 // NOTIFICACION ONE SIGNAL A CLIENTE
@@ -364,7 +360,6 @@ class ApiOrdenesRestauranteController extends Controller
                     'nota_cancelada' => $request->mensaje]);
 
 
-                OrdenesNotificaciones::where('id_ordenes', $infoOrden->id)->delete();
 
 
 
