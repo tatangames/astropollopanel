@@ -1223,7 +1223,10 @@
                         alertasOrdenError(response.data.mensaje);
                     }
                     else if(response.data.success === 2){
+
                         alertaOrdenEnviada(response.data.mensaje);
+
+                        peticionNotificacionRestaurante(response.data.id);
                     }
                     else {
                         toastr.error('Error del servidor');
@@ -1236,6 +1239,23 @@
                 });
         }
 
+
+        function peticionNotificacionRestaurante(id){
+
+            let formData = new FormData();
+            formData.append('id', id);
+
+            axios.post('/admin/callcenter/notificacion/orden',formData, {
+            })
+                .then((response) => {
+
+                   // SOLO ENVIA NOTIFICACION A RESTAURANTE
+
+                })
+                .catch((error) => {
+
+                });
+        }
 
         function alertasOrdenError(mensaje){
 

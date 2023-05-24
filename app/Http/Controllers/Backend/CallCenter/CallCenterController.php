@@ -15,6 +15,7 @@ use App\Models\OrdenesDirecciones;
 use App\Models\Productos;
 use App\Models\Servicios;
 use App\Models\SubCategorias;
+use App\Models\UsuariosServicios;
 use App\Models\Zonas;
 use App\Models\ZonasServicio;
 use Carbon\Carbon;
@@ -900,18 +901,13 @@ class CallCenterController extends Controller
 
 
 
-
-
-
-
-
                     // BORRAR CARRITO DE COMPRAS
                     CarritoCallCenterExtra::where('id_carrito_call_tempo', $infoCarrito->id)->delete();
                     CarritoCallCenterTemporal::where('id_callcenter', $idSession)->delete();
 
                      DB::commit();
                 $mensaje = "Orden enviada";
-                return ['success' => 2, 'mensaje' => $mensaje];
+                return ['success' => 2, 'mensaje' => $mensaje, 'id' => $orden->id];
 
             }else{
                 $mensaje = "No se encontro carrito de compras";
@@ -925,6 +921,68 @@ class CallCenterController extends Controller
                 DB::rollback();
                 return ['success' => 99];
             }
+    }
+
+
+
+
+    public function notificacionARestaurante(Request $request){
+
+
+        $rules = array(
+            'id' => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ( $validator->fails()){return ['success' => 0];}
+
+
+        if($infoOrden = Ordenes::where('id', $request->id)->first()){
+
+            if($infoUsuario = UsuariosServicios::where('id_servicios', $infoOrden->id_servicio)->first()){
+
+
+                if($infoUsuario->token_fcm != null){
+
+                    // ENVIAR NOTIFICACION
+
+
+                    $AppId = config('googleapi.IdApp_Restaurante');
+
+                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
+
+                    $mensaje = "Nueva Orden #" . $infoOrden->id;
+                    $titulo = "Revisar Pedido";
+
+                    $tokenUsuario = $infoUsuario->token_fcm;
+
+                    $contents = array(
+                        "en" => $mensaje
+                    );
+
+                    $params = array(
+                        'app_id' => $AppId,
+                        'contents' => $contents,
+                        'android_channel_id' => $AppGrupoNotiPasivo,
+                        'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
+                    );
+
+                    $params['headings'] = array(
+                        "en" => $titulo
+                    );
+
+                    OneSignal::sendNotificationCustom($params);
+                }
+            }
+
+            return ['success' => 1];
+        }
+        else{
+            return ['success' => 2];
+        }
+
+
     }
 
 

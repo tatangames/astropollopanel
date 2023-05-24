@@ -356,6 +356,8 @@ Route::post('/admin/callcenter/actualizar/fila/carrito', [CallCenterController::
 // ENVIAR ORDEN FINAL POR CALL CENTER
 Route::post('/admin/callcenter/enviar/orden', [CallCenterController::class,'enviarOrdenFinal']);
 
+// ENVIAR NOTIFICACION DESPUES DE ENVIAR LA ORDEN EL DEL CALL CENTER
+Route::post('/admin/callcenter/notificacion/orden', [CallCenterController::class,'notificacionARestaurante']);
 
 
 
