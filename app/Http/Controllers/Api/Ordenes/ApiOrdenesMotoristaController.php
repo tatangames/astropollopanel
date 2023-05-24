@@ -832,7 +832,50 @@ class ApiOrdenesMotoristaController extends Controller
         }else{
             return ['success' => 2];
         }
+    }
 
+
+
+    public function enviarCorreoTest(Request $request){
+
+
+        return "ta lenga";
+
+        // $idAppCliente = "f86a2ee4-a10b-4a86-a063-151be6845bce";
+        $idAppRestaurante = "5c22da89-09a8-4b89-ad94-84172cdd14e8";
+
+        $mensaje = "restaurante";
+        $titulo = "mensaje eee";
+
+
+        //$userId = "251a4965-fe66-42b0-bd5c-094838668d20";
+
+        $userRestaurante = "07252430-b70c-429d-b630-332654b321b0";
+
+
+        $contents = array(
+            "en" => $mensaje
+        );
+
+        $params = array(
+            'app_id' => $idAppRestaurante,
+            'contents' => $contents,
+            'android_channel_id' => "9d335720-f085-483f-a73f-18e5a3cd777b",
+            'include_player_ids' => is_array($userRestaurante) ? $userRestaurante : array($userRestaurante)
+        );
+
+        $params['headings'] = array(
+            "en" => $titulo
+        );
+
+
+
+        OneSignal::sendNotificationCustom($params);
+
+
+
+
+        return "enviado";
 
     }
 
