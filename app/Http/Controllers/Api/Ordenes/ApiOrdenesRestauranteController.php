@@ -11,6 +11,7 @@ use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesMotoristas;
+use App\Models\OrdenesNotificaciones;
 use App\Models\Productos;
 use App\Models\SubCategorias;
 use App\Models\UsuariosServicios;
@@ -20,6 +21,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use OneSignal;
 
 class ApiOrdenesRestauranteController extends Controller
 {
@@ -39,6 +41,13 @@ class ApiOrdenesRestauranteController extends Controller
             if($infoUsuario->bloqueado == 1){
                 return ['success'=> 1];
             }
+
+
+            if($request->idfirebase != null){
+                UsuariosServicios::where('id', $infoUsuario->id)->update(['token_fcm' => $request->idfirebase]);
+            }
+
+
 
             $arrayOrdenes = Ordenes::where('estado_iniciada', 0)
                 ->where('estado_cancelada', 0)
@@ -209,19 +218,45 @@ class ApiOrdenesRestauranteController extends Controller
                               'fecha_iniciada' => $fechaHoy,
                               'fecha_estimada' => $horaEstimada]);
 
+                // BORRAR TABLA NOTIFICACIONES PARA QUE YA NO SIGAN LLEGANDO
 
-                // NOTIFICACION ONE SIGNAL
+                OrdenesNotificaciones::where('id_ordenes', $infoOrden->id)->delete();
+
+
+                // NOTIFICACION ONE SIGNAL A CLIENTE
 
                 $infoCliente = Clientes::where('id', $infoOrden->id_cliente)->first();
 
                 if($infoCliente->token_fcm != null){
 
-                    //$tituloNoti = "Orden #" . $request->ordenid . " Aceptada";
-                    //$mensajeNoti = "Su orden inicia su Preparación";
-
-                    // ENVIAR NOTIFICACIONES
+                    $tituloNoti = "Orden #" . $infoOrden->id . " Aceptada";
+                    $mensajeNoti = "Su orden inicia su Preparación";
 
 
+
+                    $AppId = config('googleapi.IdApp_Cliente');
+
+                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoCliente');
+
+
+                    $tokenUsuario = $infoCliente->token_fcm;
+
+                    $contents = array(
+                        "en" => $mensajeNoti
+                    );
+
+                    $params = array(
+                        'app_id' => $AppId,
+                        'contents' => $contents,
+                        'android_channel_id' => $AppGrupoNotiPasivo,
+                        'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
+                    );
+
+                    $params['headings'] = array(
+                        "en" => $tituloNoti
+                    );
+
+                    OneSignal::sendNotificationCustom($params);
                 }
 
                 // NOTIFICACION ONE SIGNAL QUE HAY ORDENES QUE PUEDEN SER AGARRADAS YA
@@ -245,7 +280,27 @@ class ApiOrdenesRestauranteController extends Controller
                     // ENVIAR NOTIFICACIONES
 
 
+                    $AppId = config('googleapi.IdApp_Motorista');
 
+                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoAlarmaMotorista');
+
+
+                    $contents = array(
+                        "en" => $mensajeNoti
+                    );
+
+                    $params = array(
+                        'app_id' => $AppId,
+                        'contents' => $contents,
+                        'android_channel_id' => $AppGrupoNotiPasivo,
+                        'include_player_ids' => is_array($pilaMotoristas) ? $pilaMotoristas : array($pilaMotoristas)
+                    );
+
+                    $params['headings'] = array(
+                        "en" => $tituloNoti
+                    );
+
+                    OneSignal::sendNotificationCustom($params);
                 }
 
                 $titulo = "Nota";
@@ -309,6 +364,10 @@ class ApiOrdenesRestauranteController extends Controller
                     'nota_cancelada' => $request->mensaje]);
 
 
+                OrdenesNotificaciones::where('id_ordenes', $infoOrden->id)->delete();
+
+
+
                 // SI SE UTILIZO CUPON SE DEBE DE VOLVER A SUMAR SU CONTADOR EN - 1
 
                 if($infoOrden->id_cupones_copia != null){
@@ -326,10 +385,35 @@ class ApiOrdenesRestauranteController extends Controller
 
                     if($infoCliente->token_fcm != null){
 
-                        $tituloNoti = "Orden #" . $request->ordenid . " Cancelada";
-                        $mensajeNoti = "Revise su Orden";
+                        $tituloNoti = "Orden #" . $infoOrden->id . " Cancelada";
+                        $mensajeNoti = "Fue cancelada por Restaurante";
 
                         // ENVIAR NOTIFICACION
+
+
+                        $AppId = config('googleapi.IdApp_Cliente');
+
+                        $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoCliente');
+
+                        $tokenUsuario = $infoCliente->token_fcm;
+
+                        $contents = array(
+                            "en" => $mensajeNoti
+                        );
+
+                        $params = array(
+                            'app_id' => $AppId,
+                            'contents' => $contents,
+                            'android_channel_id' => $AppGrupoNotiPasivo,
+                            'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
+                        );
+
+                        $params['headings'] = array(
+                            "en" => $tituloNoti
+                        );
+
+                        OneSignal::sendNotificationCustom($params);
+
                     }
 
                     DB::commit();
@@ -450,11 +534,10 @@ class ApiOrdenesRestauranteController extends Controller
 
                 // NOTIFICACION ONE SIGNAL  A MOTORISTA QUE TIENE LA ORDEN SELECCIONADA
 
-                if($infoOrdenMoto = OrdenesMotoristas::where('id_ordenes', $infoOrden->orden)->first()){
+                if($infoOrdenMoto = OrdenesMotoristas::where('id_ordenes', $infoOrden->id)->first()){
 
                     // un motorista ya tiene la orden seleccionada
                     $infoMotorista = MotoristasServicios::where('id', $infoOrdenMoto->id_motorista)->first();
-
 
                     if($infoMotorista->token_fcm != null){
 
@@ -462,6 +545,31 @@ class ApiOrdenesRestauranteController extends Controller
                         $mensajeNoti = "Esta lista para Entrega";
 
                         // ENVIAR NOTIFICACIONES A MOTORISTA
+
+
+                        $AppId = config('googleapi.IdApp_Motorista');
+
+                        $AppGrupoNotiAlarma = config('googleapi.IdGrupoAlarmaMotorista');
+
+                        $tokenMotorista = $infoMotorista->token_fcm;
+
+
+                        $contents = array(
+                            "en" => $mensajeNoti
+                        );
+
+                        $params = array(
+                            'app_id' => $AppId,
+                            'contents' => $contents,
+                            'android_channel_id' => $AppGrupoNotiAlarma,
+                            'include_player_ids' => is_array($tokenMotorista) ? $tokenMotorista : array($tokenMotorista)
+                        );
+
+                        $params['headings'] = array(
+                            "en" => $tituloNoti
+                        );
+
+                        OneSignal::sendNotificationCustom($params);
                     }
 
                 }else{
@@ -483,20 +591,38 @@ class ApiOrdenesRestauranteController extends Controller
 
 
                     if($pilaMotoristas != null) {
-                        $tituloNoti = "Hay Nuevas Ordenes";
+                        $tituloNoti = "Una Orden Sin Motorista";
                         $mensajeNoti = "Por Favor Verificar";
                         // ENVIAR NOTIFICACIONES A TODOS LOS MOTORISTAS DEL RESTAURANTE
 
 
+                        $AppId = config('googleapi.IdApp_Motorista');
 
+                        $AppGrupoNotiAlarma = config('googleapi.IdGrupoAlarmaMotorista');
+
+
+                        $contents = array(
+                            "en" => $mensajeNoti
+                        );
+
+                        $params = array(
+                            'app_id' => $AppId,
+                            'contents' => $contents,
+                            'android_channel_id' => $AppGrupoNotiAlarma,
+                            'include_player_ids' => is_array($pilaMotoristas) ? $pilaMotoristas : array($pilaMotoristas)
+                        );
+
+                        $params['headings'] = array(
+                            "en" => $tituloNoti
+                        );
+
+                        OneSignal::sendNotificationCustom($params);
                     }
                 }
 
 
                 $titulo = "Nota";
                 $mensaje = "Orden Finalizada";
-
-
 
                 // orden iniciada
                 return ['success' => 2, 'titulo' => $titulo, 'mensaje' => $mensaje];

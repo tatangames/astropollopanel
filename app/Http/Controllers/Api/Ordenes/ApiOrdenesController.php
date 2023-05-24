@@ -10,7 +10,9 @@ use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesMotoristas;
+use App\Models\OrdenesNotificaciones;
 use App\Models\Productos;
+use App\Models\UsuariosServicios;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -394,6 +396,8 @@ class ApiOrdenesController extends Controller
                         'fecha_cancelada' => $fecha]);
 
 
+                    OrdenesNotificaciones::where('id_ordenes', $infoOrden->id)->delete();
+
 
                     // SUBIR CONTADOR DE CUPON SI FUE UITILIZADO
 
@@ -406,6 +410,45 @@ class ApiOrdenesController extends Controller
 
                         Cupones::where('id', $infoCupon->id)
                             ->update(['contador' => $contador]);
+                    }
+
+
+
+                    // NOTIFICACION A RESTAURANTE DE ORDEN CANCELADA
+
+
+                    if($infoUsuario = UsuariosServicios::where('id_servicios', $infoOrden->id_servicio)->first()){
+
+
+                        if($infoUsuario->token_fcm != null){
+
+
+                            $AppId = config('googleapi.IdApp_Restaurante');
+
+                            $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
+
+                            $mensaje = "Orden #" . $infoOrden->id . " Cancelada";
+                            $titulo = "La orden fue cancelada por Cliente";
+
+                            $tokenUsuario = $infoUsuario->token_fcm;
+
+                            $contents = array(
+                                "en" => $mensaje
+                            );
+
+                            $params = array(
+                                'app_id' => $AppId,
+                                'contents' => $contents,
+                                'android_channel_id' => $AppGrupoNotiPasivo,
+                                'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
+                            );
+
+                            $params['headings'] = array(
+                                "en" => $titulo
+                            );
+
+                            OneSignal::sendNotificationCustom($params);
+                        }
                     }
 
 
@@ -422,6 +465,12 @@ class ApiOrdenesController extends Controller
                 }
 
             }else{
+
+                // DIGAMOS QUE CLIENTE CANCELO Y ANTES EL RESTAURANTE CANCELO,
+                // ASI QUE MEJOR OCULTAR YA QUE QUIERE CANCELAR
+
+                Ordenes::where('id', $infoOrden->id)->update(['visible' => 0]);
+
                 $titulo = "Orden Fue Cancelada";
                 $mensaje = "";
                 return ['success' => 2, 'titulo' => $titulo, 'mensaje' => $mensaje];

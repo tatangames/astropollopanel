@@ -17,7 +17,9 @@ use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesNotificaciones;
+use App\Models\Servicios;
 use App\Models\SubCategorias;
+use App\Models\UsuariosServicios;
 use App\Models\Zonas;
 use App\Models\ZonasServicio;
 use Carbon\Carbon;
@@ -25,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use OneSignal;
 
 class ApiProcesarController extends Controller
 {
@@ -39,6 +42,7 @@ class ApiProcesarController extends Controller
 
         // nota
         // cupon
+        // idfirebase
 
         $validarDatos = Validator::make($request->all(), $reglaDatos);
 
@@ -463,16 +467,6 @@ class ApiProcesarController extends Controller
                         OrdenesDescripcion::insert($data);
                     }
 
-
-
-                    // CREAR TAREA DE SEGUNDO PLANO PARA TIMER NOTIFICACION
-
-
-                    /*$notificacion = new OrdenesNotificaciones();
-                    $notificacion->id_ordenes = $orden->id;
-                    $notificacion->save();*/
-
-
                     $infoCliente = Clientes::where('id', $request->clienteid)->first();
 
                     // BORRAR CARRITO TEMPORAL DEL USUARIO
@@ -482,10 +476,22 @@ class ApiProcesarController extends Controller
                     }
 
 
-                    //DB::commit();
+
+                    // GUARDAR REGISTRO NOTIFICACION PARA RESTAURANTE
+                    $notificacion = new OrdenesNotificaciones();
+                    $notificacion->id_ordenes = $orden->id;
+                    $notificacion->save();
+
+
+                    if($request->idfirebase != null){
+                        Clientes::where('id', $infoCliente->id)->update(['token_fcm' => $request->idfirebase]);
+                    }
+
+
+                    DB::commit();
                     $titulo = "Orden #" . $orden->id;
                     $mensaje = "Espere la notificación del Restaurante para verificar su orden";
-                    return ['success' => 10, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                    return ['success' => 10, 'titulo' => $titulo, 'mensaje' => $mensaje, 'idorden' => $orden->id];
 
                 } catch (\Throwable $e) {
                     Log::info('error ' . $e);
@@ -508,8 +514,73 @@ class ApiProcesarController extends Controller
             $mensaje = "Carrito de compras no encontrado";
             return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
         }
+    }
+
+
+    // DESPUES QUE LA ORDEN FUE ENVIADA, EL CLIENTE PEDIRA QUE ENVIE NOTIFICACION A
+    // RESTAURANTE
+
+    public function notificacionOrdenParaRestaurante(Request $request){
+
+
+        $rules = array(
+            'id' => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ( $validator->fails()){return ['success' => 0];}
+
+
+        if($infoOrden = Ordenes::where('id', $request->id)->first()){
+
+            if($infoUsuario = UsuariosServicios::where('id_servicios', $infoOrden->id_servicio)->first()){
+
+
+                    if($infoUsuario->token_fcm != null){
+
+                        // ENVIAR NOTIFICACION
+
+
+                        $AppId = config('googleapi.IdApp_Restaurante');
+
+                        $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
+
+                        $mensaje = "Nueva Orden #" . $infoOrden->id;
+                        $titulo = "Revisar Pedido";
+
+                        $tokenUsuario = $infoUsuario->token_fcm;
+
+                        $contents = array(
+                            "en" => $mensaje
+                        );
+
+                        $params = array(
+                            'app_id' => $AppId,
+                            'contents' => $contents,
+                            'android_channel_id' => $AppGrupoNotiPasivo,
+                            'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
+                        );
+
+                        $params['headings'] = array(
+                            "en" => $titulo
+                        );
+
+                        OneSignal::sendNotificationCustom($params);
+                    }
+            }
+
+            return ['success' => 1];
+        }
+        else{
+            return ['success' => 2];
+        }
+
 
     }
+
+
+
 
 
 }

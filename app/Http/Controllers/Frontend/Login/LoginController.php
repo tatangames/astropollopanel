@@ -180,21 +180,27 @@ class LoginController extends Controller
 
 
 
+       // $idAppCliente = "f86a2ee4-a10b-4a86-a063-151be6845bce";
+        $idAppRestaurante = "ef1c8fd5-494d-47e7-abac-fbbee5c24188";
 
-
-        $mensaje = "ordnee";
+        $mensaje = "restaurante";
         $titulo = "mensaje eee";
 
-        $userId = "77a9a189-ceb6-49c3-bb11-f48452f185a9";
+
+        //$userId = "251a4965-fe66-42b0-bd5c-094838668d20";
+
+        $userRestaurante = "d586192d-d94a-4c82-855b-304c45ddef2c";
+
 
         $contents = array(
             "en" => $mensaje
         );
 
         $params = array(
-
+            'app_id' => $idAppRestaurante,
             'contents' => $contents,
-            'include_player_ids' => is_array($userId) ? $userId : array($userId)
+            'android_channel_id' => "ddeed491-0e02-42a6-8fdd-95736c067eee",
+            'include_player_ids' => is_array($userRestaurante) ? $userRestaurante : array($userRestaurante)
         );
 
         $params['headings'] = array(
@@ -208,7 +214,7 @@ class LoginController extends Controller
 
 
 
-
+        return "enviado";
 
 
 

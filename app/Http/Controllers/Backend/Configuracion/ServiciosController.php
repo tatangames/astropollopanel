@@ -428,7 +428,7 @@ class ServiciosController extends Controller
             $usuario->vehiculo = $request->vehiculo;
             $usuario->placa = $request->placa;
             $usuario->imagen = $nombreFoto;
-            $usuario->notificacion = 0;
+            $usuario->notificacion = 1;
 
 
             if($usuario->save()){

@@ -85,6 +85,8 @@ Route::post('cliente/verificar/cupon', [ApiCarritoComprasController::class, 'ver
 // ***********   ENVIO DE LA ORDEN DEL CLIENTE************
 Route::post('cliente/proceso/enviar/orden', [ApiProcesarController::class, 'enviarOrdenRestaurante']);
 
+// ENVIO NOTIFICACION DESPUES DE CONFIRMAR ORDEN
+Route::post('cliente/proceso/orden/notificacion', [ApiProcesarController::class, 'notificacionOrdenParaRestaurante']);
 
 
 // LISTADO DE ORDENES ACTIVAS DEL CLIENTE
@@ -266,4 +268,14 @@ Route::post('motorista/opcion/notificacion', [ApiOrdenesMotoristaController::cla
 
 // EDITAR ESTADO NOTIFICACIONES MOTORISTA
 Route::post('motorista/opcion/notificacion/editar', [ApiOrdenesMotoristaController::class, 'editarNotificaciones']);
+
+
+
+
+
+
+//Route::post('cliente/prueba/notificaciones', [\App\Http\Controllers\Frontend\Login\LoginController::class, 'enviarCorreoTest']);
+
+
+
 

@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use OneSignal;
 
 class ApiOrdenesMotoristaController extends Controller
 {
@@ -37,6 +38,12 @@ class ApiOrdenesMotoristaController extends Controller
             if($infoUsuario->bloqueado == 1){
                 return ['success'=> 1];
             }
+
+
+            if($request->idfirebase != null){
+                MotoristasServicios::where('id', $infoUsuario->id)->update(['token_fcm' => $request->idfirebase]);
+            }
+
 
             // array de ordenes que han sido agarradas para evitar que se muestren
             $arrayOrdenAsignadas = OrdenesMotoristas::all();
@@ -337,10 +344,32 @@ class ApiOrdenesMotoristaController extends Controller
 
                 if($infoCliente->token_fcm != null){
 
-                    $tituloNoti = "Orden #" . $request->ordenid . " En Camino";
+                    $tituloNoti = "Orden #" . $info->id . " En Camino";
                     $mensajeNoti = "El Motorista se Dirige a su Dirección";
 
 
+                    $AppId = config('googleapi.IdApp_Cliente');
+
+                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoCliente');
+
+                    $tokenUsuario = $infoCliente->token_fcm;
+
+                    $contents = array(
+                        "en" => $mensajeNoti
+                    );
+
+                    $params = array(
+                        'app_id' => $AppId,
+                        'contents' => $contents,
+                        'android_channel_id' => $AppGrupoNotiPasivo,
+                        'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
+                    );
+
+                    $params['headings'] = array(
+                        "en" => $tituloNoti
+                    );
+
+                    OneSignal::sendNotificationCustom($params);
                 }
 
                 $titulo = "Iniciado";
@@ -348,9 +377,10 @@ class ApiOrdenesMotoristaController extends Controller
 
                 return ['success' => 3, 'titulo' => $titulo, 'mensaje' => $mensaje];
             }else{
-
+                $titulo = "Iniciado";
+                $mensaje = "Seguir el Proceso en Ordenes de Entrega.";
                 // SIEMPRE DECIR QUE VA EN CAMINO
-                return ['success' => 3];
+                return ['success' => 3, 'titulo' => $titulo, 'mensaje' => $mensaje];
             }
         }else{
             return ['success' => 99];
@@ -454,14 +484,35 @@ class ApiOrdenesMotoristaController extends Controller
 
                 if($infoCliente->token_fcm != null){
 
-                    $tituloNoti = "Orden #" . $request->ordenid . " En Camino";
-                    $mensajeNoti = "El Motorista se Dirige a su Dirección";
+                    $tituloNoti = "Orden #" . $infoOrden->id . " Entregada";
+                    $mensajeNoti = "Muchas Gracias";
 
+                    $AppId = config('googleapi.IdApp_Cliente');
 
+                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoCliente');
+
+                    $tokenUsuario = $infoCliente->token_fcm;
+
+                    $contents = array(
+                        "en" => $mensajeNoti
+                    );
+
+                    $params = array(
+                        'app_id' => $AppId,
+                        'contents' => $contents,
+                        'android_channel_id' => $AppGrupoNotiPasivo,
+                        'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
+                    );
+
+                    $params['headings'] = array(
+                        "en" => $tituloNoti
+                    );
+
+                    OneSignal::sendNotificationCustom($params);
                 }
 
                 $titulo = "Orden Finalizada";
-                $mensaje = "Gracias";
+                $mensaje = "Muchas Gracias!";
 
                 return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
             }else{
