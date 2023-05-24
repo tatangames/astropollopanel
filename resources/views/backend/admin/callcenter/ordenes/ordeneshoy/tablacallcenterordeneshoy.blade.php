@@ -37,10 +37,10 @@
                                             @if($dato->estado_entregada == 0)
                                                 {{ $dato->estadoorden }}
                                             @else
-                                            <span class="badge bg-success">{{ $dato->estadoorden }}</span>
+                                                {{ $dato->estadoorden }}
                                             @endif
                                         @else
-                                            <span class="badge bg-danger">{{ $dato->estadoorden }}</span>
+                                            {{ $dato->estadoorden }}
                                         @endif
                                     </td>
 
