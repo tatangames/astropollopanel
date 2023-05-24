@@ -67,7 +67,7 @@ class VerificarOrdenes extends Command
 
             $AppId = config('googleapi.IdApp_Restaurante');
 
-            $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
+            $AppGrupoNotiPasivo = config('googleapi.IdGrupoAlarmaRestaurante');
 
             $mensaje = "Hay Nuevas Ordenes";
             $titulo = "Revisar las ordenes Pendientes";
