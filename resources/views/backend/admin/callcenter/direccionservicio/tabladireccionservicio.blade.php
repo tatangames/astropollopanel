@@ -7,12 +7,8 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 8%">Télefono</th>
-                                <th style="width: 8%">Cliente</th>
-                                <th style="width: 10%">Dirección</th>
-                                <th style="width: 10%">Referencia</th>
                                 <th style="width: 8%">Restaurante</th>
-                                <th style="width: 8%">Zona</th>
+                                <th style="width: 10%">Dirección</th>
                                 <th style="width: 8%">Opciones</th>
                             </tr>
                             </thead>
@@ -21,12 +17,8 @@
                             @foreach($listado as $dato)
 
                                 <tr>
-                                    <td>{{ $dato->telefono }}</td>
-                                    <td>{{ $dato->nombre }}</td>
-                                    <td>{{ $dato->direccion }}</td>
-                                    <td>{{ $dato->punto_referencia }}</td>
                                     <td>{{ $dato->nombreservicio }}</td>
-                                    <td>{{ $dato->nombrezona }}</td>
+                                    <td>{{ $dato->direccion }}</td>
 
                                     <td>
                                         <button type="button" class="btn btn-success btn-xs" onclick="informacionEditar({{ $dato->id }})">
@@ -35,8 +27,8 @@
 
                                         <br><br>
 
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacionCambiar({{ $dato->id }})">
-                                            <i class="fas fa-edit" title="Cambiar Restaurante"></i>&nbsp; Cambiar Restaurante
+                                        <button type="button" class="btn btn-danger btn-xs" onclick="modalBorrarDireccion({{ $dato->id }})">
+                                            <i class="fas fa-trash" title="Borrar"></i>&nbsp; Borrar
                                         </button>
                                     </td>
                                 </tr>

@@ -367,6 +367,8 @@ Route::post('/admin/callcenter/notificacion/orden', [CallCenterController::class
 Route::get('/admin/callcenter/listado/direcciones', [CallCenterDireccionesController::class,'indexListadoDirecciones'])->name('index.callcenter.listado.direcciones');
 Route::get('/admin/callcenter/listado/direcciones/tabla', [CallCenterDireccionesController::class,'tablaListadoDirecciones']);
 Route::post('/admin/callcenter/info/direccion/editar', [CallCenterDireccionesController::class,'informacionDireccionCallCenter']);
+Route::post('/admin/callcenter/editar/direccion/cambiarrestaurante', [CallCenterDireccionesController::class,'cambiarRestauranteDireccion']);
+
 
 // EDITAR LA DIRECCION
 Route::post('/admin/callcenter/editar/direccion', [CallCenterDireccionesController::class,'editarDireccionCallCenter']);
@@ -382,9 +384,22 @@ Route::get('/admin/callcenter/ordenes/todas', [CallCenterOrdenesController::clas
 Route::get('/admin/callcenter/ordenes/todas/tabla', [CallCenterOrdenesController::class,'tablaListadoOrdenesTodas']);
 
 
+// LISTADO DE DIRECCIONES DE RESTAURANTE PARA TENER REFERENCIA SI SE DA DOMICILIO A ESA DIRECCION
+
+Route::get('/admin/callcenter/listado/direcciones/restaurante', [CallCenterDireccionesController::class,'indexListadoDireccionesRestaurante'])->name('index.callcenter.listado.direcciones.restaurante');
+Route::get('/admin/callcenter/listado/direcciones/restaurante/tabla', [CallCenterDireccionesController::class,'tablaListadoDireccionesRestaurante']);
+Route::post('/admin/callcenter/restaurante/direccion/nueva', [CallCenterDireccionesController::class,'nuevaDireccionParaRestaurante']);
+Route::post('/admin/callcenter/restaurante/direccion/informacion', [CallCenterDireccionesController::class,'informacionDireccionRestaurante']);
+Route::post('/admin/callcenter/restaurante/direccion/editar', [CallCenterDireccionesController::class,'editarDireccionRestaurante']);
+Route::post('/admin/callcenter/restaurante/direccion/borrar', [CallCenterDireccionesController::class,'borrarDireccionRestaurante']);
 
 
+// LISTADO DE DIRECCIONES DE CLIENTES QUE NO TIENEN DIRECCION ASIGANADA
 
+Route::get('/admin/callcenter/listado/direcciones/sinzona', [CallCenterDireccionesController::class,'indexListadoDireccionSinzona'])->name('index.callcenter.listado.direcciones.sinzona');
+Route::get('/admin/callcenter/listado/direcciones/sinzona/tabla', [CallCenterDireccionesController::class,'tablaListadoDireccionSinzona']);
+Route::post('/admin/callcenter/listado/direccion/sinzona/info', [CallCenterDireccionesController::class,'infoDireccionSinZona']);
+Route::post('/admin/callcenter/listado/direccion/sinzona/editar', [CallCenterDireccionesController::class,'editarDireccionSinZona']);
 
 
 

@@ -92,14 +92,16 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                <div class="form-group">
-                                    <label>Restaurante:</label>
+                                <div class="form-group" style="margin-top: 25px">
+                                    <label style="font-weight: bold; font-size: 18px">Asignar Restaurante:</label>
                                     <select class="form-control" id="select-servicios">
                                         @foreach($restaurantes as $item)
                                             <option value="{{$item->id}}">{{$item->nombre}}</option>
                                         @endforeach
                                     </select>
                                 </div>
+
+                                <hr>
 
                                 <div class="form-group">
                                     <label>Nombre</label>

@@ -103,6 +103,73 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="modalEditarRestaurante" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Editar Dirección</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formulario-editar-restaurante">
+                    <div class="card-body">
+                        <div class="col-md-12">
+
+
+                            <div class="form-group">
+                                <label>Cliente</label>
+                                <input type="hidden" id="id-editar-restaurante">
+                                <input type="text" maxlength="100" disabled autocomplete="off" class="form-control" id="nombre-restaurante" placeholder="Nombre">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Dirección</label>
+                                <input type="text" maxlength="400" disabled autocomplete="off" class="form-control" id="direccion-restaurante" placeholder="Dirección">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Referencia</label>
+                                <input type="text" maxlength="400" disabled autocomplete="off" class="form-control" id="referencia-restaurante" placeholder="Referencia">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="text" maxlength="10" disabled autocomplete="off" class="form-control" id="telefono-restaurante" placeholder="teléfono">
+                            </div>
+
+
+                            <div class="form-group">
+                                <p style="font-weight: bold">Al Cambiar de Restaurante se Borrara la Zona Asignada y Carrito de Compras si tuviera esta dirección en Proceso de Ordenar</p>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Restaurante</label>
+                                <select class="form-control" id="select-restaurante">
+                                    @foreach($restaurantes as $item)
+                                        <option value="{{$item->id}}">{{$item->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" onclick="actualizarRestaurante()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 @extends('backend.menus.footerjs')
 @section('archivos-js')
 
@@ -225,8 +292,6 @@
                 return;
             }
 
-
-
             openLoading();
 
             var formData = new FormData();
@@ -255,6 +320,85 @@
                     closeLoading();
                 });
         }
+
+
+
+
+
+        function informacionCambiar(id){
+
+
+            // UTILIZO MISMA URL SOLO PARA OBTENER DIRECCION DEL CLIENTE
+
+            document.getElementById("formulario-editar-restaurante").reset();
+            openLoading();
+
+            axios.post('/admin/callcenter/info/direccion/editar',{
+                'id': id
+            })
+                .then((response) => {
+                    closeLoading();
+                    if(response.data.success === 1){
+
+                        $('#modalEditarRestaurante').modal('show');
+                        $('#id-editar-restaurante').val(id);
+                        $('#nombre-restaurante').val(response.data.info.nombre);
+                        $('#direccion-restaurante').val(response.data.info.direccion);
+                        $('#referencia-restaurante').val(response.data.info.punto_referencia);
+                        $('#telefono-restaurante').val(response.data.info.telefono);
+
+
+                    }else{
+                        toastr.error('Error al buscar');
+                    }
+                })
+                .catch((error) => {
+                    toastr.error('Error al buscar');
+                    closeLoading();
+                });
+        }
+
+
+
+        function actualizarRestaurante(){
+
+
+            var id = document.getElementById('id-editar-restaurante').value;
+
+            var idservicio = document.getElementById('select-restaurante').value;
+
+            if(idservicio === '') {
+                toastr.error('Restaurante es requerido');
+                return;
+            }
+
+
+            openLoading();
+
+            var formData = new FormData();
+            formData.append('id', id);
+            formData.append('idservicio', idservicio);
+
+            axios.post('/admin/callcenter/editar/direccion/cambiarrestaurante', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+                    if (response.data.success === 1) {
+                        $('#modalEditarRestaurante').modal('hide');
+                        toastr.success('Actualizado correctamente');
+                        recargar();
+                    }
+                    else {
+                        toastr.error('Error al Editar');
+                    }
+                })
+                .catch((error) => {
+                    toastr.error('Error al Editar');
+                    closeLoading();
+                });
+
+        }
+
 
 
 

@@ -204,47 +204,94 @@
 
 
 
-
-
-
-
                     @can('sidebar.callcenter')
 
 
 
+
+
+
+
                         <li class="nav-item">
-                            <a href="{{ route('index.callcenter.generarorden') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Crear Orden</p>
+
+                            <a href="#" class="nav-link nav-">
+                                <i class="far fa-edit"></i>
+                                <p>
+                                    Ordenes
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
                             </a>
+
+                            <ul class="nav nav-treeview">
+
+
+                                <li class="nav-item">
+                                    <a href="{{ route('index.callcenter.generarorden') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Crear Orden</p>
+                                    </a>
+                                </li>
+
+
+
+                                <li class="nav-item">
+                                    <a href="{{ route('index.callcenter.listado.ordenes.hoy') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Ordenes Hoy</p>
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a href="{{ route('index.callcenter.listado.ordenes.todas') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Ordenes Todas</p>
+                                    </a>
+                                </li>
+
+                            </ul>
                         </li>
 
 
                         <li class="nav-item">
-                            <a href="{{ route('index.callcenter.listado.direcciones') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Direcciones</p>
+
+                            <a href="#" class="nav-link nav-">
+                                <i class="far fa-edit"></i>
+                                <p>
+                                    Direcciones
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
                             </a>
+
+                            <ul class="nav nav-treeview">
+
+
+
+                                <li class="nav-item">
+                                    <a href="{{ route('index.callcenter.listado.direcciones') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Direcciones</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{ route('index.callcenter.listado.direcciones.sinzona') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Dirección sin Zona</p>
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a href="{{ route('index.callcenter.listado.direcciones.restaurante') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Direcciones Restaurante</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
                         </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('index.callcenter.listado.ordenes.hoy') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Ordenes Hoy</p>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a href="{{ route('index.callcenter.listado.ordenes.todas') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Ordenes Todas</p>
-                            </a>
-                        </li>
-
-
-
-
                     @endcan
 
 
