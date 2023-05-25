@@ -11,4 +11,5 @@ return [
     'IdGrupoAlarmaRestaurante' => env('ONE_SIGNAL_GRUPO_ALARMA_RESTAURANTE', ''),
     'IdGrupoAlarmaMotorista' => env('ONE_SIGNAL_GRUPO_ALARMA_MOTORISTA', ''),
     'IdGrupoPasivoCliente' => env('ONE_SIGNAL_GRUPO_PASIVO_CLIENTE', ''),
+    'IdGrupoPasivoMotorista' => env('ONE_SIGNAL_GRUPO_PASIVO_MOTORISTA', ''),
 ];

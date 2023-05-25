@@ -86,6 +86,7 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
+                $info->referencia = $infoOrdenesDireccion->referencia;
             }
 
             return ['success' => 2, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
@@ -280,7 +281,7 @@ class ApiOrdenesRestauranteController extends Controller
 
                     $AppId = config('googleapi.IdApp_Motorista');
 
-                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoAlarmaMotorista');
+                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoMotorista');
 
 
                     $contents = array(
@@ -488,6 +489,7 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
+                $info->referencia = $infoOrdenesDireccion->referencia;
             }
 
             return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
@@ -693,6 +695,7 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
+                $info->referencia = $infoOrdenesDireccion->referencia;
             }
 
             return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
@@ -757,6 +760,7 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
+                $info->referencia = $infoOrdenesDireccion->referencia;
             }
 
             return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
