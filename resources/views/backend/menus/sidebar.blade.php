@@ -207,43 +207,65 @@
 
 
 
-                    @can('sidebar.notificaciones')
-                        <li class="nav-item">
+                @can('sidebar.notificaciones')
+                    <li class="nav-item">
 
-                            <a href="#" class="nav-link nav-">
-                                <i class="far fa-edit"></i>
-                                <p>
-                                    Notificaciones
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
+                        <a href="#" class="nav-link nav-">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Notificaciones
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
 
-                            <ul class="nav nav-treeview">
-
-
-                                <li class="nav-item">
-                                    <a href="{{ route('index.notificaciones.restaurantes') }}" target="frameprincipal" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Por Restaurante</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="{{ route('index.notificaciones.porcliente') }}" target="frameprincipal" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Por Cliente</p>
-                                    </a>
-                                </li>
+                        <ul class="nav nav-treeview">
 
 
+                            <li class="nav-item">
+                                <a href="{{ route('index.notificaciones.restaurantes') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Por Restaurante</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.notificaciones.porcliente') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Por Cliente</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                @endcan
+
+
+                @can('sidebar.reportes')
+                    <li class="nav-item">
+
+                        <a href="#" class="nav-link nav-">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Reportes
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+
+                        <ul class="nav nav-treeview">
+
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.reporte.ordenes.calificadas') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Ordenes Calificadas</p>
+                                </a>
+                            </li>
 
 
 
-
-                            </ul>
-                        </li>
-                    @endcan
-
+                        </ul>
+                    </li>
+                @endcan
 
 
 

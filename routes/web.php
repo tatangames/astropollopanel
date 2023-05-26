@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\CallCenter\CallCenterController;
 use App\Http\Controllers\Backend\CallCenter\CallCenterDireccionesController;
 use App\Http\Controllers\Backend\CallCenter\CallCenterOrdenesController;
 use App\Http\Controllers\Backend\Configuracion\NotificacionesController;
+use App\Http\Controllers\Backend\Reportes\ReportesController;
 
 
 
@@ -303,6 +304,37 @@ Route::get('/admin/notificaciones/vista/porcliente', [NotificacionesController::
 Route::get('/admin/notificaciones/vista/porcliente/tabla', [NotificacionesController::class,'tablaClientesDireccionesNotificacion']);
 Route::post('/admin/notificacion/cliente/informacion', [NotificacionesController::class,'informacionCliente']);
 Route::post('/admin/notificaciones/enviar/porcliente', [NotificacionesController::class,'enviarNotiPorCliente']);
+
+
+
+
+
+// --- REPORTES ---
+Route::get('/admin/reportes/ordenes/calificadas', [ReportesController::class,'vistaReporteOrdenesCalificadas'])->name('index.reporte.ordenes.calificadas');
+
+Route::get('/admin/pdf/ordenes/calificadas/{idservicio}/{desde}/{hasta}', [ReportesController::class,'pdfOrdenesCalificadas']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
