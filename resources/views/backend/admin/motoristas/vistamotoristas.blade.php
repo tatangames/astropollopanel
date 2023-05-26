@@ -343,6 +343,9 @@
 
             openLoading();
 
+            document.getElementById("formulario-editar").reset();
+
+
             axios.post('/admin/motoristas/usuario/informacion', {
                 'id': id
             })

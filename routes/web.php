@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\Ordenes\OrdenesController;
 use App\Http\Controllers\Backend\CallCenter\CallCenterController;
 use App\Http\Controllers\Backend\CallCenter\CallCenterDireccionesController;
 use App\Http\Controllers\Backend\CallCenter\CallCenterOrdenesController;
+use App\Http\Controllers\Backend\Configuracion\NotificacionesController;
 
 
 
@@ -292,10 +293,16 @@ Route::post('/admin/motoristas/usuario/editar', [ServiciosController::class,'act
 
 
 
+// --- NOTIFICACIONES ---
+Route::get('/admin/notificaciones/porrestaurantes', [NotificacionesController::class,'indexNotificacionPorRestaurante'])->name('index.notificaciones.restaurantes');
+Route::post('/admin/notificaciones/enviar/porservicio', [NotificacionesController::class,'enviarNotificacionPorServicio']);
 
 
-
-
+// VISTA BUSCAR UNA DIRECCION Y ESE CLIENTE ENVIARLA NOTIFICACION
+Route::get('/admin/notificaciones/vista/porcliente', [NotificacionesController::class,'indexListaDireccioneNotificacion'])->name('index.notificaciones.porcliente');
+Route::get('/admin/notificaciones/vista/porcliente/tabla', [NotificacionesController::class,'tablaClientesDireccionesNotificacion']);
+Route::post('/admin/notificacion/cliente/informacion', [NotificacionesController::class,'informacionCliente']);
+Route::post('/admin/notificaciones/enviar/porcliente', [NotificacionesController::class,'enviarNotiPorCliente']);
 
 
 
@@ -400,6 +407,9 @@ Route::get('/admin/callcenter/listado/direcciones/sinzona', [CallCenterDireccion
 Route::get('/admin/callcenter/listado/direcciones/sinzona/tabla', [CallCenterDireccionesController::class,'tablaListadoDireccionSinzona']);
 Route::post('/admin/callcenter/listado/direccion/sinzona/info', [CallCenterDireccionesController::class,'infoDireccionSinZona']);
 Route::post('/admin/callcenter/listado/direccion/sinzona/editar', [CallCenterDireccionesController::class,'editarDireccionSinZona']);
+
+
+
 
 
 
