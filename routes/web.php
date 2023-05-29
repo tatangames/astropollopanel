@@ -310,9 +310,16 @@ Route::post('/admin/notificaciones/enviar/porcliente', [NotificacionesController
 
 
 // --- REPORTES ---
-Route::get('/admin/reportes/ordenes/calificadas', [ReportesController::class,'vistaReporteOrdenesCalificadas'])->name('index.reporte.ordenes.calificadas');
 
+// ORDENES CALIFICADAS POR EL CLIENTE
+Route::get('/admin/reportes/ordenes/calificadas', [ReportesController::class,'vistaReporteOrdenesCalificadas'])->name('index.reporte.ordenes.calificadas');
 Route::get('/admin/pdf/ordenes/calificadas/{idservicio}/{desde}/{hasta}', [ReportesController::class,'pdfOrdenesCalificadas']);
+
+// ORDENES COMPLETADAS POR EL MOTORISTA
+Route::get('/admin/reportes/ordenes/entregadas', [ReportesController::class,'vistaReporteOrdenesEntregadas'])->name('index.reporte.ordenes.entregadas');
+Route::post('/admin/reportes/buscar/motorista', [ReportesController::class,'buscarMotoristaPorRestaurante']);
+Route::get('/admin/pdf/ordenes/entregadas/{idmotorista}/{idservicio}/{desde}/{hasta}', [ReportesController::class,'pdfOrdenesEntregadas']);
+
 
 
 

@@ -255,6 +255,14 @@
 
 
                             <li class="nav-item">
+                                <a href="{{ route('index.reporte.ordenes.entregadas') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Ordenes Entregadas</p>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item">
                                 <a href="{{ route('index.reporte.ordenes.calificadas') }}" target="frameprincipal" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Ordenes Calificadas</p>
