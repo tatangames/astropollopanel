@@ -177,7 +177,33 @@ class ApiClienteController extends Controller
 
         if($info = Clientes::where('id', $request->id)->first()){
 
-            return ['success' => 1, 'usuario' => $info->usuario];
+            $correo = $info->correo;
+
+            return ['success' => 1, 'usuario' => $info->usuario, 'correo' => $correo];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+
+    public function actualizarCorreoCliente(Request $request){
+
+
+        $rules = array(
+            'id' => 'required',
+            'correo' => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){return ['success' => 0]; }
+
+        if($info = Clientes::where('id', $request->id)->first()){
+
+
+            Clientes::where('id', $info->id)->update(['correo' => $request->correo]);
+
+            return ['success' => 1];
         }else{
             return ['success' => 2];
         }
@@ -215,8 +241,13 @@ class ApiClienteController extends Controller
 
                 if($info->cerrado == 1){
                     $info->horario = "Cerrado";
+                    // para ios
+                    $info->fechaformat = "Cerrado";
+
                 }else{
                     $info->horario = $hora1 . " / " . $hora2;
+                    // para ios
+                    $info->fechaformat = $hora1 . " / " . $hora2;
                 }
 
             }
@@ -412,7 +443,7 @@ class ApiClienteController extends Controller
                         DireccionCliente::where('id', $infoDireccionNueva->id)->update(['seleccionado' => 1]);
                     }
 
-                    DB::commit();
+                     DB::commit();
 
                     // BORRADA CORRECTAMENTE
                     return ['success' => 1];

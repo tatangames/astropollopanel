@@ -134,6 +134,9 @@ Route::post('cliente/ocultar/mi/orden', [ApiOrdenesController::class, 'ocultameO
 // informacion del cliente
 Route::post('cliente/informacion/personal', [ApiClienteController::class, 'informacionCliente']);
 
+// actualizar correo del cliente
+Route::post('cliente/actualizar/correo', [ApiClienteController::class, 'actualizarCorreoCliente']);
+
 // informacion horario del restaurante segun direccion
 Route::post('cliente/informacion/restaurante/horario', [ApiClienteController::class, 'informacionHorarioRestaurante']);
 
@@ -173,11 +176,13 @@ Route::post('restaurante/listado/producto/orden', [ApiOrdenesRestauranteControll
 // informacion de producto individual de una orden que se pidio
 Route::post('restaurante/listado/productos/ordenes-individual',  [ApiOrdenesRestauranteController::class, 'infoProductoOrdenadoIndividual']);
 
-// INICIAR ORDEN -> NOTIFICACION ONE SIGNAL A CLIENTE
+// INICIAR ORDEN
+//  NOTIFICACION ONE SIGNAL AL CLIENTE
 
 Route::post('restaurante/proceso/orden/iniciar-orden',  [ApiOrdenesRestauranteController::class, 'iniciarOrdenPorRestaurante']);
 
-// CANCELAR ORDEN AL CLIENTE -> NOTIFICACION ONE SIGNAL AL CLIENTE
+// CANCELAR ORDEN AL CLIENTE
+// NOTIFICACION ONE SIGNAL AL CLIENTE
 
 Route::post('restaurante/cancelar/orden', [ApiOrdenesRestauranteController::class, 'cancelarOrden']);
 

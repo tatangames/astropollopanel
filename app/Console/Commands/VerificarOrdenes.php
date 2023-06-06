@@ -58,7 +58,10 @@ class VerificarOrdenes extends Command
         foreach ($arrayOrdenHoy as $info){
             // obtener token del servicio que esta asociado esta orden
 
-            if($infoUsuario = UsuariosServicios::where('id_servicios', $info->id_servicio)->first()){
+            // EL PRIMER USUARIO QUE NO ESTE BLOQUEADO
+            if($infoUsuario = UsuariosServicios::where('id_servicios', $info->id_servicio)
+                ->where('bloqueado', 0)
+                ->first()){
                 array_push($pilaTokenRestaurante, $infoUsuario->token_fcm);
             }
         }

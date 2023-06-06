@@ -479,12 +479,10 @@ class ApiProcesarController extends Controller
 
 
 
-
-
-
                     if($request->idfirebase != null){
                         Clientes::where('id', $infoCliente->id)->update(['token_fcm' => $request->idfirebase]);
                     }
+
 
 
                     DB::commit();
@@ -533,7 +531,9 @@ class ApiProcesarController extends Controller
 
         if($infoOrden = Ordenes::where('id', $request->id)->first()){
 
-            if($infoUsuario = UsuariosServicios::where('id_servicios', $infoOrden->id_servicio)->first()){
+            if($infoUsuario = UsuariosServicios::where('id_servicios', $infoOrden->id_servicio)
+                ->where('bloqueado', 0)
+                ->first()){
 
 
                     if($infoUsuario->token_fcm != null){
