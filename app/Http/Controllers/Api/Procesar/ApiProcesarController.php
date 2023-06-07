@@ -16,7 +16,6 @@ use App\Models\HorarioServicio;
 use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
-use App\Models\Servicios;
 use App\Models\SubCategorias;
 use App\Models\UsuariosServicios;
 use App\Models\Zonas;
@@ -294,7 +293,7 @@ class ApiProcesarController extends Controller
                                 $idCupones = $infoCupon->id;
                                 $totalCarritoCupon = $resta;
 
-                                $mensajeCupon = "Aplico para Descuento Dinero de $: " . $infoCuponDescuentoDin->dinero;
+                                $mensajeCupon = "Aplico para Descuento Dinero de $" . $infoCuponDescuentoDin->dinero;
 
                             }else{
                                 $titulo = "Nota";

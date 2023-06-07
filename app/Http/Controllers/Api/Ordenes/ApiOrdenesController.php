@@ -15,7 +15,9 @@ use App\Models\UsuariosServicios;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use OneSignal;
 
 class ApiOrdenesController extends Controller
 {
@@ -410,12 +412,12 @@ class ApiOrdenesController extends Controller
                             ->update(['contador' => $contador]);
                     }
 
-
-
                     // NOTIFICACION A RESTAURANTE DE ORDEN CANCELADA
 
 
-                    if($infoUsuario = UsuariosServicios::where('id_servicios', $infoOrden->id_servicio)->first()){
+                    if($infoUsuario = UsuariosServicios::where('id_servicios', $infoOrden->id_servicio)
+                        ->where('bloqueado', 0)
+                        ->first()){
 
 
                         if($infoUsuario->token_fcm != null){
@@ -457,7 +459,7 @@ class ApiOrdenesController extends Controller
                     return ['success' => 2, 'titulo' => $titulo, 'mensaje' => $mensaje];
 
                 } catch(\Throwable $e){
-
+                    Log::info('error ' . $e);
                     DB::rollback();
                     return ['success' => 99];
                 }

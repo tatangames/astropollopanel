@@ -846,12 +846,12 @@ class ApiOrdenesRestauranteController extends Controller
 
         if($validarDatos->fails()){return ['success' => 0]; }
 
-        // buscar la orden
+
         if($infoCategoria = Categorias::where('id', $request->idcategoria)->first()){
 
             // listado de sub categorias
 
-            $arraySubCategorias = SubCategorias::where('id', $infoCategoria->id)->get();
+            $arraySubCategorias = SubCategorias::where('id_categorias', $infoCategoria->id)->get();
 
             $pilaIdSubCategorias = array();
 
