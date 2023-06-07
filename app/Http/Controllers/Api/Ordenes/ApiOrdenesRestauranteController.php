@@ -860,7 +860,7 @@ class ApiOrdenesRestauranteController extends Controller
             }
 
             $arrayProductos = Productos::whereIn('id_subcategorias', $pilaIdSubCategorias)
-                ->orderBy('nombre')
+                ->orderBy('posicion', 'ASC')
                 ->get();
 
 
