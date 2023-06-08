@@ -9,6 +9,7 @@ use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesMotoristas;
+use App\Models\OrdenesPremio;
 use App\Models\Productos;
 use App\Models\UsuariosServicios;
 use Carbon\Carbon;
@@ -95,6 +96,20 @@ class ApiOrdenesMotoristaController extends Controller
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
                 $info->referencia = $infoOrdenesDireccion->referencia;
+
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 2, 'hayordenes' => $conteoOrdenes, 'ordenes' => $arrayOrdenes];
@@ -290,6 +305,19 @@ class ApiOrdenesMotoristaController extends Controller
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
                 $info->referencia = $infoOrdenesDireccion->referencia;
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 1, 'ordenes' => $arrayOrdenes, 'hayordenes' => $conteo];
@@ -446,6 +474,19 @@ class ApiOrdenesMotoristaController extends Controller
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
                 $info->referencia = $infoOrdenesDireccion->referencia;
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 1, 'ordenes' => $arrayOrdenes, 'hayordenes' => $conteo];
@@ -600,6 +641,19 @@ class ApiOrdenesMotoristaController extends Controller
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
@@ -677,6 +731,20 @@ class ApiOrdenesMotoristaController extends Controller
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
+
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
@@ -779,6 +847,20 @@ class ApiOrdenesMotoristaController extends Controller
                 }
 
                 $info->estado = $estado;
+
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
 

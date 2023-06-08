@@ -53,6 +53,7 @@ class ApiRegistroController extends Controller
         $usuario->activo = 1;
         $usuario->token_fcm = $request->token_fcm;
         $usuario->appregistro = $request->version;
+        $usuario->puntos = 0;
 
         if($usuario->save()){
 

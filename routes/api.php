@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Procesar\ApiProcesarController;
 use App\Http\Controllers\Api\Ordenes\ApiOrdenesController;
 use App\Http\Controllers\Api\Ordenes\ApiOrdenesRestauranteController;
 use App\Http\Controllers\Api\Ordenes\ApiOrdenesMotoristaController;
+use App\Http\Controllers\Api\Premios\ApiPremiosController;
 
 
 /*
@@ -154,6 +155,22 @@ Route::post('cliente/direcciones/elegir/direccion', [ApiClienteController::class
 
 // eliminar direccion seleccionada
 Route::post('cliente/eliminar/direccion/seleccionada', [ApiClienteController::class, 'eliminarDireccionSeleccionadaCliente']);
+
+
+
+
+
+// *** PREMIOS POR RESTAURANTE ***
+Route::post('cliente/premios/listado', [ApiPremiosController::class, 'listaPremiosPorRestaurante']);
+Route::post('cliente/premios/seleccionar', [ApiPremiosController::class, 'seleccionarPremio']);
+Route::post('cliente/premios/deseleccionar', [ApiPremiosController::class, 'deseleccionarPremio']);
+
+
+
+
+
+
+
 
 
 

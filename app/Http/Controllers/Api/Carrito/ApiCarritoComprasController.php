@@ -7,11 +7,13 @@ use App\Models\CarritoExtra;
 use App\Models\CarritoTemporal;
 use App\Models\Categorias;
 use App\Models\Clientes;
+use App\Models\ClientesPremios;
 use App\Models\CuponDescuentoDinero;
 use App\Models\CuponDescuentoPorcentaje;
 use App\Models\Cupones;
 use App\Models\CuponProductoGratis;
 use App\Models\DireccionCliente;
+use App\Models\Premios;
 use App\Models\Productos;
 use App\Models\Servicios;
 use App\Models\SubCategorias;
@@ -478,6 +480,20 @@ class ApiCarritoComprasController extends Controller
 
                 $infoServicios = Servicios::where('id', $cart->id_servicios)->first();
 
+                //** PREMIO */
+
+
+                $usapremio = 0;
+                $textopremio = "";
+
+                if($infoClientePremio = ClientesPremios::where('id_clientes', $request->clienteid)->first()){
+
+                    $usapremio = 1;
+
+                    $infoPremio = Premios::where('id', $infoClientePremio->id_premios)->first();
+
+                    $textopremio = "Se canjeara el Siguiente Premio: " . $infoPremio->nombre;
+                }
 
                 return [
                     'success' => 2,
@@ -487,6 +503,8 @@ class ApiCarritoComprasController extends Controller
                     'minimo' => $boolMinimo,
                     'mensaje' => $msjMinimoConsumo,
                     'usacupon' => $infoServicios->utiliza_cupon,
+                    'usapremio' => $usapremio,
+                    'textopremio' => $textopremio
                 ];
 
             }else{
@@ -494,7 +512,8 @@ class ApiCarritoComprasController extends Controller
                 return ['success' => 3];
             }
         }catch(\Error $e){
-            return ['success' => 4, 'err' => $e];
+            Log::info('erorr ' . $e);
+            return ['success' => 99];
         }
     }
 

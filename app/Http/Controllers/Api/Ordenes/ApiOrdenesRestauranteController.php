@@ -11,6 +11,7 @@ use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesMotoristas;
+use App\Models\OrdenesPremio;
 use App\Models\Productos;
 use App\Models\SubCategorias;
 use App\Models\UsuariosServicios;
@@ -87,6 +88,20 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
                 $info->referencia = $infoOrdenesDireccion->referencia;
+
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 2, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
@@ -364,6 +379,22 @@ class ApiOrdenesRestauranteController extends Controller
 
 
 
+                // SE DEVULVEN LOS PUNTOS DEL PREMIO SI CANCELO EL CLIENTE
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $infoOrden->id)->first()){
+
+                    $infoCliente = Clientes::where('id', $infoOrdenPremio->id_cliente)->first();
+
+                    // SUMAR LOS PUNTOS AL CLUENTE
+                    $suma = $infoCliente->puntos + $infoOrdenPremio->puntos;
+
+                    Clientes::where('id', $infoCliente->id)->update([
+                        'puntos' => $suma]);
+
+
+                }
+
+
 
 
                 // SI SE UTILIZO CUPON SE DEBE DE VOLVER A SUMAR SU CONTADOR EN - 1
@@ -418,10 +449,10 @@ class ApiOrdenesRestauranteController extends Controller
 
                     // Orden cancelada por restaurante
 
-                    $titulo = "Nota";
-                    $mensaje = "Orden cancelada correctamente";
+                    $tituloFinal = "Nota";
+                    $mensajeFinal = "Orden cancelada correctamente";
 
-                    return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                    return ['success' => 1, 'titulo' => $tituloFinal, 'mensaje' => $mensajeFinal];
 
 
             } catch(\Throwable $e){
@@ -490,6 +521,21 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
                 $info->referencia = $infoOrdenesDireccion->referencia;
+
+
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
@@ -696,6 +742,20 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
                 $info->referencia = $infoOrdenesDireccion->referencia;
+
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
@@ -761,16 +821,27 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
                 $info->referencia = $infoOrdenesDireccion->referencia;
+
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];
         }else{
             return ['success' => 99];
         }
-
     }
-
-
 
     public function listadoDeCategorias(Request $request){
 

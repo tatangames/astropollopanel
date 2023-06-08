@@ -7,6 +7,7 @@ use App\Mail\CorreoPasswordMail;
 use App\Models\CarritoExtra;
 use App\Models\CarritoTemporal;
 use App\Models\Clientes;
+use App\Models\ClientesPremios;
 use App\Models\DireccionCliente;
 use App\Models\HorarioServicio;
 use App\Models\MotoristasServicios;
@@ -381,6 +382,9 @@ class ApiClienteController extends Controller
                         }
                     }
 
+                    // BORRAR EL PREMIO QUE TENGA SELECCIONADO
+
+                    ClientesPremios::where('id_clientes', $request->id)->delete();
 
 
 
@@ -598,6 +602,8 @@ class ApiClienteController extends Controller
 
 
     }
+
+
 
 
 

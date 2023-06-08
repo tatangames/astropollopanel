@@ -456,6 +456,17 @@
                                 </div>
 
 
+                                <hr>
+
+
+                                <div class="form-group">
+                                    <button class="form-control btn btn-info btn-sm" type="button" onclick="verPremios()">
+                                        <i class="fas fa-info"></i>
+                                        Premios
+                                    </button>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -1124,6 +1135,12 @@
         function verSlider(){
             var id = document.getElementById('id-opciones').value;
             window.location.href="{{ url('/admin/slider/listado') }}/"+id;
+        }
+
+
+        function verPremios(){
+            var id = document.getElementById('id-opciones').value;
+            window.location.href="{{ url('/admin/premios/servicio/listado') }}/"+id;
         }
 
 

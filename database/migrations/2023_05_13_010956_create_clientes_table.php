@@ -28,6 +28,10 @@ class CreateClientesTable extends Migration
 
             // token para enviar notificaciones por one signal
             $table->string('token_fcm', 100)->nullable();
+            
+
+            // PUNTOS QUE ACUMULA EL CLIENTE
+            $table->integer('puntos');
 
 
             // para saber de que app se registro

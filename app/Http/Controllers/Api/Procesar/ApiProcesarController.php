@@ -7,6 +7,7 @@ use App\Models\CarritoExtra;
 use App\Models\CarritoTemporal;
 use App\Models\Categorias;
 use App\Models\Clientes;
+use App\Models\ClientesPremios;
 use App\Models\CuponDescuentoDinero;
 use App\Models\CuponDescuentoPorcentaje;
 use App\Models\Cupones;
@@ -16,6 +17,8 @@ use App\Models\HorarioServicio;
 use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
+use App\Models\OrdenesPremio;
+use App\Models\Premios;
 use App\Models\SubCategorias;
 use App\Models\UsuariosServicios;
 use App\Models\Zonas;
@@ -59,12 +62,14 @@ class ApiProcesarController extends Controller
                 $infoZona = Zonas::where('id', $infoZonaServicio->id_zonas)->first();
 
 
-                // REGLA": EL RESTAURANTE TIENE CERRADO ESTA ZONA
+
+                // REGLA: EL RESTAURANTE TIENE CERRADO ESTA ZONA
                 if($infoZona->saturacion == 1){
                     $titulo = "Nota";
                     $mensaje = $infoZona->mensaje_bloqueo;
                     return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
                 }
+
 
                 // REGLA: VERIFICAR HORARIO DE LA ZONA
 
@@ -383,13 +388,40 @@ class ApiProcesarController extends Controller
 
 
 
-                //*********** VALIDACIONES COMPLETADAS  **************
+                $infoCliente = Clientes::where('id', $request->clienteid)->first();
                 $fecha = Carbon::now('America/El_Salvador');
 
 
 
-                try {
+                // REGLA: NO ALCANZAN LOS PUNTOS SI EL CLIENTE TIENE SELECCIONADO UN PREMIO
+                if($infoClientePremio = ClientesPremios::where('id_clientes', $request->clienteid)->first()){
 
+                    $infoPremio = Premios::where('id', $infoClientePremio->id_premios)->first();
+
+                    // si hay premio seleccionado
+                    if($infoCliente->puntos >= $infoPremio->puntos){
+
+                       // SI ALCANZAN LOS PUNTOS, PERO REGISTRAR BAJAO DE CUANDO SE CREA LA ORDEN
+
+                    }else{
+
+                        $titulo = "Nota";
+                        $mensaje = "Puntos insuficientes para reclamar el Premio.";
+                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                    }
+                }
+
+
+
+
+
+
+
+
+
+                //*********** VALIDACIONES COMPLETADAS  **************
+
+                try {
 
                     // SUMAR CONTADOR DE USO DEL CUPON SI APLICA
 
@@ -431,6 +463,31 @@ class ApiProcesarController extends Controller
                     $orden->save();
 
 
+                    // REGISTRAR EL PREMIO, YA VALIDADO ARRIBA, QUE ALCANCEN LOS PUNTOS
+
+                    if($infoClientePremio = ClientesPremios::where('id_clientes', $request->clienteid)->first()){
+
+                        $infoPremio = Premios::where('id', $infoClientePremio->id_premios)->first();
+
+                            $resta = $infoCliente->puntos - $infoPremio->puntos;
+
+                            Clientes::where('id', $infoCliente->id)
+                                ->update(['puntos' => $resta]);
+
+                            $datoRegistro = new OrdenesPremio();
+                            $datoRegistro->id_ordenes = $orden->id;
+                            $datoRegistro->id_cliente = $infoCliente->id;
+                            $datoRegistro->nombre = $infoPremio->nombre;
+                            $datoRegistro->puntos = $infoPremio->puntos;
+                            $datoRegistro->save();
+
+
+                            // BORRAR LA SELECCION
+                            ClientesPremios::where('id_clientes', $request->clienteid)->delete();
+                    }
+
+
+
                     $infoDireccion = DireccionCliente::where('id_cliente', $request->clienteid)
                         ->where('seleccionado', 1)
                         ->first();
@@ -453,7 +510,6 @@ class ApiProcesarController extends Controller
                     $dirCliente->save();
 
 
-
                     // guadar todos los productos de esa orden
                     foreach($producto as $p){
 
@@ -464,10 +520,6 @@ class ApiProcesarController extends Controller
                             'precio' => $p->precio);
                         OrdenesDescripcion::insert($data);
                     }
-
-                    $infoCliente = Clientes::where('id', $request->clienteid)->first();
-
-
 
 
 

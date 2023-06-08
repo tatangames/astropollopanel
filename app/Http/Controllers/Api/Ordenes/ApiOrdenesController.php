@@ -10,6 +10,7 @@ use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\OrdenesMotoristas;
+use App\Models\OrdenesPremio;
 use App\Models\Productos;
 use App\Models\UsuariosServicios;
 use Carbon\Carbon;
@@ -97,6 +98,20 @@ class ApiOrdenesController extends Controller
                 $info->estado = $estado;
 
 
+                // INFORMACION DE PREMIOS
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 1, 'ordenes' => $orden];
@@ -396,6 +411,18 @@ class ApiOrdenesController extends Controller
                         'visible' => 0,
                         'fecha_cancelada' => $fecha]);
 
+                    // SE DEVULVEN LOS PUNTOS DEL PREMIO SI CANCELO EL CLIENTE
+
+                    if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $infoOrden->id)->first()){
+
+                        $infoCliente = Clientes::where('id', $infoOrdenPremio->id_cliente)->first();
+
+                        // SUMAR LOS PUNTOS AL CLUENTE
+                        $suma = $infoCliente->puntos + $infoOrdenPremio->puntos;
+
+                        Clientes::where('id', $infoCliente->id)->update([
+                            'puntos' => $suma]);
+                    }
 
 
 
@@ -410,6 +437,7 @@ class ApiOrdenesController extends Controller
 
                         Cupones::where('id', $infoCupon->id)
                             ->update(['contador' => $contador]);
+
                     }
 
                     // NOTIFICACION A RESTAURANTE DE ORDEN CANCELADA
@@ -563,6 +591,21 @@ class ApiOrdenesController extends Controller
 
                 $info->haycupon = $haycupon;
                 $info->estado = $estado;
+
+
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
             return ['success' => 1, 'hayordenes' => $conteo, 'ordenes' => $arrayOrdenes];

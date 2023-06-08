@@ -20,6 +20,7 @@ use App\Http\Controllers\Backend\CallCenter\CallCenterDireccionesController;
 use App\Http\Controllers\Backend\CallCenter\CallCenterOrdenesController;
 use App\Http\Controllers\Backend\Configuracion\NotificacionesController;
 use App\Http\Controllers\Backend\Reportes\ReportesController;
+use App\Http\Controllers\Backend\Premios\PremiosController;
 
 
 
@@ -321,12 +322,13 @@ Route::post('/admin/reportes/buscar/motorista', [ReportesController::class,'busc
 Route::get('/admin/pdf/ordenes/entregadas/{idmotorista}/{idservicio}/{desde}/{hasta}', [ReportesController::class,'pdfOrdenesEntregadas']);
 
 
+// --- PREMIOS ---
 
-
-
-
-
-
+Route::get('/admin/premios/servicio/listado/{id}', [PremiosController::class,'indexListaPremios']);
+Route::get('/admin/premios/servicio/listado/tabla/{id}', [PremiosController::class,'tablaListaPremios']);
+Route::post('/admin/premios/servicio/registrar/nuevo', [PremiosController::class,'registrarNuevoPremio']);
+Route::post('/admin/premios/servicio/informacion', [PremiosController::class,'informacionPremios']);
+Route::post('/admin/premios/servicio/editar', [PremiosController::class,'actualizarPremio']);
 
 
 
