@@ -23,7 +23,12 @@ class ClientesController extends Controller
 
     public function tablaClientes(){
 
-        $lista = Clientes::orderBy('usuario')->get();
+        // NO MOSTRAR 3 CLIENTE
+        // QUE SON PARA CALL CENTER Y ACCESO DE APP
+
+        $lista = Clientes::orderBy('usuario')
+            ->whereNotIn('id', [1,2,3])
+            ->get();
 
         foreach ($lista as $info){
 
