@@ -40,6 +40,18 @@ class ApiDireccionesController extends Controller
             }else{
                 $direccion = DireccionCliente::where('id_cliente', $request->id)->get();
 
+                foreach ($direccion as $info){
+
+                    $infoZona = Zonas::where('id', $info->id_zonas)->first();
+
+                    $minimo = '$' . number_format((float)$infoZona->minimo, 2, '.', '');
+
+                    $texto = "Mínimo de Compra: $" . $minimo;
+
+                    $info->minimocompra = $texto;
+                }
+
+
                 return ['success' => 2, 'direcciones' => $direccion];
             }
 
