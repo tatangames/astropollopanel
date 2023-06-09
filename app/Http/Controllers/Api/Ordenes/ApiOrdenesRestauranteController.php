@@ -1058,6 +1058,22 @@ class ApiOrdenesRestauranteController extends Controller
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
+
+
+
+
+                $haypremio = 0;
+                $textopremio = "";
+
+                if($infoOrdenPremio = OrdenesPremio::where('id_ordenes', $info->id)->first()){
+                    // si se canjeo premio
+
+                    $haypremio = 1;
+                    $textopremio = $infoOrdenPremio->nombre;
+                }
+
+                $info->haypremio = $haypremio;
+                $info->textopremio = $textopremio;
             }
 
 
