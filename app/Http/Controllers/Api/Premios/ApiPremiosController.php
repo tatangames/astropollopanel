@@ -44,8 +44,9 @@ class ApiPremiosController extends Controller
                 ->orderBy('puntos', 'ASC')
                 ->get();
 
+            $conteo = 0;
             foreach ($listaPremios as $info){
-
+                $conteo++;
                 // BUSCAR SI CLIENTE TIENE SELECCIONADO UN PREMIO
 
                 $seleccionado = 0;
@@ -63,7 +64,7 @@ class ApiPremiosController extends Controller
 
             $puntos = "Mis Puntos: " . $infoCliente->puntos;
 
-            return ['success' => 1, 'nota' => $nota, 'puntos' => $puntos, 'listado' => $listaPremios];
+            return ['success' => 1, 'conteo' => $conteo, 'nota' => $nota, 'puntos' => $puntos, 'listado' => $listaPremios];
         }else{
             return ['success' => 2];
         }
