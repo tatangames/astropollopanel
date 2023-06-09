@@ -38,12 +38,12 @@
 
                                     <td>
 
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verCliente({{ $dato->id }})">
+                                        <button type="button" class="btn btn-warning btn-xs" onclick="verCliente({{ $dato->id }})">
                                             <i class="fa fa-location-arrow" title="Cliente"></i>&nbsp; Cliente
                                         </button>
 
                                         <br><br>
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verProceso({{ $dato->id }})">
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="verProceso({{ $dato->id }})">
                                             <i class="fa fa-location-arrow" title="Proceso"></i>&nbsp; Proceso
                                         </button>
 
