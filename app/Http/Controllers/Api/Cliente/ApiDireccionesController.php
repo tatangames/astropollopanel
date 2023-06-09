@@ -44,7 +44,7 @@ class ApiDireccionesController extends Controller
 
                     $infoZona = Zonas::where('id', $info->id_zonas)->first();
 
-                    $minimo = '$' . number_format((float)$infoZona->minimo, 2, '.', '');
+                    $minimo = number_format((float)$infoZona->minimo, 2, '.', '');
 
                     $texto = "Mínimo de Compra: $" . $minimo;
 
