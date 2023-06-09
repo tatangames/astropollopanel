@@ -39,7 +39,7 @@
 
                                     <td>
 
-                                        <button type="button" class="btn btn-success btn-xs" onclick="verInformacion({{ $dato->id }})">
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="verInformacion({{ $dato->id }})">
                                             <i class="fa fa-location-arrow" title="Editar"></i>&nbsp; Editar
                                         </button>
 
