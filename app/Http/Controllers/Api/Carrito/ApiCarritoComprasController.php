@@ -168,6 +168,7 @@ class ApiCarritoComprasController extends Controller
                 $getValores = Carbon::now('America/El_Salvador');
                 $hora = $getValores->format('H:i:s');
 
+                $subTotal = 0;
 
 
                 // preguntar si usuario ya tiene un carrito de compras
@@ -243,6 +244,7 @@ class ApiCarritoComprasController extends Controller
                         // multiplicar cantidad por el precio de cada producto
                         $precio = $pro->cantidad * $pro->precio;
 
+                        $subTotal = $subTotal + $precio;
 
                         // estado de productos segun reglas
                         $pro->estadoLocal = $estadoLocal;
@@ -256,11 +258,11 @@ class ApiCarritoComprasController extends Controller
                     }
 
                     // sub total de la orden
-                    $subTotal = collect($producto)->sum('precio'); // sumar todos el precio
+                    $subTotal = number_format((float)$subTotal, 2, '.', ',');
 
                     return [
                         'success' => 1,
-                        'subtotal' => number_format((float)$subTotal, 2, '.', ','), // subtotal
+                        'subtotal' => $subTotal,
                         'estadoProductoGlobal' => $estadoProductoActivo,
                         'producto' => $producto,
                     ];
