@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Clientes;
 use App\Models\ClientesPremios;
 use App\Models\DireccionCliente;
+use App\Models\Ordenes;
+use App\Models\OrdenesPremio;
 use App\Models\Premios;
 use App\Models\ZonasServicio;
 use Illuminate\Http\Request;
@@ -156,6 +158,8 @@ class ApiPremiosController extends Controller
             return ['success' => 99];
         }
     }
+
+
 
 
 

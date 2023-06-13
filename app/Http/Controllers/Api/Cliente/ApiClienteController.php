@@ -11,6 +11,8 @@ use App\Models\ClientesPremios;
 use App\Models\DireccionCliente;
 use App\Models\HorarioServicio;
 use App\Models\MotoristasServicios;
+use App\Models\Ordenes;
+use App\Models\OrdenesPremio;
 use App\Models\Servicios;
 use App\Models\UsuariosServicios;
 use App\Models\ZonasServicio;
@@ -599,12 +601,40 @@ class ApiClienteController extends Controller
             // usuario no encontrado
             return ['success' => 4, 'titulo' => $titulo, 'mensaje' => $mensaje];
         }
-
-
     }
 
 
+    // ELIMINACION TOTAL DEL CLIENTE
+    public function eliminacionTotalCliente(Request $request){
 
+        // validaciones para los datos
+        $reglaDatos = array(
+            'clienteid' => 'required',
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if ($validarDatos->fails()) {
+            return ['success' => 0];
+        }
+
+
+        if($cl = Clientes::where('id', $request->clienteid)->first()){
+
+            // DELETE ALL THE CLIENTE BY ID
+
+            OrdenesPremio::where('id_cliente', $cl->id)->first();
+            ClientesPremios::where('id_clientes', $cl->id)->first();
+
+
+            return ['success' => 1];
+
+
+
+        }else{
+            return ['success' => 2];
+        }
+    }
 
 
 

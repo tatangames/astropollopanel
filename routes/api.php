@@ -168,8 +168,9 @@ Route::post('cliente/premios/deseleccionar', [ApiPremiosController::class, 'dese
 
 
 
+// *** ELIMINACION TOTAL DEL CLIENTE
 
-
+Route::post('cliente/eliminacion/total', [ApiClienteController::class, 'eliminacionTotalCliente']);
 
 
 
