@@ -46,7 +46,7 @@ class ApiClienteController extends Controller
             if($info->activo == 0){
 
                 $titulo = 'Nota';
-                $mensaje = "Su usuario ha sido bloqueado";
+                $mensaje = "Su usuario ha sido Eliminado";
 
                 return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
             }
@@ -623,13 +623,10 @@ class ApiClienteController extends Controller
 
             // DELETE ALL THE CLIENTE BY ID
 
-            OrdenesPremio::where('id_cliente', $cl->id)->first();
-            ClientesPremios::where('id_clientes', $cl->id)->first();
-
+            Clientes::where('id', $cl->id)
+                ->update(['activo' => 0]);
 
             return ['success' => 1];
-
-
 
         }else{
             return ['success' => 2];
