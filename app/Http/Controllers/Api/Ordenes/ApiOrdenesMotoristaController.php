@@ -641,6 +641,7 @@ class ApiOrdenesMotoristaController extends Controller
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
+                $info->referencia = $infoOrdenesDireccion->referencia;
 
                 $haypremio = 0;
                 $textopremio = "";
@@ -731,7 +732,7 @@ class ApiOrdenesMotoristaController extends Controller
                 $info->cliente = $infoOrdenesDireccion->nombre;
                 $info->direccion = $infoOrdenesDireccion->direccion;
                 $info->telefono = $infoOrdenesDireccion->telefono;
-
+                $info->referencia = $infoOrdenesDireccion->referencia;
 
                 $haypremio = 0;
                 $textopremio = "";
