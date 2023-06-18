@@ -473,9 +473,14 @@ class ApiProcesarController extends Controller
 
                             // SUMAR LOS PUNTOS QUE GANO AL HACER ESTA ORDEN
 
+
+                            Log::info('Resta: ' . $resta);
+
+
                             if($totalCarritoCupon != null){
                                 // si aplico cupo de dinero o porcentaje
                                 $resta = $resta + intval($totalCarritoCupon);
+
                             }else{
                                 // no se aplico ningun cupon
                                 $resta = $resta + intval($totalCarrito);
