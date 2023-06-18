@@ -497,23 +497,10 @@ class ApiProcesarController extends Controller
 
                             // BORRAR LA SELECCION
                             ClientesPremios::where('id_clientes', $request->clienteid)->delete();
-                    }else{
-
-                        // SINO TIENE PREMIO SELECCIONADO, SOLO SUMAR LOS PUNTOS AL CLIENTE
-
-                        if($totalCarritoCupon != null){
-                            // si aplico cupo de dinero o porcentaje
-                            $miSuma = $infoCliente->puntos + intval($totalCarritoCupon);
-
-                        }else{
-                            // no se aplico ningun cupon
-                            $miSuma = $infoCliente->puntos + intval($totalCarrito);
-                        }
-
-                        Clientes::where('id', $infoCliente->id)
-                            ->update(['puntos' => $miSuma]);
                     }
 
+
+                    // LA SUMA DE PUNTOS AL CLIENTE AL ORDENAR, SE HARA CUANDO EL MOTORISTA FINALICE EL PEDIDO
 
 
                     $infoDireccion = DireccionCliente::where('id_cliente', $request->clienteid)

@@ -519,9 +519,29 @@ class ApiOrdenesMotoristaController extends Controller
                 Ordenes::where('id', $infoOrden->id)->update(['estado_entregada' => 1,
                     'fecha_entregada' => $fecha]);
 
+                $infoCliente = Clientes::where('id', $infoOrden->id_cliente)->first();
+
+
+                // SUMA DE PUNTOS AL CLIENTE AL FINALIZAR POR PARTE DEL MOTORISTA
+
+                if($infoOrden->total_cupon != null){
+
+                    // SE UTILIZO CUPON DINERO O PORCENTAJE
+
+                    // si aplico cupo de dinero o porcentaje
+                    $miSuma = $infoCliente->puntos + intval($infoOrden->total_cupon);
+
+                }else{
+                    // no se aplico ningun cupon
+                    $miSuma = $infoCliente->puntos + intval($infoOrden->total_orden);
+                }
+
+                Clientes::where('id', $infoCliente->id)
+                    ->update(['puntos' => $miSuma]);
+
 
                 // NOTIFICACION AL CLIENTE
-                $infoCliente = Clientes::where('id', $infoOrden->id_cliente)->first();
+
 
                 if($infoCliente->token_fcm != null){
 
