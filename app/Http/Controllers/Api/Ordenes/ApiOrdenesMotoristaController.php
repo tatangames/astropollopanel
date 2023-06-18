@@ -580,7 +580,7 @@ class ApiOrdenesMotoristaController extends Controller
 
 
                 $titulo = "Orden Finalizada";
-                $mensaje = "Gracias";
+                $mensaje = "Muchas Gracias";
 
                 return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
             }
