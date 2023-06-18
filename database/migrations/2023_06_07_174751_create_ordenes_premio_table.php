@@ -25,6 +25,8 @@ class CreateOrdenesPremioTable extends Migration
             // costo del premio
             $table->integer('puntos');
 
+            $table->foreign('id_ordenes')->references('id')->on('ordenes');
+            $table->foreign('id_cliente')->references('id')->on('clientes');
         });
     }
 

@@ -218,7 +218,7 @@ class ApiProcesarController extends Controller
                 }
 
 
-                // esto sera el resultado final si se aplica cupon
+                // esto sera el resultado final si se aplica cupon $$
                 $totalCarritoCupon = null;
 
 
@@ -401,7 +401,7 @@ class ApiProcesarController extends Controller
                     // si hay premio seleccionado
                     if($infoCliente->puntos >= $infoPremio->puntos){
 
-                       // SI ALCANZAN LOS PUNTOS, PERO REGISTRAR BAJAO DE CUANDO SE CREA LA ORDEN
+                       // SI ALCANZAN LOS PUNTOS, PERO REGISTRAR ABAJO DE CUANDO SE CREA LA ORDEN
 
                     }else{
 
@@ -470,6 +470,17 @@ class ApiProcesarController extends Controller
                         $infoPremio = Premios::where('id', $infoClientePremio->id_premios)->first();
 
                             $resta = $infoCliente->puntos - $infoPremio->puntos;
+
+                            // SUMAR LOS PUNTOS QUE GANO AL HACER ESTA ORDEN
+
+                            if($totalCarritoCupon != null){
+                                // si aplico cupo de dinero o porcentaje
+                                $resta = $resta + intval($totalCarritoCupon);
+                            }else{
+                                // no se aplico ningun cupon
+                                $resta = $resta + intval($totalCarrito);
+                            }
+
 
                             Clientes::where('id', $infoCliente->id)
                                 ->update(['puntos' => $resta]);
