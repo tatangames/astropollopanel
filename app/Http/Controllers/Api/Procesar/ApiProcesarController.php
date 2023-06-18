@@ -474,9 +474,6 @@ class ApiProcesarController extends Controller
                             // SUMAR LOS PUNTOS QUE GANO AL HACER ESTA ORDEN
 
 
-                            Log::info('Resta: ' . $resta);
-
-
                             if($totalCarritoCupon != null){
                                 // si aplico cupo de dinero o porcentaje
                                 $resta = $resta + intval($totalCarritoCupon);
@@ -500,6 +497,21 @@ class ApiProcesarController extends Controller
 
                             // BORRAR LA SELECCION
                             ClientesPremios::where('id_clientes', $request->clienteid)->delete();
+                    }else{
+
+                        // SINO TIENE PREMIO SELECCIONADO, SOLO SUMAR LOS PUNTOS AL CLIENTE
+
+                        if($totalCarritoCupon != null){
+                            // si aplico cupo de dinero o porcentaje
+                            $miSuma = $infoCliente->puntos + intval($totalCarritoCupon);
+
+                        }else{
+                            // no se aplico ningun cupon
+                            $miSuma = $infoCliente->puntos + intval($totalCarrito);
+                        }
+
+                        Clientes::where('id', $infoCliente->id)
+                            ->update(['puntos' => $miSuma]);
                     }
 
 
