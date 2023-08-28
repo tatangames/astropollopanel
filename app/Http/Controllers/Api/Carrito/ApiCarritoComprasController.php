@@ -255,6 +255,14 @@ class ApiCarritoComprasController extends Controller
 
                         // convertir
                         $pro->precioformat = '$' . number_format((float)$precio, 2, '.', ',');
+
+
+
+                        if($pro->imagen == null){
+                            $pro->imagen = "camaradefecto.png";
+                        }
+
+
                     }
 
                     // sub total de la orden
