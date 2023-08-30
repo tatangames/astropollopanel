@@ -36,6 +36,21 @@
                             </a>
                         </li>
 
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.vistas.problemas.aplicacion') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Fallos de App</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.clientes.listado') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Clientes Registrados</p>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
                 @endcan
@@ -197,6 +212,14 @@
                                 <a href="{{ route('index.clientes.listado') }}" target="frameprincipal" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Clientes Registrados</p>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.clientes.listado.modotesteo') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Clientes Modo Prueba</p>
                                 </a>
                             </li>
 

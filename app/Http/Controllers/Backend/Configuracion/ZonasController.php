@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend\Configuracion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clientes;
+use App\Models\ReporteProblema;
 use App\Models\Zonas;
 use App\Models\ZonasPoligono;
 use Illuminate\Http\Request;
@@ -193,5 +195,73 @@ class ZonasController extends Controller
 
         return view('backend.admin.configuracion.zonas.mapa.vistamapa', compact('poligono', 'googleapi', 'latitud', 'longitud'));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //*******************************************************
+
+
+
+
+    public function vistaProblemasAplicacion(){
+
+
+        return view('backend.admin.configuracion.problemasapp.vistaproblemaapp');
+    }
+
+
+
+    public function tablaProblemasAplicacion(){
+
+        $listado = ReporteProblema::orderBy('fecha', 'DESC')->get();
+
+        foreach ($listado as $dato){
+
+            $infoCliente = Clientes::where('id', $dato->id_cliente)->first();
+
+
+            $dato->usuariocliente = $infoCliente->usuario;
+
+
+        }
+
+        return view('backend.admin.configuracion.problemasapp.tablaproblemaapp', compact('listado'));
+    }
+
+
+
+    public function borrarFilaAppFallo(Request $request){
+
+
+        $reglaDatos = array(
+            'id' => 'required',
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos );
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        ReporteProblema::where('id', $request->id)->delete();
+
+
+        return ['success' => 1];
+    }
+
+
+
+
+
+
+
 
 }

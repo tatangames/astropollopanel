@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Clientes;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClienteModoTesteo;
 use App\Models\Clientes;
 use App\Models\DireccionCliente;
 use Illuminate\Http\Request;
@@ -145,6 +146,51 @@ class ClientesController extends Controller
 
         return view('backend.admin.clientes.direcciones.mapa.mapareal', compact('latitud', 'longitud', 'googleapi'));
     }
+
+
+
+
+    public function indexClientesModoPrueba(){
+
+        return view('backend.admin.clientes.modoprueba.vistaclientesmodoprueba');
+    }
+
+
+    public function tablaClientesModoPrueba(){
+
+        $listado = ClienteModoTesteo::orderBy('fecha')->get();
+
+        foreach ($listado as $dato){
+
+            $infoCliente = Clientes::where('id', $dato->id_cliente)->first();
+
+            $dato->usuario = $infoCliente->usuario;
+
+            $dato->fecha = date("d-m-Y h:i A", strtotime($dato->fecha));
+        }
+
+        return view('backend.admin.clientes.modoprueba.tablaclientesmodoprueba', compact('listado'));
+    }
+
+
+
+    public function borrarClienteModoTesteo(Request $request){
+
+        $rules = array(
+            'id' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){return ['success' => 0]; }
+
+        ClienteModoTesteo::where('id', $request->id)->delete();
+
+
+        return ['success' => 1];
+    }
+
+
 
 
 

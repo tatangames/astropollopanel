@@ -22,6 +22,12 @@ class CreateServiciosTable extends Migration
             $table->boolean('utiliza_cupon');
 
 
+            // SI EL RESTAURANTE MOSTRARA BOTON PARA PRIMERA COMPRA
+            // 0: no
+            // 1: si
+            $table->boolean('modo_prueba');
+
+
         });
     }
 

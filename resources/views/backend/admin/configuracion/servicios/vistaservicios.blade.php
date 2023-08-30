@@ -467,6 +467,15 @@
                                 </div>
 
 
+                                <hr>
+
+                                <div class="form-group">
+                                    <button class="form-control btn btn-success btn-sm" type="button" onclick="verTesteo()">
+                                        <i class="fas fa-info"></i>
+                                        Modo Prueba
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -1170,6 +1179,15 @@
             var id = document.getElementById('id-opciones').value;
             window.location.href="{{ url('/admin/productos/servicio/principales') }}/"+id;
         }
+
+
+        // modo de prueba de app para clientes
+        function verTesteo(){
+            var id = document.getElementById('id-opciones').value;
+            window.location.href="{{ url('/admin/modoprueba/listado/productos/') }}/"+id;
+        }
+
+
 
 
 

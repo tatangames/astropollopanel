@@ -157,6 +157,31 @@ Route::post('cliente/direcciones/elegir/direccion', [ApiClienteController::class
 Route::post('cliente/eliminar/direccion/seleccionada', [ApiClienteController::class, 'eliminarDireccionSeleccionadaCliente']);
 
 
+// problema de aplicacion, el cliente puede enviar una nota
+Route::post('cliente/problema/aplicacion/nota', [ApiClienteController::class, 'notaProblemaAplicacion']);
+
+
+
+// informacion de un producto individual para modo testeo
+Route::post('cliente/info/producto/individual/modotesteo', [ApiMenuController::class, 'infoProductoIndividualModoTesteo']);
+
+// guardar productos en mi carrito para modo testeo
+Route::post('cliente/carrito/producto/agregar/modotesteo', [ApiMenuController::class, 'agregarProductoCarritoTemporalModoTesteo']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -171,6 +196,38 @@ Route::post('cliente/premios/deseleccionar', [ApiPremiosController::class, 'dese
 // *** ELIMINACION TOTAL DEL CLIENTE
 
 Route::post('cliente/eliminacion/total', [ApiClienteController::class, 'eliminacionTotalCliente']);
+
+
+
+
+// retorna listado de productos por servicio para el modo de testeo
+Route::post('cliente/listado/productos/testeo', [ApiMenuController::class, 'listadoProductosTesteo']);
+
+// lista de productos en carrito de compras para modo testeo
+
+Route::post('cliente/carrito/ver/orden/modotesteo', [ApiMenuController::class, 'verCarritoDeComprasModoTesteo']);
+
+// borrar producto de un modo testeo
+Route::post('cliente/carrito/eliminar/producto/modotesteo', [ApiMenuController::class, 'borrarProductoDelCarritoModoTesteo']);
+
+// informacion final de boton procesar orden
+Route::post('cliente/carrito/ver/procesoorden/modotesteo', [ApiMenuController::class, 'verOrdenAProcesarClienteModoTesteo']);
+
+// finalizar el modo testeo
+Route::post('cliente/finalizar/modotesteo', [ApiMenuController::class, 'finalizarModoTesteo']);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -291,6 +348,11 @@ Route::post('motorista/opcion/notificacion', [ApiOrdenesMotoristaController::cla
 
 // EDITAR ESTADO NOTIFICACIONES MOTORISTA
 Route::post('motorista/opcion/notificacion/editar', [ApiOrdenesMotoristaController::class, 'editarNotificaciones']);
+
+
+
+
+
 
 
 

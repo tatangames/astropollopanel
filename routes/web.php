@@ -21,7 +21,7 @@ use App\Http\Controllers\Backend\CallCenter\CallCenterOrdenesController;
 use App\Http\Controllers\Backend\Configuracion\NotificacionesController;
 use App\Http\Controllers\Backend\Reportes\ReportesController;
 use App\Http\Controllers\Backend\Premios\PremiosController;
-
+use App\Http\Controllers\Backend\Configuracion\ModoTesteoController;
 
 
 Route::get('/', [LoginController::class,'index'])->name('login');
@@ -78,8 +78,10 @@ Route::get('/admin/resetear/contrasena/administrador', [LoginController::class,'
 
 Route::post('/admin/administrador/actualizacion/password', [LoginController::class, 'actualizarPasswordAdministrador']);
 
-
-
+// --- PROBLEMAS DE APLICACION ENVIADA POR USUARIOS ---
+Route::get('/admin/problemas/aplicacion/vista', [ZonasController::class,'vistaProblemasAplicacion'])->name('index.vistas.problemas.aplicacion');
+Route::get('/admin/problemas/aplicacion/tabla', [ZonasController::class,'tablaProblemasAplicacion']);
+Route::post('/admin/problemas/aplicacion/borrar', [ZonasController::class,'borrarFilaAppFallo']);
 
 
 
@@ -331,6 +333,11 @@ Route::post('/admin/premios/servicio/informacion', [PremiosController::class,'in
 Route::post('/admin/premios/servicio/editar', [PremiosController::class,'actualizarPremio']);
 
 
+// --- CLIENTES QUE REALIZARON UNA PRUEBA DE TESTEO ---
+Route::get('/admin/clientes/listado/modoprueba', [ClientesController::class,'indexClientesModoPrueba'])->name('index.clientes.listado.modotesteo');
+Route::get('/admin/clientes/listado/modoprueba/tabla', [ClientesController::class,'tablaClientesModoPrueba']);
+// borra al cliente del listado para que pueda realizar prueba nuevamente
+Route::post('/admin/clientes/borrar/modotesteo', [ClientesController::class,'borrarClienteModoTesteo']);
 
 
 
@@ -452,6 +459,18 @@ Route::post('/admin/callcenter/listado/direccion/sinzona/editar', [CallCenterDir
 
 
 
+
+
+
+// --- MODO PRUEBA DE APLICACION ---
+
+// listado de productos para modo testeo
+Route::get('/admin/modoprueba/listado/productos/{id}', [ModoTesteoController::class,'vistaListadoProductosTesteo']);
+Route::get('/admin/modoprueba/listado/productos/tabla/{id}', [ModoTesteoController::class,'tablaListadoProductosTesteo']);
+Route::post('/admin/modoprueba/listado/productos/ordenar', [ModoTesteoController::class,'ordenarProductosModoTesteo']);
+Route::post('/admin/modoprueba/listado/productos/nuevo', [ModoTesteoController::class,'nuevoProductosModoTesteo']);
+Route::post('/admin/modoprueba/listado/productos/borrar', [ModoTesteoController::class,'borrarProductosModoTesteo']);
+Route::post('/admin/modoprueba/modificar/toggle', [ModoTesteoController::class,'modificarToggleModoTesteo']);
 
 
 

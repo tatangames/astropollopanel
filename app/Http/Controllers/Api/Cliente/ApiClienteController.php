@@ -13,6 +13,7 @@ use App\Models\HorarioServicio;
 use App\Models\MotoristasServicios;
 use App\Models\Ordenes;
 use App\Models\OrdenesPremio;
+use App\Models\ReporteProblema;
 use App\Models\Servicios;
 use App\Models\UsuariosServicios;
 use App\Models\ZonasServicio;
@@ -468,6 +469,48 @@ class ApiClienteController extends Controller
     }
 
 
+
+
+    public function notaProblemaAplicacion(Request $request){
+
+        $reglaDatos = array(
+            'clienteid' => 'required',
+            'problema' => 'required',
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if ( $validarDatos->fails()){return ['success' => 0]; }
+
+        DB::beginTransaction();
+
+        try {
+
+            $fecha = Carbon::now('America/El_Salvador');
+
+
+            $dato = new ReporteProblema();
+            $dato->id_cliente = $request->clienteid;
+            $dato->manufactura = $request->manufactura;
+            $dato->nombre = $request->nombre;
+            $dato->modelo = $request->modelo;
+            $dato->codenombre = $request->codenombre;
+            $dato->devicenombre = $request->devicenombre;
+            $dato->problema = $request->problema;
+            $dato->fecha = $fecha;
+            $dato->save();
+
+
+            DB::commit();
+
+            return ['success' => 1];
+
+        } catch(\Throwable $e){
+            DB::rollback();
+            return ['success' => 99];
+        }
+
+    }
 
 
 
