@@ -408,9 +408,9 @@ class ApiMenuController extends Controller
 
         if($validarDatos->fails()){return ['success' => 0]; }
 
-        if(Productos::where('id', $request->id)->first()){
+        if(Productos::where('id', $request->idpro)->first()){
 
-            $producto = Productos::where('id', $request->id)->get();
+            $producto = Productos::where('id', $request->idpro)->get();
 
             return ['success' => 1, 'producto' => $producto];
 
