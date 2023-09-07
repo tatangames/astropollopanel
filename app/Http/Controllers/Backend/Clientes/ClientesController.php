@@ -211,7 +211,9 @@ class ClientesController extends Controller
             }
 
             // listado de cliente direccion que pertenecen a estas zonas
-            $conteo = DireccionCliente::whereIn('id_zonas', $pilaId)->count();
+            $conteo = DireccionCliente::whereIn('id_zonas', $pilaId)
+                ->where('seleccionado', 1)
+                ->count();
 
             $info->conteo = $conteo;
         }
