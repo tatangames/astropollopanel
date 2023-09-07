@@ -293,6 +293,13 @@
                             </li>
 
 
+                            <li class="nav-item">
+                                <a href="{{ route('index.clientes.reporte.primera.direccion') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Clientes - Restaurante</p>
+                                </a>
+                            </li>
+
 
                         </ul>
                     </li>

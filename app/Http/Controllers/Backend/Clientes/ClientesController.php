@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ClienteModoTesteo;
 use App\Models\Clientes;
 use App\Models\DireccionCliente;
+use App\Models\Servicios;
+use App\Models\ZonasServicio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -191,6 +193,33 @@ class ClientesController extends Controller
     }
 
 
+    public function indexClientePrimeraUbicacion(){
+
+
+        // obtener lista de restaurantes
+        $listaRestaurantes = Servicios::orderBy('nombre')->get();
+
+
+        foreach ($listaRestaurantes as $info){
+
+            $pilaId = array();
+
+            $infoZonaServicios = ZonasServicio::where('id_servicios', $info->id)->get();
+
+            foreach ($infoZonaServicios as $datoZona){
+                array_push($pilaId, $datoZona->id_zonas);
+            }
+
+            // listado de cliente direccion que pertenecen a estas zonas
+            $conteo = DireccionCliente::whereIn('id_zonas', $pilaId)->count();
+
+            $info->conteo = $conteo;
+        }
+
+
+
+        return view('backend.admin.reportes.clientes.vistaclientesrestaurantes', compact('listaRestaurantes'));
+    }
 
 
 

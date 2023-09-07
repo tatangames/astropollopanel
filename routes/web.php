@@ -340,6 +340,12 @@ Route::get('/admin/clientes/listado/modoprueba/tabla', [ClientesController::clas
 Route::post('/admin/clientes/borrar/modotesteo', [ClientesController::class,'borrarClienteModoTesteo']);
 
 
+// --- VER LISTADO DE RESTAURANTES Y CUANTOS USUARIOS TIENEN SELECCIONADO SU UBICACION ---
+Route::get('/admin/clientes/reporte/primera/ubicacion', [ClientesController::class,'indexClientePrimeraUbicacion'])->name('index.clientes.reporte.primera.direccion');
+
+
+
+
 
 
 
