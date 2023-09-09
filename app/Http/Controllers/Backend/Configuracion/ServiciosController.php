@@ -575,6 +575,8 @@ class ServiciosController extends Controller
 
         foreach ($listado as $dato){
 
+            $dato->fecha_orden = date("d-m-Y h:i A", strtotime($dato->fecha_orden));
+
             $infoServicio = Servicios::where('id', $dato->id_servicio)->first();
             $dato->nombreservicio = $infoServicio->nombre;
 
