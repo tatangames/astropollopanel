@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend\Configuracion;
 use App\Http\Controllers\Controller;
 use App\Models\HorarioServicio;
 use App\Models\MotoristasServicios;
+use App\Models\Ordenes;
+use App\Models\OrdenesMotoristas;
 use App\Models\Servicios;
 use App\Models\UsuariosServicios;
 use App\Models\Zonas;
@@ -554,6 +556,43 @@ class ServiciosController extends Controller
     }
 
 
+
+
+    public function indexMotoOrdenPendiente(){
+
+        return view('backend.admin.motoristas.pendientecompletar.vistapendienteorden');
+    }
+
+
+
+    public function tablaMotoOrdenPendiente(){
+
+        $listado = Ordenes::where('estado_preparada', 1)
+            ->where('estado_entregada', 0)
+            ->where('estado_cancelada', 0)
+            ->orderBy('fecha_orden')
+            ->get();
+
+        foreach ($listado as $dato){
+
+            $infoServicio = Servicios::where('id', $dato->id_servicio)->first();
+            $dato->nombreservicio = $infoServicio->nombre;
+
+            $nombremoto = "Pendiente Seleccionar";
+
+            if($infoMotoOrden = OrdenesMotoristas::where('id_ordenes', $dato->id)->first()){
+
+                $infoMoto = MotoristasServicios::where('id', $infoMotoOrden->id_motorista)->first();
+
+                $nombremoto = $infoMoto->nombre;
+            }
+
+            $dato->nombremoto = $nombremoto;
+        }
+
+
+        return view('backend.admin.motoristas.pendientecompletar.tablapendienteorden', compact('listado'));
+    }
 
 
 

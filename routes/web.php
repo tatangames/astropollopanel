@@ -464,10 +464,6 @@ Route::post('/admin/callcenter/listado/direccion/sinzona/editar', [CallCenterDir
 
 
 
-
-
-
-
 // --- MODO PRUEBA DE APLICACION ---
 
 // listado de productos para modo testeo
@@ -478,6 +474,11 @@ Route::post('/admin/modoprueba/listado/productos/nuevo', [ModoTesteoController::
 Route::post('/admin/modoprueba/listado/productos/borrar', [ModoTesteoController::class,'borrarProductosModoTesteo']);
 Route::post('/admin/modoprueba/modificar/toggle', [ModoTesteoController::class,'modificarToggleModoTesteo']);
 
+
+
+// --- LISTADO DE MOTOPRISTAS QUE NO HAN TERMINADO LA ORDEN ---
+Route::get('/admin/motoristas/pendiente/completar/index', [ServiciosController::class,'indexMotoOrdenPendiente'])->name('index.motoristas.ordenes.pendiente');
+Route::get('/admin/motoristas/pendiente/completar/tabla', [ServiciosController::class,'tablaMotoOrdenPendiente']);
 
 
 
