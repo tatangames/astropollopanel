@@ -194,11 +194,14 @@ class OrdenesController extends Controller
 
                 // PROCESOS
 
-                $fechaInicioPreparar = Carbon::parse($info->fecha_iniciada);
+                if($info->fecha_iniciada != null){
+                    $fechaInicioPreparar = Carbon::parse($info->fecha_iniciada);
 
-                $info->fecha_iniciada = date("h:i A d-m-Y", strtotime($info->fecha_iniciada));
+                    $info->fecha_iniciada = date("h:i A d-m-Y", strtotime($info->fecha_iniciada));
 
-                $info->fechaEstimadaEntrega = $fechaInicioPreparar->addMinute($info->tiempo_estimada)->format('h:i A d-m-Y');
+                    $info->fechaEstimadaEntrega = $fechaInicioPreparar->addMinute($info->tiempo_estimada)->format('h:i A d-m-Y');
+                }
+
 
 
                 if($info->estado_preparada == 1){
