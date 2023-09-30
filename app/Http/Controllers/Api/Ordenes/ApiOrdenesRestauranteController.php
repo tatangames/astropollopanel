@@ -1081,8 +1081,74 @@ class ApiOrdenesRestauranteController extends Controller
         } else {
             return ['success' => 2];
         }
+    }
+
+
+    public function enviarNotificacionPropia(Request $request){
+
+        $rules = array(
+            'id' => 'required'
+        );
+
+        // tokenid
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ( $validator->fails()){return ['success' => 0];}
+
+
+        if($infoAfiliado = UsuariosServicios::where('id', $request->id)->first()){
+
+
+            UsuariosServicios::where('id', $request->id)
+                ->update(['token_fcm' => $request->tokenid]);
+
+
+                if($infoAfiliado->token_fcm != null){
+
+                    // ENVIAR NOTIFICACION
+
+                    $AppId = config('googleapi.IdApp_Restaurante');
+
+                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
+
+                    $mensaje = "Notificacion Prueba";
+                    $titulo = "Modo prueba";
+
+                    $tokenUsuario = $infoAfiliado->token_fcm;
+
+                    $contents = array(
+                        "en" => $mensaje
+                    );
+
+                    $params = array(
+                        'app_id' => $AppId,
+                        'contents' => $contents,
+                        'android_channel_id' => $AppGrupoNotiPasivo,
+                        'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
+                    );
+
+                    $params['headings'] = array(
+                        "en" => $titulo
+                    );
+
+                    OneSignal::sendNotificationCustom($params);
+
+                    return ['success' => 1];
+                }
+                else{
+                    return ['success' => 2];
+                }
+
+
+        }
+        else{
+            return ['success' => 2];
+        }
+
 
     }
+
 
 
 

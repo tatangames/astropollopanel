@@ -236,6 +236,8 @@ Route::post('cliente/finalizar/modotesteo', [ApiMenuController::class, 'finaliza
 
 
 
+
+
 // *********************** RUTAS PARA APLICACION DE RESTAURANTES ****************************************
 
 
@@ -297,6 +299,14 @@ Route::post('restaurante/actualizar/estado/producto', [ApiOrdenesRestauranteCont
 
 // HISTORIAL DE ORDENES DEL RESTAURANTES
 Route::post('restaurante/historial/ordenes', [ApiOrdenesRestauranteController::class, 'historialOrdenesRestaurantes']);
+
+
+// recibir una notificacion propia
+Route::post('restaurante/notificacion/modo/prueba', [ApiOrdenesRestauranteController::class, 'enviarNotificacionPropia']);
+
+
+
+
 
 
 
