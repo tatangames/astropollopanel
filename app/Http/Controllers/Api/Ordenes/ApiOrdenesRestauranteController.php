@@ -1108,14 +1108,15 @@ class ApiOrdenesRestauranteController extends Controller
 
                     // ENVIAR NOTIFICACION
 
+
+
                     $AppId = config('googleapi.IdApp_Restaurante');
 
                     $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
 
-                    $mensaje = "Notificacion Prueba";
-                    $titulo = "Modo prueba";
+                    $mensaje = "Modo Prueba";
+                    $titulo = "Se recibe notificaciones";
 
-                    $tokenUsuario = $infoAfiliado->token_fcm;
 
                     $contents = array(
                         "en" => $mensaje
@@ -1124,8 +1125,9 @@ class ApiOrdenesRestauranteController extends Controller
                     $params = array(
                         'app_id' => $AppId,
                         'contents' => $contents,
+                        'priority' => 10,
                         'android_channel_id' => $AppGrupoNotiPasivo,
-                        'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
+                        'include_player_ids' => is_array($infoAfiliado->token_fcm) ? $infoAfiliado->token_fcm : array($infoAfiliado->token_fcm)
                     );
 
                     $params['headings'] = array(

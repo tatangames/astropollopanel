@@ -940,8 +940,39 @@ class ApiOrdenesMotoristaController extends Controller
     }
 
 
-
     public function enviarCorreoTest(Request $request){
+
+/*
+        $AppId = config('googleapi.IdApp_Restaurante');
+
+        $AppGrupoNotiPasivo = config('googleapi.IdGrupoAlarmaRestaurante');
+
+        $mensaje = "Hay Nuevas Ordenes";
+        $titulo = "Revisar las ordenes Pendientes";
+
+
+        $contents = array(
+            "en" => $mensaje
+        );
+
+        $params = array(
+            'app_id' => $AppId,
+            'contents' => $contents,
+            'android_channel_id' => $AppGrupoNotiPasivo,
+            'include_player_ids' => is_array($pilaTokenRestaurante) ? $pilaTokenRestaurante : array($pilaTokenRestaurante)
+        );
+
+        $params['headings'] = array(
+            "en" => $titulo
+        );
+
+        OneSignal::sendNotificationCustom($params);
+*/
+
+
+    }
+
+    public function enviarCorreoTest2(Request $request){
 
 
 
@@ -986,8 +1017,7 @@ class ApiOrdenesMotoristaController extends Controller
             ]
         );*/
 
-        $tokenUsuario = "fUd-EUx4RaeZ07ST09_tGs:APA91bGSnS532A5ZRcCAmsWjXDzgollfnTo2WbdU77OKfVnuA5tnJd-elp-WFlhf2DRjoOfXuOHnJexMFL6Pic0rBSR0lDrThGJRcffWPLoO2Rcsnyv6Oa3x4koM5Vd9MxH-Tz7X2yuB";
-
+       /* $tokenUsuario = "fUd-EUx4RaeZ07ST09_tGs:APA91bGSnS532A5ZRcCAmsWjXDzgollfnTo2WbdU77OKfVnuA5tnJd-elp-WFlhf2DRjoOfXuOHnJexMFL6Pic0rBSR0lDrThGJRcffWPLoO2Rcsnyv6Oa3x4koM5Vd9MxH-Tz7X2yuB";
 
         $url = 'https://fcm.googleapis.com/fcm/send';
 
@@ -996,6 +1026,7 @@ class ApiOrdenesMotoristaController extends Controller
 
         $data = [
             "registration_ids" => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario),
+            "priority" => "high",
             "notification" => [
                 "title" => "tituloo",
                 "body" => "mensajee",
@@ -1028,11 +1059,11 @@ class ApiOrdenesMotoristaController extends Controller
         curl_close($ch);
         // FCM response
 
+*/
 
 
 
-
-        return "enviado " . $result;
+       // return "enviado " . $result;
 
     }
 

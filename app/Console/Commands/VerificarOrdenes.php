@@ -83,6 +83,7 @@ class VerificarOrdenes extends Command
             $params = array(
                 'app_id' => $AppId,
                 'contents' => $contents,
+                'priority' => 10,
                 'android_channel_id' => $AppGrupoNotiPasivo,
                 'include_player_ids' => is_array($pilaTokenRestaurante) ? $pilaTokenRestaurante : array($pilaTokenRestaurante)
             );
