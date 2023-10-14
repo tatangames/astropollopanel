@@ -12,4 +12,6 @@ return [
     'IdGrupoAlarmaMotorista' => env('ONE_SIGNAL_GRUPO_ALARMA_MOTORISTA', ''),
     'IdGrupoPasivoCliente' => env('ONE_SIGNAL_GRUPO_PASIVO_CLIENTE', ''),
     'IdGrupoPasivoMotorista' => env('ONE_SIGNAL_GRUPO_PASIVO_MOTORISTA', ''),
+
+    'IdFirebaseRestaurante' => env('FCM_CLAVE_RESTAURANTE', ''),
 ];

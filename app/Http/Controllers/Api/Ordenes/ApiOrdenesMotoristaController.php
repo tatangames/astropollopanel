@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use OneSignal;
 
+use App\Services\FCMService;
+
 class ApiOrdenesMotoristaController extends Controller
 {
 
@@ -905,7 +907,7 @@ class ApiOrdenesMotoristaController extends Controller
 
         if($info = MotoristasServicios::where('id', $request->id)->first()){
 
-            $mensaje = "Estado de Recibir Notifacaciones";
+            $mensaje = "Estado de Recibir Notificaciones";
 
             return ['success' => 1, 'opcion' => $info->notificacion, 'mensaje' => $mensaje];
         }else{
@@ -944,16 +946,13 @@ class ApiOrdenesMotoristaController extends Controller
 
 
 
-        // $idAppCliente = "f86a2ee4-a10b-4a86-a063-151be6845bce";
-        $idAppRestaurante = "5c22da89-09a8-4b89-ad94-84172cdd14e8";
+       /* $AppId = config('googleapi.IdApp_Restaurante');
 
-        $mensaje = "restaurante";
-        $titulo = "mensaje eee";
+        $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
 
+        $mensaje = "Notificacion Prueba";
+        $titulo = "Modo pruebxxa";
 
-        //$userId = "251a4965-fe66-42b0-bd5c-094838668d20";
-
-        $userRestaurante = "07252430-b70c-429d-b630-332654b321b0";
 
 
         $contents = array(
@@ -961,26 +960,79 @@ class ApiOrdenesMotoristaController extends Controller
         );
 
         $params = array(
-            'app_id' => $idAppRestaurante,
+            'app_id' => $AppId,
             'contents' => $contents,
-            'android_channel_id' => "9d335720-f085-483f-a73f-18e5a3cd777b",
-            'include_player_ids' => is_array($userRestaurante) ? $userRestaurante : array($userRestaurante)
+            'android_channel_id' => $AppGrupoNotiPasivo,
+            'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
         );
 
         $params['headings'] = array(
             "en" => $titulo
         );
 
-
-
-
-
         OneSignal::sendNotificationCustom($params);
 
+*/
+
+        //$idFCM = config('googleapi.IdFirebaseRestaurante');
+
+        /*$tokenUsuario = "fUd-EUx4RaeZ07ST09_tGs:APA91bGSnS532A5ZRcCAmsWjXDzgollfnTo2WbdU77OKfVnuA5tnJd-elp-WFlhf2DRjoOfXuOHnJexMFL6Pic0rBSR0lDrThGJRcffWPLoO2Rcsnyv6Oa3x4koM5Vd9MxH-Tz7X2yuB";
+
+        FCMService::send(
+            $tokenUsuario,
+            [
+                'title' => 'your title 11',
+                'body' => 'your body 22',
+            ]
+        );*/
+
+        $tokenUsuario = "fUd-EUx4RaeZ07ST09_tGs:APA91bGSnS532A5ZRcCAmsWjXDzgollfnTo2WbdU77OKfVnuA5tnJd-elp-WFlhf2DRjoOfXuOHnJexMFL6Pic0rBSR0lDrThGJRcffWPLoO2Rcsnyv6Oa3x4koM5Vd9MxH-Tz7X2yuB";
+
+
+        $url = 'https://fcm.googleapis.com/fcm/send';
+
+
+        $serverKey = 'AAAA8kPXPTw:APA91bHG1eLJCp25agMOzz6DzKrHuZY_r3kkSpoeMYRpsBrsTTnVTGSHFHFCGuJjPSVq5w62aPRe8G3khJrt0yBH1euUMCZeA9DhYzGhbmRB_eTrwxshRu_rHRIgyovFi5okrZTfDlbG';
+
+        $data = [
+            "registration_ids" => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario),
+            "notification" => [
+                "title" => "tituloo",
+                "body" => "mensajee",
+            ]
+        ];
+        $encodedData = json_encode($data);
+
+        $headers = [
+            'Authorization:key=' . $serverKey,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        // Disabling SSL Certificate support temporarly
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
+        // Execute post
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            die('Curl failed: ' . curl_error($ch));
+        }
+        // Close connection
+        curl_close($ch);
+        // FCM response
 
 
 
-        return "enviado";
+
+
+        return "enviado " . $result;
 
     }
 
