@@ -227,7 +227,10 @@ class ServiciosController extends Controller
 
             $info->restaurante = $infoServicio->nombre;
 
-            $info->fecha = date("h:i A d-m-Y", strtotime($info->fecha_entroapp));
+            if($info->fecha != null){
+                $info->fecha = date("h:i A d-m-Y", strtotime($info->fecha_entroapp));
+            }
+
         }
 
         return view('backend.admin.usuarios.tablausuarios', compact('lista'));
