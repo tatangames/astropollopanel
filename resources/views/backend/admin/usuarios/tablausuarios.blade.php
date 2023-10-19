@@ -10,6 +10,7 @@
                                 <th style="width: 15%">Restaurante</th>
                                 <th style="width: 20%">Usuario</th>
                                 <th style="width: 20%">Nombre</th>
+                                <th style="width: 20%">Ultimo Ingreso a la App</th>
                                 <th style="width: 12%">Opciones</th>
 
                             </tr>
@@ -22,6 +23,7 @@
                                     <td>{{ $dato->restaurante }}</td>
                                     <td>{{ $dato->usuario }}</td>
                                     <td>{{ $dato->nombre }}</td>
+                                    <td>{{ $dato->fecha }}</td>
                                     <td>
 
 

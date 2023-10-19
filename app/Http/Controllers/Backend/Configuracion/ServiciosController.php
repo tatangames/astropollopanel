@@ -226,6 +226,8 @@ class ServiciosController extends Controller
             $infoServicio = Servicios::where('id', $info->id_servicios)->first();
 
             $info->restaurante = $infoServicio->nombre;
+
+            $info->fecha = date("h:i A d-m-Y", strtotime($info->fecha_entroapp));
         }
 
         return view('backend.admin.usuarios.tablausuarios', compact('lista'));
