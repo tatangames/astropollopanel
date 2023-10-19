@@ -227,7 +227,7 @@ class ServiciosController extends Controller
 
             $info->restaurante = $infoServicio->nombre;
 
-            if($info->fecha != null){
+            if($info->fecha_entroapp != null){
                 $info->fecha = date("h:i A d-m-Y", strtotime($info->fecha_entroapp));
             }
 
