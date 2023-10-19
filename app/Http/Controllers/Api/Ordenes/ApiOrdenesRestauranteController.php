@@ -48,6 +48,12 @@ class ApiOrdenesRestauranteController extends Controller
             }
 
 
+            // actualizar ccada vez que entran
+            $fecha = Carbon::now('America/El_Salvador');
+
+            UsuariosServicios::where('id', $infoUsuario->id)->update([
+                'fecha_entroapp' => $fecha]);
+
 
             $arrayOrdenes = Ordenes::where('estado_iniciada', 0)
                 ->where('estado_cancelada', 0)
