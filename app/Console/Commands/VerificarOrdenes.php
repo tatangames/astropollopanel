@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Informacion;
 use App\Models\Ordenes;
+use App\Models\Registros;
 use App\Models\Servicios;
 use App\Models\UsuariosServicios;
 use Illuminate\Console\Command;
@@ -46,6 +48,17 @@ class VerificarOrdenes extends Command
 
         // ENVIO DE NOTIFICACION A RESTAURANTE CADA 1 MINUTO SI LA ORDEN
         // NO HA SIDO INICIADA O CANCELADA
+
+        $infor = Informacion::where('id', 1)->first();
+
+        if($infor->crono_activo == 1){
+
+            $fecha = Carbon::now('America/El_Salvador');
+
+            $registro = new Registros();
+            $registro->fecha = $fecha;
+            $registro->save();
+        }
 
 
         $arrayOrdenHoy = Ordenes::where('estado_iniciada', 0)
