@@ -81,8 +81,12 @@ class ApiDireccionesController extends Controller
             $index++;
         }
 
+
+        $AppId = config('googleapi.Google_API');
+
         return [
             'success' => 1,
+            'apikey' => $AppId,
             'poligono' => $zonas
         ];
     }
