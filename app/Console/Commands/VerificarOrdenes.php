@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\EnviarNotificacionRestaurante;
 use App\Models\Informacion;
 use App\Models\Ordenes;
 use App\Models\Registros;
@@ -9,6 +10,7 @@ use App\Models\Servicios;
 use App\Models\UsuariosServicios;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use OneSignal;
 
 
@@ -81,15 +83,19 @@ class VerificarOrdenes extends Command
 
         if($pilaTokenRestaurante != null) {
 
-            $AppId = config('googleapi.IdApp_Restaurante');
+            //$AppId = config('googleapi.IdApp_Restaurante');
 
-            $AppGrupoNotiPasivo = config('googleapi.IdGrupoAlarmaRestaurante');
+            //$AppGrupoNotiPasivo = config('googleapi.IdGrupoAlarmaRestaurante');
 
             $mensaje = "Hay Nuevas Ordenes";
             $titulo = "Revisar las ordenes Pendientes";
 
+            Log::info('enviado desde Timer');
+            dispatch(new EnviarNotificacionRestaurante($pilaTokenRestaurante, $mensaje, $titulo));
 
-            $contents = array(
+
+
+           /* $contents = array(
                 "en" => $mensaje
             );
 
@@ -105,7 +111,7 @@ class VerificarOrdenes extends Command
                 "en" => $titulo
             );
 
-            OneSignal::sendNotificationCustom($params);
+            OneSignal::sendNotificationCustom($params);*/
         }
 
 
