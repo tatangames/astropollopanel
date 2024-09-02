@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Ordenes;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\EnviarNotificacionRestaurante;
 use App\Models\Clientes;
 use App\Models\Cupones;
 use App\Models\MotoristasServicios;
@@ -118,7 +119,6 @@ class ApiOrdenesController extends Controller
         } else {
             return ['success' => 2];
         }
-
     }
 
 
@@ -450,32 +450,12 @@ class ApiOrdenesController extends Controller
 
                         if($infoUsuario->token_fcm != null){
 
-
-                            $AppId = config('googleapi.IdApp_Restaurante');
-
-                            $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
-
-                            $mensaje = "Orden #" . $infoOrden->id . " Cancelada";
-                            $titulo = "La orden fue cancelada por Cliente";
+                            $titulo = "Orden #" . $infoOrden->id . " Cancelada";
+                            $mensaje = "La orden fue cancelada por Cliente";
 
                             $tokenUsuario = $infoUsuario->token_fcm;
 
-                            $contents = array(
-                                "en" => $mensaje
-                            );
-
-                            $params = array(
-                                'app_id' => $AppId,
-                                'contents' => $contents,
-                                'android_channel_id' => $AppGrupoNotiPasivo,
-                                'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
-                            );
-
-                            $params['headings'] = array(
-                                "en" => $titulo
-                            );
-
-                            OneSignal::sendNotificationCustom($params);
+                            dispatch(new EnviarNotificacionRestaurante($tokenUsuario, $titulo, $mensaje));
                         }
                     }
 

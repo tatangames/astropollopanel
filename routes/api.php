@@ -84,9 +84,11 @@ Route::post('cliente/verificar/cupon', [ApiCarritoComprasController::class, 'ver
 
 
 // ***********   ENVIO DE LA ORDEN DEL CLIENTE************
+
 Route::post('cliente/proceso/enviar/orden', [ApiProcesarController::class, 'enviarOrdenRestaurante']);
 
 // ENVIO NOTIFICACION DESPUES DE CONFIRMAR ORDEN
+// *** ONE SIGNAL -> enviar a lista de restaurantes
 Route::post('cliente/proceso/orden/notificacion', [ApiProcesarController::class, 'notificacionOrdenParaRestaurante']);
 
 
@@ -114,6 +116,7 @@ Route::post('cliente/listado/productos/ordenes-individual',  [ApiOrdenesControll
 
 
 // CANCELAR ORDEN POR EL CLIENTE
+// *** ONE SIGNAL -> notificacion a restaurantes
 Route::post('cliente/proceso/cancelar/orden', [ApiOrdenesController::class, 'cancelarOrdenPorCliente']);
 
 
@@ -254,7 +257,8 @@ Route::post('restaurante/listado/producto/orden', [ApiOrdenesRestauranteControll
 Route::post('restaurante/listado/productos/ordenes-individual',  [ApiOrdenesRestauranteController::class, 'infoProductoOrdenadoIndividual']);
 
 // INICIAR ORDEN
-//  NOTIFICACION ONE SIGNAL AL CLIENTE
+// **** ONE SIGNAL -> notificacion al cliente
+// **** ONE SIGNAL -> notificacion a motoristas
 
 Route::post('restaurante/proceso/orden/iniciar-orden',  [ApiOrdenesRestauranteController::class, 'iniciarOrdenPorRestaurante']);
 
@@ -263,15 +267,13 @@ Route::post('restaurante/proceso/orden/iniciar-orden',  [ApiOrdenesRestauranteCo
 
 Route::post('restaurante/cancelar/orden', [ApiOrdenesRestauranteController::class, 'cancelarOrden']);
 
-
-
 // LISTADO DE ORDENES QUE YA ESTAN EN PREPARACION
-
 Route::post('restaurante/preparacion/ordenes', [ApiOrdenesRestauranteController::class, 'preparacionOrdenes']);
 
 
 // FINALIZAR ORDEN -> NOTIFICACION SIGNAL A MOTORISTA QUE TIENE LA ORDEN
                    // O ENVIA NOTIFICACION A TODOS LOS MOTORISTAS PARA AGARRARLA
+// **** ONE SIGNAL X2
 Route::post('restaurante/proceso/orden/finalizar-orden',  [ApiOrdenesRestauranteController::class, 'finalizarOrdenPorRestaurante']);
 
 
@@ -333,6 +335,7 @@ Route::post('motorista/pendientes/entrega/orden', [ApiOrdenesMotoristaController
 
 // AQUI SE INICIA LA ENTREGA DE LA ORDEN
             // NOTIFICACION ONE SIGNAL A CLIENTE
+// *** ONE SIGNAL
 Route::post('motorista/iniciar/entrega/orden', [ApiOrdenesMotoristaController::class, 'iniciarEntregaOrden']);
 
 // LISTADO DE ORDENES QUE EL MOTORISTA ESTA ENTREGANDO
@@ -340,6 +343,7 @@ Route::post('motorista/entregando/entrega/orden', [ApiOrdenesMotoristaController
 
 // FINALIZAR ENTREGA POR PARTE DEL MOTORISTA
             // NOTIFICACION ONE SIGNAL AL CLIENTE
+// *** ONE SIGNAL
 Route::post('motorista/finalizar/entrega/orden', [ApiOrdenesMotoristaController::class, 'finalizarOrden']);
 
 // LISTADO DE ORDENES COMPLETADAS HOY POR EL MOTORISTA

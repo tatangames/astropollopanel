@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Ordenes;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\EnviarNotificacionUsuario;
 use App\Models\Clientes;
 use App\Models\MotoristasServicios;
 use App\Models\Ordenes;
@@ -378,28 +379,10 @@ class ApiOrdenesMotoristaController extends Controller
                     $mensajeNoti = "El Motorista se Dirige a su Dirección";
 
 
-                    $AppId = config('googleapi.IdApp_Cliente');
-
-                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoCliente');
 
                     $tokenUsuario = $infoCliente->token_fcm;
 
-                    $contents = array(
-                        "en" => $mensajeNoti
-                    );
-
-                    $params = array(
-                        'app_id' => $AppId,
-                        'contents' => $contents,
-                        'android_channel_id' => $AppGrupoNotiPasivo,
-                        'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
-                    );
-
-                    $params['headings'] = array(
-                        "en" => $tituloNoti
-                    );
-
-                    OneSignal::sendNotificationCustom($params);
+                    dispatch(new EnviarNotificacionUsuario($tokenUsuario, $tituloNoti, $mensajeNoti));
                 }
 
                 $titulo = "Iniciado";
@@ -550,28 +533,9 @@ class ApiOrdenesMotoristaController extends Controller
                     $tituloNoti = "Orden #" . $infoOrden->id . " Entregada";
                     $mensajeNoti = "Muchas Gracias";
 
-                    $AppId = config('googleapi.IdApp_Cliente');
-
-                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoCliente');
-
                     $tokenUsuario = $infoCliente->token_fcm;
 
-                    $contents = array(
-                        "en" => $mensajeNoti
-                    );
-
-                    $params = array(
-                        'app_id' => $AppId,
-                        'contents' => $contents,
-                        'android_channel_id' => $AppGrupoNotiPasivo,
-                        'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
-                    );
-
-                    $params['headings'] = array(
-                        "en" => $tituloNoti
-                    );
-
-                    OneSignal::sendNotificationCustom($params);
+                    dispatch(new EnviarNotificacionUsuario($tokenUsuario, $tituloNoti, $mensajeNoti));
                 }
 
                 $titulo = "Orden Finalizada";
@@ -579,19 +543,14 @@ class ApiOrdenesMotoristaController extends Controller
 
                 return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
             }else{
-
-
                 $titulo = "Orden Finalizada";
                 $mensaje = "Muchas Gracias";
-
                 return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
             }
 
         }else{
             return ['success' => 2];
         }
-
-
     }
 
 

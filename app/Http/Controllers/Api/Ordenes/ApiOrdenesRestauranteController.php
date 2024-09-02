@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\Ordenes;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\EnviarNotificacion;
+use App\Jobs\EnviarNotificacionMotorista;
 use App\Jobs\EnviarNotificacionRestaurante;
+use App\Jobs\EnviarNotificacionUsuario;
 use App\Models\Categorias;
 use App\Models\Clientes;
 use App\Models\Cupones;
@@ -256,30 +258,11 @@ class ApiOrdenesRestauranteController extends Controller
                     $mensajeNoti = "Su orden inicia su Preparación";
 
 
-
-                    $AppId = config('googleapi.IdApp_Cliente');
-
-                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoCliente');
-
-
                     $tokenUsuario = $infoCliente->token_fcm;
 
-                    $contents = array(
-                        "en" => $mensajeNoti
-                    );
-
-                    $params = array(
-                        'app_id' => $AppId,
-                        'contents' => $contents,
-                        'android_channel_id' => $AppGrupoNotiPasivo,
-                        'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
-                    );
-
-                    $params['headings'] = array(
-                        "en" => $tituloNoti
-                    );
-
-                    OneSignal::sendNotificationCustom($params);
+                    if($tokenUsuario != null){
+                        dispatch(new EnviarNotificacionUsuario($tokenUsuario, $tituloNoti, $mensajeNoti));
+                    }
                 }
 
                 // NOTIFICACION ONE SIGNAL QUE HAY ORDENES QUE PUEDEN SER AGARRADAS YA
@@ -300,30 +283,9 @@ class ApiOrdenesRestauranteController extends Controller
                 if($pilaMotoristas != null) {
                     $tituloNoti = "Hay Nuevas Ordenes";
                     $mensajeNoti = "Por Favor Verificar";
-                    // ENVIAR NOTIFICACIONES
+                    // ENVIAR NOTIFICACIONES A MOTORISTAS
 
-
-                    $AppId = config('googleapi.IdApp_Motorista');
-
-                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoMotorista');
-
-
-                    $contents = array(
-                        "en" => $mensajeNoti
-                    );
-
-                    $params = array(
-                        'app_id' => $AppId,
-                        'contents' => $contents,
-                        'android_channel_id' => $AppGrupoNotiPasivo,
-                        'include_player_ids' => is_array($pilaMotoristas) ? $pilaMotoristas : array($pilaMotoristas)
-                    );
-
-                    $params['headings'] = array(
-                        "en" => $tituloNoti
-                    );
-
-                    OneSignal::sendNotificationCustom($params);
+                    dispatch(new EnviarNotificacionMotorista($pilaMotoristas, $tituloNoti, $mensajeNoti));
                 }
 
                 $titulo = "Nota";
@@ -601,29 +563,12 @@ class ApiOrdenesRestauranteController extends Controller
                         // ENVIAR NOTIFICACIONES A MOTORISTA
 
 
-                        $AppId = config('googleapi.IdApp_Motorista');
-
-                        $AppGrupoNotiAlarma = config('googleapi.IdGrupoAlarmaMotorista');
 
                         $tokenMotorista = $infoMotorista->token_fcm;
 
-
-                        $contents = array(
-                            "en" => $mensajeNoti
-                        );
-
-                        $params = array(
-                            'app_id' => $AppId,
-                            'contents' => $contents,
-                            'android_channel_id' => $AppGrupoNotiAlarma,
-                            'include_player_ids' => is_array($tokenMotorista) ? $tokenMotorista : array($tokenMotorista)
-                        );
-
-                        $params['headings'] = array(
-                            "en" => $tituloNoti
-                        );
-
-                        OneSignal::sendNotificationCustom($params);
+                        if($tokenMotorista != null){
+                            dispatch(new EnviarNotificacionMotorista($tokenMotorista, $tituloNoti, $mensajeNoti));
+                        }
                     }
 
                 }else{
@@ -650,27 +595,7 @@ class ApiOrdenesRestauranteController extends Controller
                         // ENVIAR NOTIFICACIONES A TODOS LOS MOTORISTAS DEL RESTAURANTE
 
 
-                        $AppId = config('googleapi.IdApp_Motorista');
-
-                        $AppGrupoNotiAlarma = config('googleapi.IdGrupoAlarmaMotorista');
-
-
-                        $contents = array(
-                            "en" => $mensajeNoti
-                        );
-
-                        $params = array(
-                            'app_id' => $AppId,
-                            'contents' => $contents,
-                            'android_channel_id' => $AppGrupoNotiAlarma,
-                            'include_player_ids' => is_array($pilaMotoristas) ? $pilaMotoristas : array($pilaMotoristas)
-                        );
-
-                        $params['headings'] = array(
-                            "en" => $tituloNoti
-                        );
-
-                        OneSignal::sendNotificationCustom($params);
+                        dispatch(new EnviarNotificacionMotorista($pilaMotoristas, $tituloNoti, $mensajeNoti));
                     }
                 }
 

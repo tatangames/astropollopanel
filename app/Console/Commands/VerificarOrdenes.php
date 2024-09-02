@@ -83,35 +83,12 @@ class VerificarOrdenes extends Command
 
         if($pilaTokenRestaurante != null) {
 
-            //$AppId = config('googleapi.IdApp_Restaurante');
-
-            //$AppGrupoNotiPasivo = config('googleapi.IdGrupoAlarmaRestaurante');
-
-            $mensaje = "Hay Nuevas Ordenes";
-            $titulo = "Revisar las ordenes Pendientes";
+            $titulo = "Hay Nuevas Ordenes";
+            $mensaje = "Revisar las ordenes Pendientes";
 
             Log::info('enviado desde Timer');
-            dispatch(new EnviarNotificacionRestaurante($pilaTokenRestaurante, $mensaje, $titulo));
 
-
-
-           /* $contents = array(
-                "en" => $mensaje
-            );
-
-            $params = array(
-                'app_id' => $AppId,
-                'contents' => $contents,
-                'priority' => 10,
-                'android_channel_id' => $AppGrupoNotiPasivo,
-                'include_player_ids' => is_array($pilaTokenRestaurante) ? $pilaTokenRestaurante : array($pilaTokenRestaurante)
-            );
-
-            $params['headings'] = array(
-                "en" => $titulo
-            );
-
-            OneSignal::sendNotificationCustom($params);*/
+            dispatch(new EnviarNotificacionRestaurante($pilaTokenRestaurante, $titulo, $mensaje));
         }
 
 

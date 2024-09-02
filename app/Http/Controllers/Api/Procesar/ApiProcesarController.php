@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Procesar;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\EnviarNotificacionRestaurante;
 use App\Models\CarritoExtra;
 use App\Models\CarritoTemporal;
 use App\Models\Categorias;
@@ -601,38 +602,17 @@ class ApiProcesarController extends Controller
                 ->where('bloqueado', 0)
                 ->first()){
 
-
                     if($infoUsuario->token_fcm != null){
 
                         // ENVIAR NOTIFICACION
 
-
-                        $AppId = config('googleapi.IdApp_Restaurante');
-
-                        $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
-
-                        $mensaje = "Nueva Orden #" . $infoOrden->id;
-                        $titulo = "Revisar Pedido";
+                        $titulo = "Nueva Orden #" . $infoOrden->id;
+                        $mensaje = "Revisar Pedido";
 
                         $tokenUsuario = $infoUsuario->token_fcm;
 
-                        $contents = array(
-                            "en" => $mensaje
-                        );
 
-                        $params = array(
-                            'app_id' => $AppId,
-                            'contents' => $contents,
-                            'priority' => 10,
-                            'android_channel_id' => $AppGrupoNotiPasivo,
-                            'include_player_ids' => is_array($tokenUsuario) ? $tokenUsuario : array($tokenUsuario)
-                        );
-
-                        $params['headings'] = array(
-                            "en" => $titulo
-                        );
-
-                        OneSignal::sendNotificationCustom($params);
+                        dispatch(new EnviarNotificacionRestaurante($tokenUsuario, $titulo, $mensaje));
                     }
             }
 
@@ -641,12 +621,5 @@ class ApiProcesarController extends Controller
         else{
             return ['success' => 2];
         }
-
-
     }
-
-
-
-
-
 }
