@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "87bd790470446a8b90c21547831089d9",
+    "content-hash": "0bb52e7898f15575229aae273b949f2c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -64,23 +64,23 @@
         },
         {
             "name": "berkayk/onesignal-laravel",
-            "version": "v2",
+            "version": "v2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/berkayk/laravel-onesignal.git",
-                "reference": "e37aaf474903789f20239949c73e20382bd623bf"
+                "reference": "292973c63914b7b6a6b788a7849c1060abfe9079"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/berkayk/laravel-onesignal/zipball/e37aaf474903789f20239949c73e20382bd623bf",
-                "reference": "e37aaf474903789f20239949c73e20382bd623bf",
+                "url": "https://api.github.com/repos/berkayk/laravel-onesignal/zipball/292973c63914b7b6a6b788a7849c1060abfe9079",
+                "reference": "292973c63914b7b6a6b788a7849c1060abfe9079",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.2|^7.4.1|^7.2",
-                "illuminate/support": "~5.5|~6.0|~7.0|~8.0|~9.0|^10.0",
+                "illuminate/support": "~5.5|~6.0|~7.0|~8.0|~9.0|^10.0|^11.0",
                 "php": ">=5.4.0",
-                "symfony/psr-http-message-bridge": "1.*|2.*"
+                "symfony/psr-http-message-bridge": "1.*|2.*|^7.0"
             },
             "require-dev": {
                 "vlucas/phpdotenv": "^2.2|^5.5"
@@ -126,9 +126,9 @@
             ],
             "support": {
                 "issues": "https://github.com/berkayk/laravel-onesignal/issues",
-                "source": "https://github.com/berkayk/laravel-onesignal/tree/v2"
+                "source": "https://github.com/berkayk/laravel-onesignal/tree/v2.1"
             },
-            "time": "2023-02-21T08:06:05+00:00"
+            "time": "2024-03-26T12:15:06+00:00"
         },
         {
             "name": "brick/math",
@@ -8145,5 +8145,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

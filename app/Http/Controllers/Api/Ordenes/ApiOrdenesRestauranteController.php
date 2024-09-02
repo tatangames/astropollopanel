@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Ordenes;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\EnviarNotificacion;
+use App\Jobs\EnviarNotificacionRestaurante;
 use App\Models\Categorias;
 use App\Models\Clientes;
 use App\Models\Cupones;
@@ -19,6 +21,7 @@ use App\Models\Zonas;
 use App\Models\ZonasServicio;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use OneSignal;
@@ -1105,42 +1108,17 @@ class ApiOrdenesRestauranteController extends Controller
 
         if($infoAfiliado = UsuariosServicios::where('id', $request->id)->first()){
 
-
             UsuariosServicios::where('id', $request->id)
                 ->update(['token_fcm' => $request->tokenid]);
-
 
                 if($infoAfiliado->token_fcm != null){
 
                     // ENVIAR NOTIFICACION
 
-
-
-                    $AppId = config('googleapi.IdApp_Restaurante');
-
-                    $AppGrupoNotiPasivo = config('googleapi.IdGrupoPasivoRestaurante');
-
                     $mensaje = "Modo Prueba";
                     $titulo = "Se recibe notificaciones";
 
-
-                    $contents = array(
-                        "en" => $mensaje
-                    );
-
-                    $params = array(
-                        'app_id' => $AppId,
-                        'contents' => $contents,
-                        'priority' => 10,
-                        'android_channel_id' => $AppGrupoNotiPasivo,
-                        'include_player_ids' => is_array($infoAfiliado->token_fcm) ? $infoAfiliado->token_fcm : array($infoAfiliado->token_fcm)
-                    );
-
-                    $params['headings'] = array(
-                        "en" => $titulo
-                    );
-
-                    OneSignal::sendNotificationCustom($params);
+                    dispatch(new EnviarNotificacionRestaurante($infoAfiliado->token_fcm, $mensaje, $titulo));
 
                     return ['success' => 1];
                 }
