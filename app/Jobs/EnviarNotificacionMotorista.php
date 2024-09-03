@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use OneSignal;
 use Exception;
+use GuzzleHttp\Client;
 
 class EnviarNotificacionMotorista implements ShouldQueue
 {
@@ -42,24 +43,25 @@ class EnviarNotificacionMotorista implements ShouldQueue
     {
         $tituloNoti = $this->titulo;
         $mensajeNoti = $this->descripcion;
-
-        $contents = array(
-            "en" => $mensajeNoti
-        );
-
-        $params = array(
-            'app_id' => 'ef1c8fd5-494d-47e7-abac-fbbee5c24188',
-            'contents' => $contents,
-            'include_player_ids' => is_array($this->arrayOnesignal) ? $this->arrayOnesignal : array($this->arrayOnesignal),
-            'android_channel_id' => 'ddeed491-0e02-42a6-8fdd-95736c067eee'
-        );
-
-        $params['headings'] = array(
-            "en" => $tituloNoti
-        );
+        $tokenOneSignal = $this->arrayOnesignal;
 
         try {
-            OneSignal::sendNotificationCustom($params);
+
+            $client = new Client();
+            $response = $client->post('https://onesignal.com/api/v1/notifications', [
+                'json' => [
+                    'app_id' => 'ef1c8fd5-494d-47e7-abac-fbbee5c24188',
+                    'contents' => ['en' => $mensajeNoti],
+                    'include_player_ids' => is_array($tokenOneSignal) ? $tokenOneSignal : array($tokenOneSignal),
+                    'android_channel_id' => 'ddeed491-0e02-42a6-8fdd-95736c067eee',
+                    'headings' => ['en' => $tituloNoti],
+                ],
+                'headers' => [
+                    'Authorization' => 'Basic ' . 'ZTI1M2VhZTQtYzAwYS00ODBiLThlZmEtOTFlOTU3MmQ2YTQ4',
+                    'Content-Type' => 'application/json; charset=utf-8',
+                ],
+            ]);
+
         } catch (\Exception $e) {
             Log::info("Error al enviar la notificación para Motorista");
         }

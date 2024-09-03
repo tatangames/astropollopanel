@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -42,26 +43,27 @@ class EnviarNotificacionUsuario implements ShouldQueue
     {
         $tituloNoti = $this->titulo;
         $mensajeNoti = $this->descripcion;
-
-        $contents = array(
-            "en" => $mensajeNoti
-        );
-
-        $params = array(
-            'app_id' => 'f86a2ee4-a10b-4a86-a063-151be6845bce',
-            'contents' => $contents,
-            'include_player_ids' => is_array($this->arrayOnesignal) ? $this->arrayOnesignal : array($this->arrayOnesignal),
-            'android_channel_id' => '59f35031-6bad-4833-b73b-00f384c2be89'
-        );
-
-        $params['headings'] = array(
-            "en" => $tituloNoti
-        );
+        $tokenOneSignal = $this->arrayOnesignal;
 
         try {
-            OneSignal::sendNotificationCustom($params);
+
+            $client = new Client();
+            $response = $client->post('https://onesignal.com/api/v1/notifications', [
+                'json' => [
+                    'app_id' => 'f86a2ee4-a10b-4a86-a063-151be6845bce',
+                    'contents' => ['en' => $mensajeNoti],
+                    'include_player_ids' => is_array($tokenOneSignal) ? $tokenOneSignal : array($tokenOneSignal),
+                    'android_channel_id' => 'ddeed491-0e02-42a6-8fdd-95736c067eee',
+                    'headings' => ['en' => $tituloNoti],
+                ],
+                'headers' => [
+                    'Authorization' => 'Basic ' . 'NWJmYWZlYzAtMDMxNy00NTdkLTlhZTYtODY1YjRjNmIyNzZm',
+                    'Content-Type' => 'application/json; charset=utf-8',
+                ],
+            ]);
+
         } catch (\Exception $e) {
-            Log::info("Error al enviar la notificación para Usuarios");
+            Log::info("Error al enviar la notificación para Clientes");
         }
     }
 }

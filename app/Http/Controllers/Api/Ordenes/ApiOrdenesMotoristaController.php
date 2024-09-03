@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Ordenes;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\EnviarNotificacionMotorista;
 use App\Jobs\EnviarNotificacionUsuario;
 use App\Models\Clientes;
 use App\Models\MotoristasServicios;
@@ -887,10 +888,18 @@ class ApiOrdenesMotoristaController extends Controller
 
         if ( $validator->fails()){return ['success' => 0]; }
 
-        if(MotoristasServicios::where('id', $request->id)->first()){
+        if($infoMoto = MotoristasServicios::where('id', $request->id)->first()){
 
             MotoristasServicios::where('id', $request->id)->update([
                 'notificacion' => $request->disponible]);
+
+
+            $mensaje = "Modo Prueba";
+            $titulo = "Se recibe notificaciones";
+
+            if($infoMoto->token_fcm != null){
+                dispatch(new EnviarNotificacionMotorista($infoMoto->token_fcm, $mensaje, $titulo));
+            }
 
             return ['success' => 1];
         }else{
