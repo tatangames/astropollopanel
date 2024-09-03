@@ -53,7 +53,7 @@ class EnviarNotificacionUsuario implements ShouldQueue
                     'app_id' => 'f86a2ee4-a10b-4a86-a063-151be6845bce',
                     'contents' => ['en' => $mensajeNoti],
                     'include_player_ids' => is_array($tokenOneSignal) ? $tokenOneSignal : array($tokenOneSignal),
-                    'android_channel_id' => 'ddeed491-0e02-42a6-8fdd-95736c067eee',
+                    'android_channel_id' => '59f35031-6bad-4833-b73b-00f384c2be89',
                     'headings' => ['en' => $tituloNoti],
                 ],
                 'headers' => [
