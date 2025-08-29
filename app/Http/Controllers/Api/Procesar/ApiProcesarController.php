@@ -355,38 +355,21 @@ class ApiProcesarController extends Controller
                         return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
                     }
 
-
-
-                    // REGLA: MINIMO DE COMPRA A LA ZONA QUE SI UTILIZAN CUPON
-
-                    // IGNORAR EL CUPON PRODUCTO GRATIS
-                    if($tipoCupon != 1){
-                        if($totalCarritoCupon < $infoZona->minimo){
-
-                            $minimo = '$' . number_format((float)$infoZona->minimo, 2, '.', ',');
-
-                            $titulo = "Nota";
-                            $mensaje = "El mínimo de compra para su dirección actual es . " . $minimo;
-                            return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
-                        }
-                    }
-
-                }else{
-
-                    // REGLA: MINIMO DE COMPRA A LA ZONA QUE NO USAN CUPON
-
-                    if($totalCarrito < $infoZona->minimo){
-
-                        $minimo = '$' . number_format((float)$infoZona->minimo, 2, '.', ',');
-
-                        $titulo = "Nota";
-                        $mensaje = "El mínimo de compra para su dirección actual es . " . $minimo;
-                        return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
-                    }
                 }
 
 
 
+                // CALCULARE EL MINIMO DE COMPRA SIEMPRE CON LA VENTA, IGNORANDO CUPONES.
+                // PORQUE EL CHISTE ES VENDER ALGO CARO, PARA QUE DESQUITE EL DESCUENTO
+
+                if($totalCarrito < $infoZona->minimo){
+
+                    $minimo = '$' . number_format((float)$infoZona->minimo, 2, '.', ',');
+
+                    $titulo = "Nota";
+                    $mensaje = "El mínimo de compra para su dirección actual es . " . $minimo;
+                    return ['success' => 1, 'titulo' => $titulo, 'mensaje' => $mensaje];
+                }
 
 
                 $infoCliente = Clientes::where('id', $request->clienteid)->first();
