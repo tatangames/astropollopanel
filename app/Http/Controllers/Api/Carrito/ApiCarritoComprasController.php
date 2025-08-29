@@ -477,10 +477,10 @@ class ApiCarritoComprasController extends Controller
                 $infoZona = Zonas::where('id', $infoDireccion->id_zonas)->first();
                 $boolMinimo = 0; // aqui no puede ordenar
 
-                $msjMinimoConsumo = "El mínimo de consumo es: $".$infoZona->minimo_consumo;
+                $msjMinimoConsumo = "El mínimo de consumo es: $".$infoZona->minimo;
 
 
-                if($subtotal >= $infoZona->minimo_consumo){
+                if($subtotal >= $infoZona->minimo){
                     // si puede ordenar
                     $boolMinimo = 1;
                 }
