@@ -624,8 +624,6 @@ class ApiClienteController extends Controller
     public function loginMotorista(Request $request){
 
 
-        return "holaa";
-
         $rules = array(
             'usuario' => 'required',
             'password' => 'required',
