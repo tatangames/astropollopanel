@@ -7,6 +7,7 @@ use App\Models\Categorias;
 use App\Models\Productos;
 use App\Models\SubCategorias;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -54,6 +55,13 @@ class ProductosController extends Controller
 
         if ($validar->fails()){return ['success' => 0]; }
 
+        if($info = Productos::where('id_subcategorias', $request->idsubcategoria)
+            ->orderBy('posicion', 'DESC')->first()){
+            $suma = $info->posicion + 1;
+        }else{
+            $suma = 1;
+        }
+
         if($request->file('imagen')){
 
             $cadena = Str::random(15);
@@ -67,13 +75,6 @@ class ProductosController extends Controller
             $upload = Storage::disk('imagenes')->put($nombreFoto, \File::get($avatar));
 
             if($upload){
-
-                if($info = Productos::orderBy('posicion', 'DESC')->first()){
-                    $suma = $info->posicion + 1;
-                }else{
-                    $suma = 1;
-                }
-
                 $ca = new Productos();
                 $ca->id_subcategorias = $request->idsubcategoria;
                 $ca->nombre = $request->nombre;
@@ -94,15 +95,7 @@ class ProductosController extends Controller
             }else{
                 return ['success' => 2];
             }
-
         }else {
-
-            $suma = Productos::sum('posicion');
-            if($suma == null){
-                $suma = 1;
-            }else{
-                $suma = $suma + 1;
-            }
 
             $ca = new Productos();
             $ca->id_subcategorias = $request->idsubcategoria;
