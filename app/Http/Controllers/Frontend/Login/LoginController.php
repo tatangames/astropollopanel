@@ -279,4 +279,12 @@ class LoginController extends Controller
         Auth::logout();
         return redirect('/');
     }
+
+
+    public function vistaEliminacionCuenta()
+    {
+        return view('cuenta.vistaeliminacion');
+    }
+
+
 }
