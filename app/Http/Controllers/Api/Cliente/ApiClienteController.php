@@ -214,6 +214,40 @@ class ApiClienteController extends Controller
     }
 
 
+    public function actualizarCorreoClienteVersion2(Request $request){
+        $rules = array(
+            'id' => 'required',
+            'correo' => 'required',
+            'usuario' => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){return ['success' => 0]; }
+
+        if(Clientes::where('id', $request->id)->first()){
+
+            // NO USUARIO REPETIDO
+            if(Clientes::where('correo', $request->correo)->where('id', '!=', $request->id)->first()){
+                // USUARIO REPETIDO
+                return ['success' => 1];
+            }
+
+            if(Clientes::where('usuario', $request->usuario)->where('id', '!=', $request->id)->first()){
+                // USUARIO REPETIDO
+                return ['success' => 2];
+            }
+
+            // ACTUALIZAR
+            Clientes::where('id', $request->id)->update(['correo' => $request->correo, 'usuario' => $request->usuario]);
+
+            return ['success' => 3];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+
     public function informacionHorarioRestaurante(Request $request){
 
         $rules = array(

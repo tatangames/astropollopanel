@@ -140,6 +140,7 @@ Route::post('cliente/informacion/personal', [ApiClienteController::class, 'infor
 
 // actualizar correo del cliente
 Route::post('cliente/actualizar/correo', [ApiClienteController::class, 'actualizarCorreoCliente']);
+Route::post('cliente/actualizar/correo/v2', [ApiClienteController::class, 'actualizarCorreoClienteVersion2']);
 
 // informacion horario del restaurante segun direccion
 Route::post('cliente/informacion/restaurante/horario', [ApiClienteController::class, 'informacionHorarioRestaurante']);

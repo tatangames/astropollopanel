@@ -190,7 +190,7 @@ class ApiOrdenesController extends Controller
                 if ($info->estado_entregada == 1) {
 
                     $textoEntregada = "Orden Entregada";
-                    $fechaEntregada = date("h:i A d-m-Y", strtotime($info->fecha_camino));
+                    $fechaEntregada = date("h:i A d-m-Y", strtotime($info->fecha_entregada));
                 } else {
 
                     $textoEntregada = "";
