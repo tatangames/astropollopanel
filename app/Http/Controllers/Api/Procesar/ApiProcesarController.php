@@ -39,7 +39,7 @@ class ApiProcesarController extends Controller
         $reglaDatos = array(
             'clienteid' => 'required',
             'aplicacupon' => 'required',
-            'version' => 'required'
+           // 'version' => 'required'
         );
 
         // nota
